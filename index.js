@@ -19,10 +19,12 @@ bot.hears('/details', async ctx => {
   })).data.obj
   ctx.reply("enter config name")
   list.map(config =>{
-    const download = (config.down / (1024 * 1024 * 1024)).toFixed(2) < 1? (config.down / (1024 * 1024)) : (config.down / (1024 * 1024 * 1024)).toFixed(2)
+    const download = (config.down / (1024 * 1024 * 1024)).toFixed(2) < 1? Math.floor(config.down / (1024 * 1024)) : (config.down / (1024 * 1024 * 1024)).toFixed(2)
     const downSymbol = (config.down / (1024 * 1024 * 1024)).toFixed(2) < 1 ? 'MB' : 'GB'
+    const upload = (config.up / (1024 * 1024 * 1024)).toFixed(2) < 1? Math.floor(config.down / (1024 * 1024)) : (config.down / (1024 * 1024 * 1024)).toFixed(2)
+    const upSymbol = (config.up / (1024 * 1024 * 1024)).toFixed(2) < 1 ? 'MB' : 'GB'
     bot.hears(`${config.remark}`, ctx => {
-      ctx.reply(`config name: ${config.remark} \n downloaded: ${download} ${downSymbol} \n uploded: ${Math.floor(config.up / (1024 * 1024 ))} MB \n total: ${config.total / (1024 * 1024 * 1024)} GB`)
+      ctx.reply(`config name: ${config.remark} \n downloaded: ${download} ${downSymbol} \n uploded: ${upload} ${upSymbol} \n total: ${config.total / (1024 * 1024 * 1024)} GB`)
     })
   })
 });
