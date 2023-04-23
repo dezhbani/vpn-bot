@@ -4,8 +4,9 @@ const app = express();
 const {Telegraf} = require('telegraf');
 const bot = new Telegraf('6237341408:AAHpTMQcHUcDGbysVBxMEvFCD25lvPqWhEc');
 const https = require('https');
-const key = "/etc/letsencrypt/live/s1.delta-dev.top/privkey.pem";
-const cert = "/etc/letsencrypt/live/s1.delta-dev.top/fullchain.pem";
+const fs = require('fs')
+const key = fs.readFileSync("/etc/letsencrypt/live/s1.delta-dev.top/privkey.pem");
+const cert = fs.readFileSync("/etc/letsencrypt/live/s1.delta-dev.top/fullchain.pem");
 const server = https.createServer({ key, cert }, app);
 
 bot.hears('/start', ctx => {
