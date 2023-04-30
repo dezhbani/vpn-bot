@@ -38,7 +38,8 @@ module.exports = class Application{
         })
     }
     connectToDB(){
-        mongoose.connect(this.#DB_URL, (error) => {
+        mongoose.set('strictQuery', false);
+        mongoose.connect(this.#DB_URL, (error) => {    
         if (!error) return console.log("conected to MongoDB");
         return console.log(error);
         });
