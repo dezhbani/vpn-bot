@@ -5,10 +5,8 @@ const morgan = require('morgan');
 const path = require('path');
 const http = require("http");
 const { default: mongoose } = require("mongoose");
-const {Telegraf, Markup} = require('telegraf');
-const { start } = require('../bot/commands/start');
 const startTelegramBot = require('../bot/commands/start');
-const { BOT_TOKEN } = process.env;
+const { AllRoutes } = require('./router/router');
 
 module.exports = class Application{
     #app = express();
@@ -56,7 +54,7 @@ module.exports = class Application{
         });
     }
     createRoutes(){
-        // this.#app.use(AllRoutes)
+        this.#app.use(AllRoutes)
     }
     startBot(){
         startTelegramBot()
