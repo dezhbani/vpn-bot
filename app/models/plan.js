@@ -5,9 +5,13 @@ const planSchema = new mongoose.Schema({
     price: {type: String, required: true},
     user_count: {type: String, required: true},
     data_size: {type: String, required: true},
-    pay_link: {type: String, required: true}
+    pay_link: {type: String, required: false},
+    count: {type: String, default: "0"},
+    month: {type: Number, default: 1}
+}, {
+    versionKey: false
 })
 
 module.exports = {
-    userModel: mongoose.model('plan', planSchema)
+    planModel: mongoose.model('plan', planSchema)
 }
