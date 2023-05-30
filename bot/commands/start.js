@@ -1,4 +1,6 @@
 const {Telegraf, Markup} = require('telegraf');
+const { details } = require('../src/details');
+const { plans } = require('../src/plans');
 const { BOT_TOKEN } = process.env;
 
 const startTelegramBot = () =>{
@@ -10,8 +12,8 @@ const startTelegramBot = () =>{
             .resize()
             );
         });
-        // details(bot)
-        // plans(bot)
+        details(bot)
+        plans(bot)
         bot.launch();
 }
 
