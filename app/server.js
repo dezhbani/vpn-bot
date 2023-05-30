@@ -7,6 +7,7 @@ const http = require("http");
 const { default: mongoose } = require("mongoose");
 const startTelegramBot = require('../bot/commands/start');
 const { AllRoutes } = require('./router/router');
+const createHttpError = require('http-errors');
 
 module.exports = class Application{
     #app = express();
@@ -61,10 +62,10 @@ module.exports = class Application{
     }
     errorHandling(){
         this.#app.use((req, res, next) => {
-                next(createError.NotFound("آدرس مورد نظر یافت نشد"))
+                next(createHttpError.NotFound("آدرس مورد نظر یافت نشد"))
         })
         this.#app.use((err, req, res, next) =>{
-            const serverError = createError.InternalServerError("InternalServerError")
+            const serverError = createHttpError.InternalServerError("InternalServerError")
             console.log(err)
             const status = err.status || serverError.status;
             const message = err.message || serverError.message;
