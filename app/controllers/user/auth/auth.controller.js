@@ -1,5 +1,5 @@
 const createHttpError = require("http-errors");
-const { randomNumber, signAccessToken, verifyRefreshToken } = require("../../../utils/functions");
+const { randomNumber, signAccessToken } = require("../../../utils/functions");
 const { checkOtpSchema, getOtpSchema } = require("../../../validations/user/auth.schema");
 const { userModel } = require("../../../models/user");
 const { Controllers } = require("../../controller");
@@ -12,8 +12,8 @@ class userAuthControllers extends Controllers {
             const code = randomNumber();
             const result = await this.saveUser(mobile, code)
             if (!result) return createHttpError.Unauthorized("ورود شما انجام نشد")
-            // const sendResult = await sendSMS(mobile, code)
-            // if (!sendResult) return createHttpError.Unauthorized("کد تایید ارسال نشد")
+            const sendResult = await sendSMS(mobile, code)
+            if (!sendResult) return createHttpError.Unauthorized("کد تایید ارسال نشد")
             return res.status(200).send({
                 data: {
                     statusCode: 200,
