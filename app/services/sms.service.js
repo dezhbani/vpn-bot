@@ -1,19 +1,24 @@
-const { default: axios } = require("axios");
+const request = require("request");
 
 class smsService{
-    sendOTP(mobile, code){  
-        const SMS = axios.post('http://ippanel.com/api/select', {
-            "op":"pattern",
-            "user":"u-9906345580",
-            "pass":"MATINdezhbani",
-            "fromNum":"+9850001040241565",
-            "toNum": `${mobile}`,
-            "patternCode":"6x5e01fhw2",
-            "inputData":[
-                {"code":`${code}`},
-                ]
+    async sendOTP(mobile, code){  
+        return request.post({
+            url: 'http://ippanel.com/api/select',
+            body: {
+                "op":"pattern",
+                "user":"u-9906345580",
+                "pass":"MATINdezhbani",
+                "fromNum":"+983000505",
+                "toNum": `${mobile}`,
+                "patternCode":"6x5e01fhw2",
+                "inputData":[
+                        {"code":`${code}`}
+                        ]
+            },
+            json: true,
+            }, (error, response, body) => {
+            if (!error) return true
         });
-        console.log(SMS);
     }
     sendEndTime(mobile){
 
@@ -21,5 +26,5 @@ class smsService{
 }
 
 module.exports= {
-    smsService
+    smsService: new smsService()
 }
