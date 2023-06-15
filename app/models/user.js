@@ -1,8 +1,9 @@
 const { default: mongoose } = require("mongoose");
 const ConfigSchema = new mongoose.Schema({
-    name: {type: String}, 
-    config_content: {type: String},
-    expiry_date: {type: String},
+    name: {type: String, required: true}, 
+    config_content: {type: String, required: true},
+    expiry_date: {type: String, required: true},
+    configID: {type: String, required: true}
 })
 const bill = new mongoose.Schema({
     planID: {type: mongoose.Types.ObjectId, ref: 'plan', required: true},
@@ -13,12 +14,12 @@ const UserSchema = new mongoose.Schema({
     last_name: {type: String, required: true},
     mobile: {type: String},
     bills: {type: [bill], ref: 'plan', default: []},
-    config: {type: [ConfigSchema], default: []},
+    configs: {type: [ConfigSchema], default: []},
     otp: {type: Object, default: {
         code: 0,
         expireIn: 0
     }},
-    chatID: {type: String, default: ''}
+    chatID: {type: String}
 }, {
     versionKey: false
 })
