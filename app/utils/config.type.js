@@ -1,5 +1,4 @@
-const { planModel } = require("../models/plan");
-const { randomNumber, randomEmail, randomString, configExpiryTime } = require("./functions");
+const { randomNumber, randomString, configExpiryTime } = require("./functions");
 const { v4: uuidv4 } = require('uuid');
 
 const createVless = async (lastID, plan, fullName) => {
@@ -62,7 +61,7 @@ const createVless = async (lastID, plan, fullName) => {
         sniffing
     };
     const configContent = `vless://${id}@s1.delta-dev.top:${port}?type=kcp&security=none&headerType=none&seed=${password}#${name}`
-    const obj = { details, configContent }
+    const obj = { details, configContent, id }
     return obj
 }
 const createVmess = () => {
