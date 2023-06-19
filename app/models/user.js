@@ -10,8 +10,8 @@ const bill = new mongoose.Schema({
     buy_date: {type: Number, default: new Date().getTime()}
 })
 const UserSchema = new mongoose.Schema({
-    first_name: {type: String, required: true},
-    last_name: {type: String, required: true},
+    first_name: {type: String},
+    last_name: {type: String},
     mobile: {type: String},
     bills: {type: [bill], ref: 'plan', default: []},
     configs: {type: [ConfigSchema], default: []},
