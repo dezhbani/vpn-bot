@@ -15,7 +15,7 @@ class planController extends Controllers {
             if(!result) throw createHttpError.InternalServerError("پلن ساخته نشد")
             console.log(result);
             return res.status(StatusCodes.CREATED).json({
-                statusCode: StatusCodes.CREATED, 
+                status: StatusCodes.CREATED, 
                 message: "پلن ساخته شد"
             })
         } catch (error) {
@@ -29,7 +29,7 @@ class planController extends Controllers {
             const result = await planModel.deleteOne({ _id: id });
             if (result.deletedCount == 0) throw createHttpError.InternalServerError("پلن حذف نشد")
             return res.status(StatusCodes.OK).json({
-                statusCode: StatusCodes.OK,
+                status: StatusCodes.OK,
                 message: "پلن حذف شد"
             })
         } catch (error) {
@@ -46,7 +46,7 @@ class planController extends Controllers {
             console.log(updateResult);
             if (updateResult.modifiedCount == 0) throw createHttpError.InternalServerError("پلن آپدیت نشد");
             return res.status(StatusCodes.OK).json({
-                statusCode: StatusCodes.OK,
+                status: StatusCodes.OK,
                 message: "پلن آپدیت شد"
             })
         } catch (error) {
@@ -57,7 +57,7 @@ class planController extends Controllers {
         try {
             const plans = await planModel.find()
             return res.status(StatusCodes.OK).json({
-                statusCode: StatusCodes.OK, 
+                status: StatusCodes.OK, 
                 plans
             })
         } catch (error) {

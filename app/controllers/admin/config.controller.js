@@ -41,7 +41,7 @@ class configController extends Controllers {
             console.log(configs);
             if(saveResult.modifiedCount == 0) throw createHttpError("کانفیگ برای یوزر ذخیره نشد");
             return res.status(StatusCodes.CREATED).json({
-                statusCode: StatusCodes.CREATED, 
+                status: StatusCodes.CREATED, 
                 message: "کانفیگ ایجاد شد",
                 configContent: config_content
             })
@@ -56,7 +56,7 @@ class configController extends Controllers {
             const result = await userModel.updateOne({ _id: userID }, { $pull: { config: {_id: configID} }});
             if (result.modifiedCount == 0) throw createHttpError.InternalServerError("کانفیگ حذف نشد")
             return res.status(StatusCodes.OK).json({
-                statusCode: StatusCodes.OK,
+                status: StatusCodes.OK,
                 message: "کانفیگ حذف شد"
             })
         } catch (error) {
@@ -73,7 +73,7 @@ class configController extends Controllers {
                 }
             })).data.obj
             return res.status(StatusCodes.OK).json({
-                statusCode: StatusCodes.OK, 
+                status: StatusCodes.OK, 
                 configs
             })
         } catch (error) {
