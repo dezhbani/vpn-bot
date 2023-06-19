@@ -29,15 +29,16 @@ class userController extends Controllers {
             console.log( planID, buy_date, configID, userID );
             await this.findUserByID(userID)
             await this.findPlanByID(planID);
-            const { remark, expiryTime } = await this.findConfigByID(configID);
+            const { name, expiry_date, config_content } = await this.findConfigByID(configID);
             const data = {
                 bills: [], 
                 configs: []
             }
             const config = {
-                name: remark,
-                expiry_date: expiryTime,
-                configID
+                name,
+                expiry_date,
+                configID,
+                config_content
             }
             const bill = {
                 planID,
@@ -94,9 +95,17 @@ class userController extends Controllers {
             }
         })).data.obj
         const config = configs.filter(config => JSON.parse(config.settings).clients[0].id == configID);
-        console.log(config);
+        console.log(config.streamSettings);
+        const seed = JSON.parse(config[0].streamSettings).kcpSettings.seed;
+        const name = config[0].remark.replace(" ", "%20")
+        const config_content = `vless://${configID}@s1.delta-dev.top:${config[0].port}?type=kcp&security=none&headerType=none&seed=${seed}#${name}`
+        console.log(config_content);
         if (!config) throw createHttpError.NotFound("کانفیگی یافت نشد");
-        return config
+        return {
+            name: config[0].remark,
+            expiry_date: config[0].expiryTime,
+            config_content
+        }
     }
 }
 
