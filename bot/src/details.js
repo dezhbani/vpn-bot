@@ -34,7 +34,6 @@ const details = bot =>{
     let keyboards = []
     if(account.configs){
       account.configs.map(config => {
-        console.log(keyboards);
         keyboards.push({
             text: config.name,
             callback_data: config.configID

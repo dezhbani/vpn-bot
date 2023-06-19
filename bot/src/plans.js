@@ -39,7 +39,6 @@ const plans = bot => {
         bot.on('text', ctx => {
             const text = ctx.update.message.text;
             const flattenedPlans = [].concat(...withLimitionPlans);
-            console.log(flattenedPlans);
             if(!flattenedPlans.includes(text)) ctx.reply('بسته ارسالی وجود ندارد❌');
         })
     })
@@ -55,7 +54,6 @@ const plans = bot => {
         bot.on('text', ctx => {
             const text = ctx.update.message.text;
             const flattenedPlans = [].concat(...unlimitedPlans);
-            console.log(flattenedPlans);
             if(!flattenedPlans.includes(text)) ctx.reply('بسته ارسالی وجود ندارد❌');
         })
     })

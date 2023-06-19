@@ -8,7 +8,6 @@ const getOTP = async mobile => {
     if (!result) return "ورود شما انجام نشد";
     const newMobile = mobile.replace(/^0/, '98')
     await smsService.sendOTP(newMobile, code)
-    console.log(code)
     return "کد تایید ارسال شد.برای ورود به حساب کاربری کد را وارد کنید"
 }
 const checkOTP = async (mobile, code, chatID) => {

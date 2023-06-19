@@ -13,7 +13,6 @@ class planController extends Controllers {
             const { name, price, user_count, data_size, pay_link, count, month } = planBody
             const result = await planModel.create({ name, price, user_count, data_size, pay_link, count, month });
             if(!result) throw createHttpError.InternalServerError("پلن ساخته نشد")
-            console.log(result);
             return res.status(StatusCodes.CREATED).json({
                 status: StatusCodes.CREATED, 
                 message: "پلن ساخته شد"
@@ -41,9 +40,7 @@ class planController extends Controllers {
             const { id } = req.params;
             const plan = await this.findPlanByID(id);
             const data = copyObject(req.body);
-            console.log(data);
             const updateResult = await planModel.updateOne({ _id: plan.id }, { $set: data });
-            console.log(updateResult);
             if (updateResult.modifiedCount == 0) throw createHttpError.InternalServerError("پلن آپدیت نشد");
             return res.status(StatusCodes.OK).json({
                 status: StatusCodes.OK,
@@ -65,7 +62,6 @@ class planController extends Controllers {
         }
     }
     async findPlanByID(planID) {
-        console.log(planID);
         const { id } = await IDvalidator.validateAsync({ id: planID });
         const plan = await planModel.findById(id);
         if (!plan) throw createHttpError.NotFound("پلنی یافت نشد");

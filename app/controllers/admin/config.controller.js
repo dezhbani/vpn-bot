@@ -38,7 +38,6 @@ class configController extends Controllers {
             }
             if(!addConfig.data.success) throw createHttpError.InternalServerError("کانفیگ ایجاد نشد")
             const saveResult = await userModel.updateOne({ mobile }, { $push: { configs, bills }})
-            console.log(configs);
             if(saveResult.modifiedCount == 0) throw createHttpError("کانفیگ برای یوزر ذخیره نشد");
             return res.status(StatusCodes.CREATED).json({
                 status: StatusCodes.CREATED, 
@@ -65,7 +64,6 @@ class configController extends Controllers {
     }
     async getAllConfigs(req, res, next){
         try {
-            console.log(V2RAY_API_URL);
             const configs = (await axios.post(`${V2RAY_API_URL}/xui/inbound/list`, {}, {
                 withCredentials: true,
                 headers: {
@@ -82,7 +80,6 @@ class configController extends Controllers {
     }
     async findPlanByID(planID) {
         const plan = await planModel.findOne({_id: planID});
-        console.log(plan);
         if (!plan) throw createHttpError.NotFound("کانفیگی یافت نشد");
         return plan
     }
