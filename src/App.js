@@ -1,8 +1,7 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
-import { useState } from 'react';
 import Auth from './components/auth/AuthForm';
-import Timer from './components/public/Timer';
-// import Auth from './components/auth/auth';
+import HomePage from './components/admin/home/HomePage';
+import Plan from './components/admin/plan-section/Plans';
 
 function App() {
 
@@ -13,7 +12,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/sign-up"/>} />
         <Route path="/sign-up" element={<Auth />} />
-        <Route path="/sign" element={<Timer />} />
+        <Route path="/dashboard" element={<HomePage />}/>
+        <Route path="/dashboard/plans" element={<Plan />}/>
       </Routes>
     </div>
   );

@@ -1,0 +1,71 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+@font-face{
+    font-family: b-kamran;
+    src: url(../assets/B\ Kamran\ Bold_0.ttf);
+}
+@font-face{
+    font-family: panton-blackcaps;
+    src: url(../assets/Panton-BlackCaps.otf);
+}
+.main{
+    direction: rtl;
+    position: fixed;
+    right: 0px;
+    float: right;
+    min-height: 100vh;
+    min-width: 10vw;
+    border-left: 1px solid #e5eaef;
+}
+
+.fieldsContainer{
+    margin: 35px 0px;
+    font-family: b-kamran;
+}
+.links{
+    text-decoration: none;
+    color: #676d7c;
+}
+.container{
+    padding: 5px 15px;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+}
+.container:hover{
+    border-radius: 20px 0 0 20px;
+    background-color: #fa4f56;
+    /* opacity: 0.8; */
+    color: #fff;
+}
+
+.profile{
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    padding: 40px;
+    border-bottom: 1px solid #e5eaef;
+}
+.imageContainer{
+    display: flex;
+    justify-content: center;
+}
+.fullname{
+    margin-top: 10px;
+    font-family: panton-blackcaps;
+}
+.profileImage{
+    justify-content: center;
+    height: 50px;
+    width: 50px;
+}
+.field{
+    font-weight: bolder;
+    font-size: 18pt;
+    padding: 0px 10px;
+}
+.icon{
+    fill: aqua;
+}

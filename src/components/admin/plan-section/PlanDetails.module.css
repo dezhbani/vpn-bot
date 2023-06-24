@@ -1,0 +1,102 @@
+
+@font-face{
+    font-family: panton-blackcaps;
+    src: url(../assets/IRANYekanBold.ttf);
+}
+@font-face{
+    font-family: b-kamran;
+    src: url(../assets/B\ Kamran\ Bold_0.ttf);
+}
+.mainContainer{
+    display: flex;
+    justify-content: space-between;
+    font-family: panton-blackcaps;
+    font-size: 10pt;
+}
+.container{
+    margin-top: 10px;
+    max-width: 60vw;
+    min-width: 60vw;
+    background-color: #fff;
+    display: flex;
+    box-shadow:  -1px 1px 5px rgb(229, 229, 229);
+    border-radius: 10px;
+    direction: rtl;
+    padding: 15px 0px;
+    
+}
+.planContainer{
+    display: grid;
+    grid-template-areas: "a a a a";
+    grid-auto-columns: 20px;
+    gap: 200px;
+    align-items: center;
+}
+.icons{
+    display: flex;
+    padding: 0px 10px;
+    align-items: center;
+}
+.name{
+    width: 200px;
+    font-size: 16pt;
+    font-family: b-kamran;
+}
+.moreBox{
+    margin-top: 10px;
+    padding: 10px;
+    flex-direction: column;
+    border: 1px solid rgb(239, 239, 239);
+    background-color: rgb(255, 255, 255);
+    position: absolute;
+    display: flex;
+    border-radius: 15px;
+}
+
+.field{
+    font-family: b-kamran;
+    font-size: 19pt;
+    display: flex;
+    align-items: center;
+}
+.field img{
+    height: 20px;
+    margin-left: 10px;
+}
+.closeMore{
+    display: none;
+}
+.month{
+    border: 1px solid #87e8de;
+    color: #13c2c2;
+    background: #e6fffb;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    direction: ltr;
+    padding: 2px;
+    border-radius: 5px;
+
+}
+.dataSize{
+    border: 1px solid #1890ff;
+    background-color: #e6f7ff;
+    color: #1890ff;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    direction: ltr;
+    padding: 2px;
+    border-radius: 5px;
+}
+.userCount{
+    border: 1px solid #b7eb8f;
+    color: #52c41a;
+    background: #f6ffed;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    direction: ltr;
+    padding: 2px;
+    border-radius: 5px;
+}

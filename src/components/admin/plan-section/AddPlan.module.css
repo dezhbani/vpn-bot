@@ -1,0 +1,27 @@
+.inputBox{
+    display: flex;
+    flex-direction: column;
+    /* background-color: aqua; */
+}
+.inputBox:only-child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.field{
+    width: 200px;
+    /* top: 50%;
+    left: 50%; */
+}
+.Box{
+    border: none;
+}
+.addPlan{
+    background-color: #0560fd;
+    height: 45px;
+    width: 45px;
+    border-radius: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

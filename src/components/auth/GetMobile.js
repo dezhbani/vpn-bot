@@ -29,24 +29,21 @@ const GetMobile = ({setState}) => {
         if(errors.mobile){
             setTouched({mobile: true});
         }else{ 
-            try {
-                const res = await axios.post("auth/get-otp",{
-                    mobile: data.mobile
-                });
-                const { message, mobile, status } = res.data;
-                if(status == 200){
-                    console.log(res.data);
-                    setTimeout(() => setState({sendOTP: true, mobile, message}), 5500);
-                    toast.success(message)
-                }
-            } catch (error) {
-                console.log(error);
-                toast.error(error.response.data.message, {autoClose: 2000})
+        try {
+            const res = await axios.post("auth/get-otp",{
+                mobile: data.mobile
+            });
+            const { message, mobile, status } = res.data;
+            if(status == 200){
+                console.log(res.data);
+                setTimeout(() => setState({sendOTP: true, mobile, message}), 5500);
+                toast.success(message)
             }
-            
-            // notify("error", "لطفا فرم را کامل کنید");
-    };
-
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.data.message, {autoClose: 2000})
+            }
+        }
     }
 
 
@@ -69,37 +66,3 @@ const GetMobile = ({setState}) => {
 };
 
 export default GetMobile;
-
-// import React, { useState } from 'react';
-// import styles from './GetMobile.module.css'
-
-// const GetMobile = () => {
-
-//     const [data, setData] = useState({mobile: ""})
-//     const [error, setError] = useState({mobile: false})
-//     const [focus, setFocus] = useState({mobile: false})
-//     const change = event => {
-//         setData({[event.target.name]: event.target.value})
-//         console.log(data);
-//     }
-//     const focus = event => {
-//         console.log(data, error);
-//         setError({mobile: (data.mobile? false :true)})
-//         setFocus({mobile: !focus.mobile})
-//     }
-//     return (
-//         <div className={styles.mobileForm}>
-//             <h2 className={styles.header}>ثبت نام</h2>
-//             <div className={styles.formfield}>
-//                 <label className={styles.label}>شماره تلفن:</label>
-//                 <input className={error.mobile? styles.uncompleted : styles.mobile} type="tel" placeholder="شماره رو با 98 وارد کن" value={data.mobile} onFocus={focus} onChange={change} name='mobile'  />
-//                 {error.mobile &&  && <span>ارور</span>}
-//             </div>
-//                 <div className={styles.button}>
-//                     <button type="submit">تایید</button>
-//                 </div>
-//         </div>
-//     );
-// };
-// // {}
-// export default GetMobile;
