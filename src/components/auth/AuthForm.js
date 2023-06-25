@@ -7,7 +7,6 @@ const Auth = () => {
 
     const [ state, setState ] = useState({sendOTP: false, mobile: ''})
 
-    console.log(state)
     return (
         <div className={styles.main}>
             <div className={styles.container}>

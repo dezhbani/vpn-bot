@@ -15,7 +15,6 @@ const AddPlan = () => {
 
     const change = event =>{
         setData({...data, [event.target.name]: event.target.value});
-        console.log(data);
     }
     const style = {
         position: 'absolute',

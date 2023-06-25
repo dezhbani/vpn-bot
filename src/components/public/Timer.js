@@ -34,7 +34,6 @@ const Timer = ({mobile}) => {
         const res = await axios.post("auth/get-otp", {
             mobile: mobile
         });
-        console.log(res.data);
             toast.success(res.data.message)
     } catch (error) {
         toast.error(error.response.data.message, {autoClose: 2000})

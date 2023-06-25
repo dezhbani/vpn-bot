@@ -11,7 +11,6 @@ const EditPlan = ({data, open, setOpen}) => {
     
     const change = event =>{
         setEditData({...editData, [event.target.name]: event.target.value});
-        console.log(editData);
     }
     const style = {
         position: 'absolute',
@@ -32,7 +31,6 @@ const EditPlan = ({data, open, setOpen}) => {
             setTimeout(() => window.location.reload(true), 5000);
             
         } catch (error) {
-            console.log(error.response.data);
             toast.error(error.response.data.message, {autoClose: 2000})
         }
     }

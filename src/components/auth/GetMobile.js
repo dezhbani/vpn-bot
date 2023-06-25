@@ -35,12 +35,10 @@ const GetMobile = ({setState}) => {
             });
             const { message, mobile, status } = res.data;
             if(status == 200){
-                console.log(res.data);
                 setTimeout(() => setState({sendOTP: true, mobile, message}), 5500);
                 toast.success(message)
             }
         } catch (error) {
-            console.log(error);
             toast.error(error.response.data.message, {autoClose: 2000})
             }
         }
