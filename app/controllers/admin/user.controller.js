@@ -60,10 +60,13 @@ class userController extends Controllers {
     }
     async getAllUsers(req, res, next){
         try {
-            const users = await userModel.find()
+            const users = await userModel.find({}, {otp:0})
+            const account = await planModel.populate(users, {
+                path: 'bills.planID'
+            })
             return res.status(StatusCodes.OK).json({
                 status: StatusCodes.OK, 
-                users
+                users: account
             })
         } catch (error) {
             next(error)
