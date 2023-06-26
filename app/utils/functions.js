@@ -26,8 +26,8 @@ function copyObject(object){
 function configExpiryTime(month){
     const expiryTime = new Date()
     expiryTime.setMonth(expiryTime.getMonth() + month)
-    expiryTime.setDate(expiryTime.getDate() + 1)
-    expiryTime.setHours(24)
+    expiryTime.setDate(expiryTime.getDate() +1)
+    expiryTime.setHours(23)
     expiryTime.setMinutes(59)
     expiryTime.setSeconds(0)
     expiryTime.setMilliseconds(0)
