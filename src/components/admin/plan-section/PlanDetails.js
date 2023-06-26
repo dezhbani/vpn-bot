@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './PlanDetails.module.css'
 import trash from '../assets/Trash.svg'
 import edit from '../assets/edit.svg'
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import More from '../assets/Menu.svg';
 import DeletePlan from './DeletePlan';
 import EditPlan from './EditPlan';
 
@@ -21,7 +21,7 @@ const Plan = ({data}) => {
         <div className={styles.mainContainer}>
             <div className={styles.container}>
                 <div className={styles.icons}>
-                    <MoreVertIcon onClick={openMoreHanler}/>
+                    <img src={More} onClick={openMoreHanler}/>
                     <div className={openMore? styles.openMore:styles.closeMore}>
                         <div className={styles.moreBox}>
                             <div onClick={handleOpen} className={styles.field}><img src={edit}/> ادیت</div>

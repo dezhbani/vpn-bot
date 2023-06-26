@@ -17,10 +17,8 @@
     border: none;
 }
 .addPlan{
-    background-color: #0560fd;
     height: 45px;
     width: 45px;
-    border-radius: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
