@@ -3,6 +3,7 @@ const { randomNumber, signAccessToken } = require("../../../utils/functions");
 const { checkOtpSchema, getOtpSchema } = require("../../../validations/user/auth.schema");
 const { userModel } = require("../../../models/user");
 const { Controllers } = require("../../controller");
+const { smsService } = require("../../../services/sms.service");
 
 class userAuthControllers extends Controllers {
     async getOTP(req, res, next) {
@@ -12,20 +13,14 @@ class userAuthControllers extends Controllers {
             const code = randomNumber();
             const result = await this.saveUser(mobile, code)
             if (!result) return createHttpError.Unauthorized("ورود شما انجام نشد")
-            const sendResult = await sendSMS(mobile, code)
+            const sendResult = await smsService.sendOTP(mobile, code)
             if (!sendResult) return createHttpError.Unauthorized("کد تایید ارسال نشد")
-            return res.status(200).send({
-                data: {
-                    statusCode: 200,
-                    data: {
-                        message: "کد تایید ارسال شد",
-                        mobile,
-                        code
-                    }
-                }
+            return res.status(200).json({
+                status: 200,
+                message: "کد تایید ارسال شد",
+                mobile
             });
         } catch (error) {
-            console.log(error)
             next(createHttpError.BadRequest(error.message));
         }
     }
@@ -39,8 +34,10 @@ class userAuthControllers extends Controllers {
             const now = Date.now();
             if (+user.otp.expireIn < +now) throw createHttpError.Unauthorized("کد تایید منقضی شده");
             const accessToken = await signAccessToken(user._id);
-            return res.json({
+            return res.status(200).json({
+                status: 200,
                 accessToken,
+                message: "با موفقیت وارد شدید"
             })
         } catch (error) {
             next(error)
