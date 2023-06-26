@@ -4,7 +4,7 @@ const router = require("express").Router();
 
 router.post("/add", configController.addConfig);
 router.delete("/delete", configController.deleteConfig);
-// router.patch("/edit/:id", planController.editPlan);
+router.post("/repurchase/:userID", configController.repurchase);
 router.get("/", configController.getAllConfigs);
 
 module.exports = {

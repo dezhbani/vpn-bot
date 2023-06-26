@@ -8,6 +8,7 @@ const { V2RAY_API_URL, V2RAY_PANEL_TOKEN } = process.env
 const { default: axios } = require('axios');
 const { userModel } = require("../../models/user");
 const { createVless } = require("../../utils/config.type");
+const { IDvalidator } = require("../../validations/public.schema");
 
 
 class configController extends Controllers {
@@ -62,6 +63,41 @@ class configController extends Controllers {
             next(error)
         }
     }
+    async repurchase(req, res, next){
+        try {
+            const {userID} = req.params;
+            const user = await userModel.findById(userID)
+            const config = user.configs.pop()
+            const lastPlan = user.bills.pop()
+            let configsData = await this.findConfigByID(config.configID, 'configController')
+            const plan = await this.findPlanByID(lastPlan.planID.toString())
+            configsData.expiryTime = +configExpiryTime(plan.month)
+            configsData.up = 0
+            configsData.down = 0
+            const result = await this.repurchaseConfig(configsData.id, configsData)
+            const configs = {
+                name: config.name,
+                config_content: config.config_content,
+                expiry_date: +configExpiryTime(plan.month), 
+                configID: config.configID,
+            }
+            const bills = {
+                planID: plan._id,
+                buy_date: new Date().getTime()
+            }
+            if(result) throw createHttpError.InternalServerError("کانفیگ تمدید نشد")
+            const saveResult = await userModel.updateOne({ _id: userID }, { $push: { configs, bills }})
+            if(saveResult.modifiedCount == 0) throw createHttpError("کانفیگ برای یوزر ذخیره نشد");
+            if(result) throw createHttpError.InternalServerError("کانفیگ تمدید نشد")
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK, 
+                message: "کانفیگ تمدید شد",
+                configContent: config.config_content
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
     async getAllConfigs(req, res, next){
         try {
             const configs = (await axios.post(`${V2RAY_API_URL}/xui/inbound/list`, {}, {
@@ -100,6 +136,44 @@ class configController extends Controllers {
             const newUser = await userModel.create({ first_name, last_name, mobile })
             if(!newUser) return createHttpError.InternalServerError('یوزر ثبت نشد')
         }
+    }
+    async findConfigByID(configID, type) {
+        const configs = (await axios.post(`${V2RAY_API_URL}/xui/inbound/list`, {}, {
+            withCredentials: true,
+            headers: {
+              'Cookie': V2RAY_PANEL_TOKEN
+            }
+        })).data.obj
+        const config = configs.filter(config => JSON.parse(config.settings).clients[0].id == configID);
+        const seed = JSON.parse(config[0].streamSettings).kcpSettings.seed;
+        const name = config[0].remark.replace(" ", "%20")
+        const config_content = `vless://${configID}@s1.delta-dev.top:${config[0].port}?type=kcp&security=none&headerType=none&seed=${seed}#${name}`
+        if (!config) throw createHttpError.NotFound("کانفیگی یافت نشد");
+        if(type == 'userController'){
+            return {
+                name: config[0].remark,
+                expiry_date: config[0].expiryTime,
+                config_content
+            }
+        }else{
+            return config[0]
+        }
+    }
+    async repurchaseConfig(configID, data) {
+        const configs = (await axios.post(`${V2RAY_API_URL}/xui/inbound/update/${configID}`, data, {
+            withCredentials: true,
+            headers: {
+              'Cookie': V2RAY_PANEL_TOKEN
+            }
+        }))
+        return configs.data.obj.success
+    }
+    async findPlanByID(planID) {
+        console.log(planID);
+        const { id } = await IDvalidator.validateAsync({ id: planID });
+        const plan = await planModel.findById(id);
+        if (!plan) throw createHttpError.NotFound("پلنی یافت نشد");
+        return plan
     }
 }
 
