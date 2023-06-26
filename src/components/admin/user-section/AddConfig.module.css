@@ -1,0 +1,7 @@
+.inputBox{
+    display: flex;
+    flex-direction: column;
+}
+.inputBox button{
+    margin: 20px;
+}
