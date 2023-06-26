@@ -1,0 +1,68 @@
+/* #0560fd */
+@font-face{
+    font-family: b-kamran;
+    src: url(../assets/B\ Kamran\ Bold_0.ttf);
+}
+.mainContainer{
+    text-decoration: none;
+    display: flex;
+    color: #000;
+    margin-top: 50px;
+}
+.container{
+    display: flex;
+    text-decoration: none;
+    flex-direction: column;
+}
+.imageContainer{
+    display: flex;
+    justify-content: center;
+}
+.image{
+    height: 50px;
+    background-color: #fff;
+    padding: 5px;
+    border-radius: 100%;
+    box-shadow:  -1px 1px 5px rgb(229, 229, 229);
+    position: absolute;
+}
+.profile{
+    display: flex;
+    flex-direction: column;
+    float: right;
+    margin: 30px 30px;
+    padding: 30px;
+    /* max-height: 100px; */
+    font-family: b-kamran;
+    max-width: 200px;
+    min-height: 100px;
+    min-width: 250px;
+    /* margin-top: 30px; */
+    border-radius: 10px;
+    box-shadow:  -1px 1px 5px rgb(170, 170, 170);
+    background-color: rgb(255, 255, 255);
+}
+.profileContainer{
+    display: flex;
+    font-size: 18pt;
+    direction: rtl;
+    float: right;
+    flex-direction: column;
+    margin-top: 20px;
+}
+.profileContainer span{
+    font-size: 14pt;
+}
+.buttonContainer{
+    display: flex;
+    margin-top: 30px;
+    justify-content: center;
+}
+.buttonContainer button{
+    margin: 10px;
+    background-color: #0560fdb1;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 10px ;
+}
