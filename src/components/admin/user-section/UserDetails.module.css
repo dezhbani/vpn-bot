@@ -1,0 +1,76 @@
+.mainContainer{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; */
+    gap: 30px;
+    margin: 50px;
+}
+.container{
+    background-color: #fff;
+    box-shadow:  -1px 1px 5px rgb(227, 227, 227);
+    padding: 15px;
+    border-radius: 10px;
+    max-height: 200px;
+    min-width: 40vw;
+}
+.actions{
+    margin: 20px;
+    display: flex;
+    justify-content: right;
+}
+.buttonContainer{
+    display: flex;
+    
+}
+.buttonContainer button{
+    margin: 10px;
+    background-color: #0560fdb1;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 10px ;
+}
+.billsContainer{
+    box-shadow:  -1px 1px 5px rgb(227, 227, 227);
+    /* border: 1px solid silver; */
+    border-radius: 10px;
+    display: flex;
+    float: right;
+    flex-direction: column;
+    direction: rtl;
+    /* padding: 10px; */
+}
+.lable{
+    border-bottom: 0;
+    padding: 5px 10px;
+}
+.allConfig{
+    box-shadow:  -1px 1px 5px rgb(227, 227, 227);
+    /* border: 1px solid silver; */
+    border-radius: 10px;
+    display: flex;
+    float: right;
+    flex-direction: column;
+    direction: rtl;
+    margin-top: 40px;
+}
+.profileImage{
+    height: 50px;
+}
+.profileDetails{
+    display: flex;
+}
+.profile{
+    align-items: center;
+    padding: 10px;
+}
+.buttonContainer button:hover{
+    background-color: #4c8bf9b1;
+}
+.containerRight{
+    display: flex;
+    flex-direction: column;
+    /* margin: ; */
+}
