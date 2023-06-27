@@ -1,5 +1,7 @@
 .container{
     /* box-shadow:  -1px 1px 5px rgb(170, 170, 170); */
-    background-color: #fff;
+    background-color: #fff;   
+    height: 300px;
+    overflow-y: scroll;
     border-radius: 10px;
 }

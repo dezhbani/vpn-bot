@@ -5,7 +5,7 @@ import Config from './Config';
 const Configs = ({configs}) => {
     console.log(configs);
     return (
-        <div>
+        <div className={styles.container}>
             {
                 configs?.map(config => <Config key={config._id} config={config} />)
             }

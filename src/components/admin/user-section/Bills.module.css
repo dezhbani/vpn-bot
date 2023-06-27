@@ -1,5 +1,19 @@
 .container{
     /* box-shadow:  -1px 1px 5px rgb(170, 170, 170); */
+    height: 300px; /* Adjust the height as needed */
+    overflow-y: scroll;
     background-color: #fff;
     border-radius: 10px;
 }
+::-webkit-scrollbar {
+    width: 12px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: none; 
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #002b6b;
+    border-radius: 10px;
+  }
