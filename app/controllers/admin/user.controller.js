@@ -7,6 +7,7 @@ const { IDvalidator } = require("../../validations/public.schema");
 const { planModel } = require("../../models/plan");
 const { default: axios } = require("axios");
 const { configController } = require("./config.controller");
+const { smsService } = require("../../services/sms.service");
 const { V2RAY_API_URL, V2RAY_PANEL_TOKEN } = process.env
 
 class userController extends Controllers {
@@ -88,8 +89,22 @@ class userController extends Controllers {
             next(error)
         }
     }
+    async resendConfig(req, res, next){
+        try {
+            const {configID, userID} = req.body;
+            const user = await userModel.findById(userID);
+            const configContent = user.configs.filter(config => config._id == configID)
+            await smsService.resendConfig(user.mobile, configContent[0].config_content)
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK, 
+                message: 'کانفیگ دوباره ارسال شد'
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
     async findUserByMobile(mobile) {
-        const user = await planModel.findOne({mobile});
+        const user = await userModel.findOne({mobile});
         if (user) throw createHttpError.BadRequest("کاربر قبلا ثبت شده");
         return user
     }
