@@ -21,7 +21,28 @@ class smsService{
         });
     }
     sendEndTime(mobile){
-
+        
+    }
+    async resendConfig(mobile, config){
+        console.log(mobile, config);
+        return request.post({
+            url: 'http://ippanel.com/api/select',
+            body: {
+                "op":"pattern",
+                "user":"u-9906345580",
+                "pass":"MATINdezhbani",
+                "fromNum":"+983000505",
+                "toNum": `${mobile}`,
+                "patternCode":"gy51a51jedt078s",
+                "inputData":[
+                        {"config": config}
+                        ]
+            },
+            json: true,
+            }, (error, response, body) => {
+                console.log(body, error);
+            if (!error) return true
+        });
     }
 }
 
