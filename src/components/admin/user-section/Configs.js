@@ -3,7 +3,6 @@ import styles from './Configs.module.css';
 import Config from './Config';
 
 const Configs = ({configs}) => {
-    console.log(configs);
     return (
         <div className={styles.container}>
             {

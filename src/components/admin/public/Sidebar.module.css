@@ -16,7 +16,8 @@
     right: 0px;
     float: right;
     min-height: 100vh;
-    min-width: 10vw;
+    min-width: 15vw;
+    max-width: 15vw;
     border-left: 1px solid #e5eaef;
 }
 

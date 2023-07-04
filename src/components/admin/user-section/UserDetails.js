@@ -11,6 +11,7 @@ import profile from '../assets/profile.png'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import { getPlans } from '../services/plan.service';
+import { resendConfig } from '../services/config.service';
 const UserDetails = () => {
     const { userID } = useParams()
     const [open, setOpen] = useState(false);
@@ -43,6 +44,21 @@ const UserDetails = () => {
         setBuyConfig(!buyConfig)
         handleOpen()
     }
+    const resendUserConfig = async () =>{
+        try {
+            const config = user.configs.pop()
+            const data = {
+                userID,
+                configID: config._id
+            }
+            const result = await resendConfig(data);
+            toast.success(result.message)
+            setTimeout(() => window.location.reload(true), 5000);
+        } catch (error) {
+            console.log(error.response);
+            toast.error(error.response.data.message, {autoClose: 2000})
+        }
+    }
     return (
         <div className={styles.mainContainer}>
             <div className={styles.container}>
@@ -55,24 +71,24 @@ const UserDetails = () => {
                                 <div className={styles.mobile}>{user.mobile}</div>
                             </div>
                         </div>
-                        {buyConfig?<AddConfig open={open} setOpen={setOpen} plans={plans} />:''}
+                        <AddConfig open={open} setOpen={setOpen} plans={plans} />
                     </div>
                     <div className={styles.buttonContainer}>
                         <Button onClick={repurchaseConfig}>تمدید کانغیگ</Button>
-                        <Button>ارسال مجدد کانفیگ</Button>
+                        <Button onClick={resendUserConfig}>ارسال مجدد کانفیگ</Button>
                         <Button>اضافه کردن کانغیگ و فاکتور</Button>
                         <Button onClick={buyNewConfig} className={styles.addConfig}>خرید کانفیگ</Button>
                     </div>
                 </div>
             </div>
             <div className={styles.containerRight}>
-                <div className={styles.billsContainer}>
+                <div className={user.bills?.length > 0? styles.billsContainer: styles.hidden}>
                     <div className={styles.lable}>فاکتور های خرید:</div>
                     <div className={styles.bills}>
                         <Bills bills={user.bills}/>
                     </div>
                 </div>
-                <div className={styles.allConfig}>
+                <div className={user.configs?.length > 0? styles.allConfig: styles.hidden}>
                     <div className={styles.lable}>همه کانفیگ ها:</div>
                     <div className={styles.configs}>
                         <Configs configs={user.configs}/>

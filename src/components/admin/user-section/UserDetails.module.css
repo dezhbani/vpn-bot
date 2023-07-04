@@ -32,6 +32,9 @@
     border: none;
     border-radius: 10px ;
 }
+.hidden{
+    display: none;
+}
 .billsContainer{
     box-shadow:  -1px 1px 5px rgb(227, 227, 227);
     /* border: 1px solid silver; */

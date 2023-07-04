@@ -35,12 +35,13 @@
     /* max-height: 100px; */
     font-family: b-kamran;
     max-width: 200px;
-    min-height: 100px;
+    min-height: 150px;
     min-width: 250px;
     /* margin-top: 30px; */
     border-radius: 10px;
     box-shadow:  -1px 1px 5px rgb(170, 170, 170);
     background-color: rgb(255, 255, 255);
+    color: #000;
 }
 .profileContainer{
     display: flex;

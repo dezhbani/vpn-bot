@@ -32,15 +32,15 @@
     gap: 200px;
     align-items: center;
 }
-.icons{
-    display: flex;
-    padding: 0px 10px;
-    align-items: center;
-}
 .name{
     width: 200px;
     font-size: 16pt;
     font-family: b-kamran;
+}
+.icons{
+    display: flex;
+    padding: 0px 10px;
+    align-items: center;
 }
 .moreBox{
     margin-top: 10px;
@@ -52,6 +52,9 @@
     display: flex;
     border-radius: 15px;
 }
+.closeMore{
+    display: none;
+}
 
 .field{
     font-family: b-kamran;
@@ -62,9 +65,6 @@
 .field img{
     height: 20px;
     margin-left: 10px;
-}
-.closeMore{
-    display: none;
 }
 .month{
     border: 1px solid #87e8de;

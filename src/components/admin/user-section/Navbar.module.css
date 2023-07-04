@@ -1,0 +1,19 @@
+.container{
+    background-color: aliceblue;
+    max-width: calc(85vw - 13px);
+    min-width: calc(85vw - 13px);
+    z-index: 0;
+    display: flex;
+    position: fixed;
+    bottom: 0px;
+    justify-content: center;
+}
+.container button{
+    margin: 5px 30px;
+    font-size: 35px;
+}
+.addUserButton img {
+    height: 25px;
+    display: flex;
+    align-items: center;
+}
