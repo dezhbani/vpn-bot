@@ -32,7 +32,7 @@ const AddPlan = () => {
             const addPlanResult = await addPlan(data);
             handleClose()
             toast.success(addPlanResult.message)
-            setTimeout(() => window.location.reload(true), 5000);
+            // setTimeout(() => window.location.reload(true), 5000);
             
         } catch (error) {
             toast.error(error.response.data.message, {autoClose: 2000})

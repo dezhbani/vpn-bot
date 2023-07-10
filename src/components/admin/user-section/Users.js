@@ -7,6 +7,10 @@ import Navbar from './Navbar';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
+    const [editedID, setEditedID] = useState({
+        ID: '', 
+        edit: false
+    });
     useEffect(() => {
         const allUsers = async () => {
             const allUser = await getUsers()
@@ -21,11 +25,11 @@ const Users = () => {
         <div className={styles.mainContainer}>
             <div className={styles.container}>
                 {
-                    users.map(user => <User key={user._id} users={user}/>)
+                    users.map(user => <User key={user._id} editedID={editedID} setEditedID={setEditedID}  users={user}/>)
                 }
             </div>
         </div>
-        <Navbar data={users}/>
+        <Navbar editedID={editedID} setEditedID={setEditedID} data={users}/>
         </>
     );
 };

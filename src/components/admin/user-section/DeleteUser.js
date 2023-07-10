@@ -29,7 +29,6 @@ const DeleteUser = ({setOpenDelete, openDelete}) => {
     }
     const change = event =>{
         setData({...data, [event.target.name]: event.target.value});
-        console.log(data);
     }
     const handleClose = () => setOpenDelete(false);
     return (

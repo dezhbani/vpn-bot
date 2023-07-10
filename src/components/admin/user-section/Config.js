@@ -4,7 +4,6 @@ import styles from './Config.module.css';
 const Config = ({config}) => {
     const date = new Date(+config.expiry_date);
     const now = new Date().getTime()
-    console.log( date < now );
     const IRDate = date.toLocaleDateString('fa-IR')
     return (
         <div className={styles.mainContainer}>

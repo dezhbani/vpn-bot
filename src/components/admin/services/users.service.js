@@ -9,8 +9,11 @@ const getUserDetails = async(id) => {
     return await result.data.user
 }
 const addUser = async data => {
-    // const { name, price, user_count, data_size, pay_link, count, month } = data
     const result = await axios.post('admin/user/add', data)
+    return result.data
+}
+const editUser = async data => {
+    const result = await axios.patch(`admin/user/edit/${data._id}`, data)
     return result.data
 }
 const repurchase = async id => {
@@ -22,5 +25,6 @@ export {
     getUsers,
     addUser,
     getUserDetails,
-    repurchase
+    repurchase,
+    editUser
 }

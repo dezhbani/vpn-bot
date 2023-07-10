@@ -1,16 +1,21 @@
 import { Box, Button, Modal, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import styles from '../plan-section/AddPlan.module.css'
-import { editPlan } from '../services/plan.service';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
+import { editUser } from '../services/users.service';
 
-const EditUser = ({data, setOpenEdit, openEdit}) => {
-    const handleClose = () => setOpenEdit(false);
-    const [editData, setEditData] = useState(data)
-    
+const EditUser = ({data, editedID, openEdit, setOpenEdit, setEditedID}) => {
+    // const [openEdit, setOpenEdit] = useState(!editedID.edit)
+    const userData = (data.filter(user => user._id == editedID.ID))[0]
+    const [editData, setEditData] = useState(userData)
+    const handleClose = () => {
+        setOpenEdit(false);
+        setEditedID({edit: false, ID: ''})
+    }
     const change = event =>{
         setEditData({...editData, [event.target.name]: event.target.value});
+        console.log(editData);
     }
     const style = {
         position: 'absolute',
@@ -25,9 +30,9 @@ const EditUser = ({data, setOpenEdit, openEdit}) => {
       };
     const sendData = async () =>{
         try {
-            const addPlanResult = await editPlan(editData);
+            const editUserResult = await editUser(editData);
             handleClose()
-            toast.success(addPlanResult.message)
+            toast.success(editUserResult.message)
             setTimeout(() => window.location.reload(true), 5000);
             
         } catch (error) {
@@ -40,11 +45,8 @@ const EditUser = ({data, setOpenEdit, openEdit}) => {
                 <Box className={styles.box} sx={style}>
                     <div className={styles.inputBox}>
                         <TextField margin='normal' size='small' onChange={change} name='first_name' value={editData.first_name} className={styles.field} label="نام پلن" variant="outlined" />
-                        <TextField margin='normal' size='small' onChange={change} name='price' value={editData.price} className={styles.field} label='قیمت' variant="outlined" />
-                        <TextField margin='normal' size='small' onChange={change} name='user_count' value={editData.user_count} className={styles.field} label='تعداد کاربر' variant="outlined" />
-                        <TextField margin='normal' size='small' onChange={change} name='data_size' value={editData.data_size} className={styles.field} label='ترافیک' variant="outlined" />
-                        <TextField margin='normal' size='small' onChange={change} name='pay_link' value={editData.pay_link} className={styles.field} label='لینک خرید' variant="outlined" />
-                        <TextField margin='normal' size='small' onChange={change} name='month' value={editData.month} className={styles.field} label='زمان' variant="outlined" />
+                        <TextField margin='normal' size='small' onChange={change} name='last_name' value={editData.last_name} className={styles.field} label='قیمت' variant="outlined" />
+                        <TextField margin='normal' size='small' onChange={change} name='mobile' value={editData.mobile} className={styles.field} label='تعداد کاربر' variant="outlined" />
                         <Button onClick={sendData}>ارسال</Button>
                     </div>
                 </Box>

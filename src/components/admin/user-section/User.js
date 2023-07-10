@@ -2,17 +2,29 @@ import React from 'react';
 import profile from '../assets/profile.png';
 import styles from './User.module.css';
 import { Link } from 'react-router-dom';
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
+import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { lastIndex } from '../../public/function';
 
-const User = ({users, editedID}) => {
-    console.log(editedID);
-    const lastPlan = users.bills.pop()
+const User = ({users, editedID, setEditedID}) => {
+    const changeHandler = event =>{
+        setEditedID({edit: true, ID: event.target.value})
+    }
+    const lastPlan = lastIndex(users.bills);
+    // console.log(lastPlan);
     return (
         <div className={styles.mainContainer}>
             <div className={styles.container}>
-                <div className={styles.imageContainer}>
-                    < img className={styles.image} src={profile} />
-                </div>
+                    {editedID.edit ?
+                    <FormControl>
+                        <RadioGroup aria-labelledby="demo-radio-buttons-group-label" defaultValue="female" name="radio-buttons-group" >
+                            <FormControlLabel checked={editedID.ID == users._id} onChange={changeHandler} value={users._id} control={<Radio />}/>
+                        </RadioGroup>
+                    </FormControl>
+                    :
+                    <div className={styles.imageContainer}>
+                        < img className={styles.image} src={profile} />
+                    </div>
+                    }
                 <Link style={{textDecoration: 'none'}} to={`/dashboard/users/${users._id}`}>
                     <div className={styles.profile}>
                         <div className={styles.profileContainer}>

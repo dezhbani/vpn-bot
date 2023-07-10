@@ -14,7 +14,6 @@ const AddConfig = ({plans, setOpen, open}) => {
     const handleClose = () => setOpen(false);
     const change = event =>{
         setData({...data, [event.target.name]: event.target.value});
-        console.log(data);
     }
     const style = {
         position: 'absolute',
@@ -29,7 +28,6 @@ const AddConfig = ({plans, setOpen, open}) => {
     };
     const handleChange = (event) => {
       setSelectedValue(event.target.value);
-      console.log(selectedValue);
     };
     const sendData = async () =>{
         try {
@@ -48,14 +46,12 @@ const AddConfig = ({plans, setOpen, open}) => {
             <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
                 <Box sx={style}>
                     <div className={styles.inputBox}>
-                        <TextField margin='normal' size='small' onChange={change} name='first_name' value={data.first_name} className={styles.field} label="نام" variant="outlined" />
-                        <TextField margin='normal' size='small' onChange={change} name='last_name' value={data.last_name} className={styles.field} label='نام خاموادگی' variant="outlined" />
                         <TextField margin='normal' size='small' onChange={change} name='mobile' value={data.mobile} className={styles.field} label='موبایل' variant="outlined" />
                         <FormControl>
                             <InputLabel id="dropdown-label">Select an option</InputLabel>
                             <Select labelId="dropdown-label" id="dropdown-input" value={selectedValue} onChange={handleChange}>
                                 {
-                                    plans.map(plan => <MenuItem value={plan._id}>{plan.name}</MenuItem>)
+                                    plans.map(plan => <MenuItem key={plan._id} value={plan._id}>{plan.name}</MenuItem>)
                                 }
                             </Select>
                         </FormControl>

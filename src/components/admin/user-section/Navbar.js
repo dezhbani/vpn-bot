@@ -9,15 +9,14 @@ import DeleteUser from './DeleteUser';
 import EditUser from './EditUser';
 const Navbar = ({data, editedID, setEditedID}) => {
     const [openAdd, setOpenAdd] = useState(false);
-    // const [openEdit, setOpenEdit] = useState(false);
-    // const [openDelete, setOpenDelete] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
+    const [openDelete, setOpenDelete] = useState(false);
     const handleOpenAdd = () =>{ 
         setOpenAdd(!openAdd);
     }
     const handleOpenEdit = () =>{
-        window.alert('هنوز این قسمت غیر فعاله')
-        // setOpenEdit(!openEdit);
-        // setEditedID({...editedID, edit: !openEdit});
+        setOpenEdit(!!editedID.ID);
+        setEditedID({...editedID, edit: !openEdit});
     }
     const handleOpenDelete = () =>{ 
         window.alert('هنوز این قسمت غیر فعاله')
@@ -30,7 +29,12 @@ const Navbar = ({data, editedID, setEditedID}) => {
             <Button className={styles.addUserButton} onClick={handleOpenEdit}><img className={styles.addUserIcon} src={editUser} /></Button>
             <Button className={styles.addUserButton} onClick={handleOpenAdd}><img src={addUser} /></Button>
             <AddUser openAdd={openAdd} setOpenAdd={setOpenAdd} />
-            <EditUser data={data}/>
+            {
+                openEdit?
+                <EditUser editedID={editedID} setEditedID={setEditedID} openEdit={openEdit} setOpenEdit={setOpenEdit} data={data}/>
+                :
+                ''
+            }
             {/* <DeleteUser openDelete={openDelete} setOpenDelete={setOpenDelete} /> */}
         </div>
     );
