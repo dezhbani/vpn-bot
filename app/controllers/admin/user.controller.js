@@ -5,10 +5,9 @@ const { userModel } = require("../../models/user");
 const { addUserSchema } = require("../../validations/admin/user.schema");
 const { IDvalidator } = require("../../validations/public.schema");
 const { planModel } = require("../../models/plan");
-const { default: axios } = require("axios");
 const { configController } = require("./config.controller");
 const { smsService } = require("../../services/sms.service");
-const { V2RAY_API_URL, V2RAY_PANEL_TOKEN } = process.env
+const { copyObject } = require("../../utils/functions");
 
 class userController extends Controllers {
     async addUser(req, res, next){
@@ -20,6 +19,21 @@ class userController extends Controllers {
             return res.status(StatusCodes.CREATED).json({
                 status: StatusCodes.CREATED, 
                 message: "کاربر اضافه شد"
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+    async editUser(req, res, next){
+        try {
+            const { id } = req.params;
+            const user = await this.findUserByID(id);
+            const data = copyObject(req.body);
+            const updateResult = await userModel.updateOne({ _id: user.id }, { $set: data });
+            if (updateResult.modifiedCount == 0) throw createHttpError.InternalServerError("اطلاعات یوزر آپدیت نشد");
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                message: "اطلاعات یوزر آپدیت شد"
             })
         } catch (error) {
             next(error)
