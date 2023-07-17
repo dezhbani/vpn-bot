@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
         code: 0,
         expireIn: 0
     }},
-    chatID: {type: String}
+    chatID: {type: String},
 }, {
     versionKey: false
 })
