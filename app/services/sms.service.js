@@ -8,7 +8,7 @@ class smsService{
                 "op":"pattern",
                 "user":"u-9906345580",
                 "pass":"MATINdezhbani",
-                "fromNum":"+983000505",
+                "fromNum":"+9830002349800800",
                 "toNum": `${mobile}`,
                 "patternCode":"6x5e01fhw2",
                 "inputData":[
@@ -24,7 +24,6 @@ class smsService{
         
     }
     async resendConfig(mobile, config){
-        console.log(mobile, config);
         return request.post({
             url: 'http://ippanel.com/api/select',
             body: {
@@ -40,7 +39,25 @@ class smsService{
             },
             json: true,
             }, (error, response, body) => {
-                console.log(body, error);
+            if (!error) return true
+        });
+    }
+    async repurchaseMessage(mobile, name){
+        return request.post({
+            url: 'http://ippanel.com/api/select',
+            body: {
+                "op":"pattern",
+                "user":"u-9906345580",
+                "pass":"MATINdezhbani",
+                "fromNum":"+983000505",
+                "toNum": `${mobile}`,
+                "patternCode":"6taekc2kqwxpw4r",
+                "inputData":[
+                        {"name": name}
+                        ]
+            },
+            json: true,
+            }, (error, response, body) => {
             if (!error) return true
         });
     }
