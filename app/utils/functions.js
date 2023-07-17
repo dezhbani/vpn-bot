@@ -12,7 +12,7 @@ async function signAccessToken(userID){
             mobile: user.mobile
         };
         const option = {
-            expiresIn: "1m"
+            expiresIn: "1y"
         };
         JWT.sign(payload, ACCESS_TOKEN_SECRET_KEY, option, (err, token) =>{
                 if(err) reject(createError.InternalServerError("خطای سروری رخ داد"));
@@ -38,11 +38,31 @@ function randomString(){
     const random = Math.random().toString(36).substring(2, 8);
     return random
 }
+function deleteInvalidProperties(data = {}, blackListFields){
+    let nullishData = ["", " ", "0", 0, null, undefined];
+    Object.keys(data).forEach(key => {
+        if(blackListFields.includes(data[key])) delete data[key];
+        if(typeof data[key] === "string") data[key] = data[key].trim();
+        if(Array.isArray(data[key]) && data[key].length > 0) data[key] = data[key].map(item => item.trim());
+        if(Array.isArray(data[key]) && data[key].length == 0) delete data[key];
+        if(nullishData.includes(data[key])) delete data[key];
+    })
+}
 
+function copyObject(object){
+    return JSON.parse(JSON.stringify(object))
+}
+const lastIndex = (array = []) => {
+    const last = array.length - 1;
+    return array[last]
+}
 module.exports = {
     randomNumber,
     signAccessToken,
     copyObject,
     configExpiryTime,
-    randomString
+    randomString,
+    copyObject,
+    deleteInvalidProperties,
+    lastIndex
 }
