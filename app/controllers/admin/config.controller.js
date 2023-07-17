@@ -9,6 +9,7 @@ const { default: axios } = require('axios');
 const { userModel } = require("../../models/user");
 const { createVless } = require("../../utils/config.type");
 const { IDvalidator } = require("../../validations/public.schema");
+const { smsService } = require("../../services/sms.service");
 
 
 class configController extends Controllers {
@@ -89,10 +90,11 @@ class configController extends Controllers {
             const saveResult = await userModel.updateOne({ _id: userID }, { $push: { configs, bills }})
             if(saveResult.modifiedCount == 0) throw createHttpError("کانفیگ برای یوزر ذخیره نشد");
             if(result) throw createHttpError.InternalServerError("کانفیگ تمدید نشد")
+            const name = `${user.first_name} ${user.last_name}`
+            await smsService.repurchaseMessage(user.mobile, name)
             return res.status(StatusCodes.OK).json({
                 status: StatusCodes.OK, 
-                message: "کانفیگ تمدید شد",
-                configContent: config.config_content
+                message: "کانفیگ تمدید شد"
             })
         } catch (error) {
             next(error)
@@ -169,7 +171,6 @@ class configController extends Controllers {
         return configs.data.obj.success
     }
     async findPlanByID(planID) {
-        console.log(planID);
         const { id } = await IDvalidator.validateAsync({ id: planID });
         const plan = await planModel.findById(id);
         if (!plan) throw createHttpError.NotFound("پلنی یافت نشد");
