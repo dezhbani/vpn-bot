@@ -28,7 +28,7 @@ class userAuthControllers extends Controllers {
         try {
             await checkOtpSchema.validateAsync(req.body);
             const { mobile, code } = req.body;
-            const user = await userModel.findOne({ mobile })
+            const user = await userModel.findOne({ mobile }, {bills: 0, chatID: 0, role: 0, configs: 0})
             if (!user) throw createHttpError.NotFound("کاربر یافت نشد");
             if (user.otp.code != code) throw createHttpError.Unauthorized("کد تایید صحیح نمیباشد");
             const now = Date.now();
@@ -37,7 +37,8 @@ class userAuthControllers extends Controllers {
             return res.status(200).json({
                 status: 200,
                 accessToken,
-                message: "با موفقیت وارد شدید"
+                message: "با موفقیت وارد شدید",
+                user
             })
         } catch (error) {
             next(error)
