@@ -1,24 +1,48 @@
 import axios from "axios"
+import { headers } from "../../public/function"
+import { toast } from "react-toastify"
 
 const getUsers = async() => {
-    const result = await axios.get('admin/user')
-    return await result.data.users
+    try {
+        const result = await axios.get('admin/user/list', headers)
+        toast.success(await result.message)
+        return result.data.users
+    } catch (error) {
+        toast.error(error.response.data.message, {autoClose: 2000})
+    }
 }
 const getUserDetails = async(id) => {
-    const result = await axios.get(`admin/user/${id}`)
-    return await result.data.user
+    try {
+        const result = await axios.get(`admin/user/${id}`, headers)
+        toast.success(await result.message)
+        return result.data.user
+    } catch (error) {
+        toast.error(error.response.data.message, {autoClose: 2000})
+    }
 }
 const addUser = async data => {
-    const result = await axios.post('admin/user/add', data)
-    return result.data
+    try {
+        const result = await axios.post('admin/user/add', data, headers)
+        return result.data
+    } catch (error) {
+        toast.error(error.response.data.message, {autoClose: 2000})
+    }
 }
 const editUser = async data => {
-    const result = await axios.patch(`admin/user/edit/${data._id}`, data)
-    return result.data
+    try {
+        const result = await axios.patch(`admin/user/edit/${data._id}`, data, headers)
+        return result.data
+    } catch (error) {
+        toast.error(error.response.data.message, {autoClose: 2000})
+    }
 }
 const repurchase = async id => {
-    const result = await axios.post(`admin/config/repurchase/${id}`)
-    return result.data
+    try {
+        const result = await axios.post(`admin/config/repurchase/${id}`, headers)
+        return result.data
+    } catch (error) {
+        toast.error(error.response.data.message, {autoClose: 2000})
+    }
 }
 
 export {

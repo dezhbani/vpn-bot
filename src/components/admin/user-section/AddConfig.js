@@ -8,7 +8,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import { addConfig } from '../services/config.service';
 
 const AddConfig = ({plans, setOpen, open}) => {
-    
     const [data, setData] = useState({})
     const [selectedValue, setSelectedValue] = useState('');
     const handleClose = () => setOpen(false);
@@ -48,10 +47,10 @@ const AddConfig = ({plans, setOpen, open}) => {
                     <div className={styles.inputBox}>
                         <TextField margin='normal' size='small' onChange={change} name='mobile' value={data.mobile} className={styles.field} label='موبایل' variant="outlined" />
                         <FormControl>
-                            <InputLabel id="dropdown-label">Select an option</InputLabel>
+                            <InputLabel id="dropdown-label">انتخاب پلن</InputLabel>
                             <Select labelId="dropdown-label" id="dropdown-input" value={selectedValue} onChange={handleChange}>
                                 {
-                                    plans.map(plan => <MenuItem key={plan._id} value={plan._id}>{plan.name}</MenuItem>)
+                                    plans?.map(plan => <MenuItem key={plan._id} value={plan._id}>{plan.name}</MenuItem>)
                                 }
                             </Select>
                         </FormControl>

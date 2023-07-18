@@ -1,5 +1,5 @@
 .container{
-    background-color: aliceblue;
+    background-color: rgb(247, 248, 248);
     max-width: calc(85vw - 13px);
     min-width: calc(85vw - 13px);
     z-index: 0;

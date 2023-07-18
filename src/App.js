@@ -6,9 +6,6 @@ import Users from './components/admin/user-section/Users';
 import UserDetails from './components/admin/user-section/UserDetails';
 
 function App() {
-
-  // const [state, setState] = useState({id: "", phone:""});
-
   return (
     <div>
       <Routes>

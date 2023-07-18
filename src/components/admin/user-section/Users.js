@@ -4,6 +4,8 @@ import { getUsers } from '../services/users.service';
 import styles from './Users.module.css'
 import User from './User';
 import Navbar from './Navbar';
+import logo from '../assets/delta-vpn-logo.webp'
+import { Navigate } from 'react-router-dom';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
@@ -18,18 +20,26 @@ const Users = () => {
         }
         allUsers()
         document.title = 'dashboard';
-    }, [])
+    }, []);
     return (
         <>
         <Sidebar />
-        <div className={styles.mainContainer}>
-            <div className={styles.container}>
-                {
-                    users.map(user => <User key={user._id} editedID={editedID} setEditedID={setEditedID}  users={user}/>)
-                }
+        {
+            users? 
+            <div>
+                <div className={styles.mainContainer}>
+                    <div className={styles.container}>
+                        {
+                            users?.map(user => <User key={user._id} editedID={editedID} setEditedID={setEditedID}  users={user}/>)
+                        }
+                    </div>
+                </div>
+                <Navbar editedID={editedID} setEditedID={setEditedID} data={users}/>
+            </div>: 
+            <div className={styles.logoContainer}>
+                <img src={logo} alt='logo' className={styles.logo} />
             </div>
-        </div>
-        <Navbar editedID={editedID} setEditedID={setEditedID} data={users}/>
+        }
         </>
     );
 };

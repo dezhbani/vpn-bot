@@ -3,3 +3,13 @@
     display: flex;
     flex-wrap: wrap;
 }
+.logoContainer{
+    display: flex;
+    min-height: 100vh;
+    min-width: 100vw;
+    justify-content: center;
+    align-items: center;
+}
+.logo{
+    height: 350px;
+}

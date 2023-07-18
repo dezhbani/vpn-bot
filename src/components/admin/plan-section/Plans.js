@@ -4,12 +4,14 @@ import Plan from './PlanDetails';
 import styles from './Plans.module.css'
 import Sidebar from '../public/Sidebar';
 import PlanGuide from '../plan-section/PlanGuide';
+import logo from '../assets/delta-vpn-logo.webp'
 
 const Plans = () => {
     const [plans, setPlans] = useState([]);
     useEffect(() => {
         const allPlans = async () => {
-            setPlans(await getPlans())
+            const allPlans = await getPlans()
+            setPlans(allPlans)
         }
         allPlans()
         document.title = 'dashboard';
@@ -17,14 +19,22 @@ const Plans = () => {
     return (
         <>
         <Sidebar />
-        <PlanGuide />
-        <div className={styles.mainContainer}>
-            <div className={styles.container}>
-                {
-                    plans.map(plan => <Plan key={plan._id} data={plan}/>)
-                }
-            </div>
-        </div>
+        {
+            plans?
+                <div>
+                    <PlanGuide />
+                    <div className={styles.mainContainer}>
+                        <div className={styles.container}>
+                            {
+                                plans?.map(plan => <Plan key={plan._id} data={plan}/>)
+                            }
+                        </div>
+                    </div>
+                </div>:
+                <div className={styles.logoContainer}>
+                    <img src={logo} alt='logo' className={styles.logo} />
+                </div>
+        }
         </>
     );
 };

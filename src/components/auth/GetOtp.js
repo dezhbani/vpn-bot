@@ -40,6 +40,7 @@ const GetOtp = ({state}) => {
                 if(status == 200){
                     toast.success(message)
                     localStorage.setItem("accessToken", accessToken)
+                    setTimeout(() => window.location.href = '/dashboard', 5000)
                 }
             } catch (error) {
                 toast.error(error.response.data.message, {autoClose: 2000})

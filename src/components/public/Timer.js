@@ -28,13 +28,13 @@ const Timer = ({mobile}) => {
   }, [seconds]);
 
   const resendOTP = async () => {
-    setMinutes(2);
-    setSeconds(0);
     try {
-        const res = await axios.post("auth/get-otp", {
-            mobile: mobile
-        });
-            toast.success(res.data.message)
+      const res = await axios.post("auth/get-otp", {
+        mobile: mobile
+      });
+      toast.success(res.data.message)
+      setMinutes(2);
+      setSeconds(0);
     } catch (error) {
         toast.error(error.response.data.message, {autoClose: 2000})
     }

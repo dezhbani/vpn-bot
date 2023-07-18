@@ -1,38 +1,27 @@
 import axios from "axios"
+import { toast } from "react-toastify"
+import { headers } from "../../public/function"
 
 const getPlans = async() => {
-    const allPlans = await axios.get('admin/plan')
-    return allPlans.data.plans
+    try {
+        const result = await axios.get('admin/plan/list', headers)
+        toast.success(await result.message)
+        return result.data?.plans
+    } catch (error) {
+        toast.error(error.response.data.message, {autoClose: 2000})
+    }
 }
 const addPlan = async data => {
-    const { name, price, user_count, data_size, pay_link, count, month } = data
-    const addPlans = await axios.post('admin/plan/add', {
-        name,
-        price, 
-        user_count, 
-        data_size, 
-        pay_link, 
-        count,
-        month
-    })
+    const addPlans = await axios.post('admin/plan/add', data, headers)
     return addPlans.data
 }
 const editPlan = async data => {
-    const { name, price, user_count, data_size, pay_link, count, month, _id } = data
-    const addPlans = await axios.patch(`admin/plan/edit/${_id}`, {
-        name,
-        price, 
-        user_count, 
-        data_size, 
-        pay_link, 
-        count,
-        month
-    })
-    return addPlans.data
+    const editPlans = await axios.patch(`admin/plan/edit/${data._id}`, data, headers)
+    return editPlans.data
 }
 const deletePlan = async id => {
-    const allPlans = await axios.delete(`admin/plan/delete/${id}`)
-    return allPlans.data
+    const deletePlans = await axios.delete(`admin/plan/delete/${id}`, headers)
+    return deletePlans.data
 }
 export {
     getPlans,

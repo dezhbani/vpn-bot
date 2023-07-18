@@ -6,7 +6,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import { editUser } from '../services/users.service';
 
 const EditUser = ({data, editedID, openEdit, setOpenEdit, setEditedID}) => {
-    // const [openEdit, setOpenEdit] = useState(!editedID.edit)
     const userData = (data.filter(user => user._id == editedID.ID))[0]
     const [editData, setEditData] = useState(userData)
     const handleClose = () => {
@@ -15,7 +14,6 @@ const EditUser = ({data, editedID, openEdit, setOpenEdit, setEditedID}) => {
     }
     const change = event =>{
         setEditData({...editData, [event.target.name]: event.target.value});
-        console.log(editData);
     }
     const style = {
         position: 'absolute',

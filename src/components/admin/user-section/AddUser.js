@@ -29,9 +29,7 @@ const AddUser = ({openAdd, setOpenAdd}) => {
         try {
             const addUserResult = await addUser(data);
             handleClose()
-            toast.success(addUserResult.message)
-            setTimeout(() => window.location.reload(true), 5000);
-            
+            toast.success(addUserResult?.message)
         } catch (error) {
             handleClose()
             toast.error(error.response.data.message, {autoClose: 2000})

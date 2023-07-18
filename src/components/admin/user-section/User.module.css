@@ -67,3 +67,13 @@
     border: none;
     border-radius: 10px ;
 }
+.radioContainer{
+    display: flex;
+    justify-content: center;
+        height: 50px;
+    /* background-color: #fff; */
+    padding: 5px;
+    border-radius: 100%;
+    /* box-shadow:  -1px 1px 5px rgb(229, 229, 229); */
+    position: absolute;
+}

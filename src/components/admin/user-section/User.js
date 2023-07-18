@@ -10,19 +10,20 @@ const User = ({users, editedID, setEditedID}) => {
         setEditedID({edit: true, ID: event.target.value})
     }
     const lastPlan = lastIndex(users.bills);
-    // console.log(lastPlan);
     return (
         <div className={styles.mainContainer}>
             <div className={styles.container}>
                     {editedID.edit ?
-                    <FormControl>
-                        <RadioGroup aria-labelledby="demo-radio-buttons-group-label" defaultValue="female" name="radio-buttons-group" >
-                            <FormControlLabel checked={editedID.ID == users._id} onChange={changeHandler} value={users._id} control={<Radio />}/>
-                        </RadioGroup>
-                    </FormControl>
+                    <div className={styles.radioContainer}>
+                        <FormControl>
+                            <RadioGroup aria-labelledby="demo-radio-buttons-group-label" defaultValue="female" name="radio-buttons-group" >
+                                <FormControlLabel checked={editedID.ID == users._id} onChange={changeHandler} value={users._id} control={<Radio />}/>
+                            </RadioGroup>
+                        </FormControl>
+                    </div>
                     :
                     <div className={styles.imageContainer}>
-                        < img className={styles.image} src={profile} />
+                        < img alt='profile' className={styles.image} src={profile} />
                     </div>
                     }
                 <Link style={{textDecoration: 'none'}} to={`/dashboard/users/${users._id}`}>
