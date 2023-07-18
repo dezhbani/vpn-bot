@@ -32,7 +32,7 @@ const details = bot =>{
     const chatID = ''+ ctx.update.message.from.id;
     const account = await userModel.findOne({chatID})
     let keyboards = []
-    if(account.configs){
+    if(account.configs.length >0){
       account.configs.map(config => {
         keyboards.push({
             text: config.name,
