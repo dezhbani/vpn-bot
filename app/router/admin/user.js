@@ -7,6 +7,7 @@ router.post("/resend", userController.resendConfig);
 router.get("/list", userController.getAllUsers);
 router.get("/:id", userController.getUserByID);
 router.patch("/edit/:id", userController.editUser);
+router.patch("/wallet/:id", userController.updateWallet);
 router.post("/add-details", userController.addUserDetails);
 
 module.exports = {
