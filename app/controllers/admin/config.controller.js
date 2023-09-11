@@ -3,11 +3,11 @@ const { planModel } = require("../../models/plan");
 const { StatusCodes } = require("http-status-codes");
 const { deleteConfigSchema } = require("../../validations/admin/config.shema");
 const { Controllers } = require("../controller");
-const { configExpiryTime } = require("../../utils/functions");
+const { configExpiryTime, percentOfNumber } = require("../../utils/functions");
 const { V2RAY_API_URL, V2RAY_PANEL_TOKEN } = process.env
 const { default: axios } = require('axios');
 const { userModel } = require("../../models/user");
-const { createVless } = require("../../utils/config.type");
+const { createVlessKcp } = require("../../utils/config.type");
 const { IDvalidator } = require("../../validations/public.schema");
 const { smsService } = require("../../services/sms.service");
 
@@ -15,13 +15,16 @@ const { smsService } = require("../../services/sms.service");
 class configController extends Controllers {
     async addConfig(req, res, next){
         try {
+            const owner = req.user
             const { first_name, last_name, mobile, planID } = req.body
             const plan = await this.findPlanByID(planID);
             const lastConfigID = await this.getConfigID();
-            await this.createUser(first_name, last_name, mobile)
+            await this.createUser(first_name, last_name, mobile, owner._id)
             const user = await userModel.findOne({mobile})
+            const percentOfPlan = percentOfNumber(plan.price, 70)
+            if(owner.wallet < percentOfPlan) throw createHttpError.BadRequest("موجودی حساب شما کافی نمی باشد")
             const fullName = `${user.first_name} ${user.last_name}`;
-            const { details, configContent: config_content, id } = await createVless(lastConfigID, plan, fullName)
+            const { details, configContent: config_content, id } = await createVlessKcp(lastConfigID, plan, fullName)
             const addConfig = await axios.post(`${V2RAY_API_URL}/xui/inbound/add`, details, {
                 withCredentials: true,
                 headers: {
@@ -36,9 +39,24 @@ class configController extends Controllers {
             }
             const bills = {
                 planID,
-                buy_date: new Date().getTime()
+                buy_date: new Date().getTime(),
+                for: 'خرید کانفیگ',
+                up: true, 
+                price: plan.price
             }
+            const ownerBills = {
+                planID,
+                buy_date: new Date().getTime(),
+                for: 'ثبت کانفیگ',
+                up: true, 
+                price: percentOfPlan
+            }
+            const wallet = owner.wallet - percentOfPlan;
+            // update owner
             if(!addConfig.data.success) throw createHttpError.InternalServerError("کانفیگ ایجاد نشد")
+            const updateWallet = await userModel.updateOne({ mobile: owner.mobile }, { $set: {wallet}, $push: {bills: ownerBills} })
+            // update user 
+            if(updateWallet.modifiedCount == 0) throw createHttpError.InternalServerError('کانفیگ ثبت نشد')
             const saveResult = await userModel.updateOne({ mobile }, { $push: { configs, bills }})
             if(saveResult.modifiedCount == 0) throw createHttpError("کانفیگ برای یوزر ذخیره نشد");
             return res.status(StatusCodes.CREATED).json({
@@ -75,6 +93,7 @@ class configController extends Controllers {
             configsData.expiryTime = +configExpiryTime(plan.month)
             configsData.up = 0
             configsData.down = 0
+            configsData.enable = true
             const result = await this.repurchaseConfig(configsData.id, configsData)
             const configs = {
                 name: config.name,
@@ -90,8 +109,7 @@ class configController extends Controllers {
             const saveResult = await userModel.updateOne({ _id: userID }, { $push: { configs, bills }})
             if(saveResult.modifiedCount == 0) throw createHttpError("کانفیگ برای یوزر ذخیره نشد");
             if(result) throw createHttpError.InternalServerError("کانفیگ تمدید نشد")
-            const name = `${user.first_name} ${user.last_name}`
-            await smsService.repurchaseMessage(user.mobile, name)
+            await smsService.repurchaseMessage(user.mobile, user.full_name)
             return res.status(StatusCodes.OK).json({
                 status: StatusCodes.OK, 
                 message: "کانفیگ تمدید شد"
@@ -100,21 +118,14 @@ class configController extends Controllers {
             next(error)
         }
     }
-    async getAllConfigs(req, res, next){
-        try {
-            const configs = (await axios.post(`${V2RAY_API_URL}/xui/inbound/list`, {}, {
-                withCredentials: true,
-                headers: {
-                  'Cookie': V2RAY_PANEL_TOKEN
-                }
-            })).data.obj
-            return res.status(StatusCodes.OK).json({
-                status: StatusCodes.OK, 
-                configs
-            })
-        } catch (error) {
-            next(error)
-        }
+    async getAllConfigs(){
+        const configs = (await axios.post(`${V2RAY_API_URL}/xui/inbound/list`, {}, {
+            withCredentials: true,
+            headers: {
+                'Cookie': V2RAY_PANEL_TOKEN
+            }
+        })).data.obj
+        return configs
     }
     async findPlanByID(planID) {
         const plan = await planModel.findOne({_id: planID});
@@ -132,10 +143,11 @@ class configController extends Controllers {
         const lastConfigID = configs[lastIndex].id + 1
         return lastConfigID
     }
-    async createUser(first_name, last_name, mobile){
+    async createUser(first_name, last_name, mobile, by){
+        console.log(by);
         const user = await userModel.findOne({mobile})
         if(!user){
-            const newUser = await userModel.create({ first_name, last_name, mobile })
+            const newUser = await userModel.create({ first_name, last_name, mobile, by })
             if(!newUser) return createHttpError.InternalServerError('یوزر ثبت نشد')
         }
     }
@@ -147,7 +159,7 @@ class configController extends Controllers {
             }
         })).data.obj
         const config = configs.filter(config => JSON.parse(config.settings).clients[0].id == configID);
-        const seed = JSON.parse(config[0].streamSettings).kcpSettings.seed;
+        const seed = JSON.parse(config[0].streamSettings).kcpSettings?.seed;
         const name = config[0].remark.replace(" ", "%20")
         const config_content = `vless://${configID}@s1.delta-dev.top:${config[0].port}?type=kcp&security=none&headerType=none&seed=${seed}#${name}`
         if (!config) throw createHttpError.NotFound("کانفیگی یافت نشد");
