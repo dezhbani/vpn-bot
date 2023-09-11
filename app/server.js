@@ -5,9 +5,12 @@ const morgan = require('morgan');
 const path = require('path');
 const http = require("http");
 const { default: mongoose } = require("mongoose");
-const startTelegramBot = require('../bot/commands/start');
+const { startTelegramBot } = require('../bot/commands/start');
 const { AllRoutes } = require('./router/router');
 const createHttpError = require('http-errors');
+const cron = require('node-cron');
+const { checkEndTime } = require('./controllers/admin/cron/checkConfigEndTime');
+const { checkEndData } = require('./controllers/admin/cron/checkEndData');
 
 module.exports = class Application{
     #app = express();
@@ -20,6 +23,7 @@ module.exports = class Application{
         this.connectToDB();
         this.createServer();
         this.createRoutes();
+        this.checkConfig();
         this.startBot();
         this.errorHandling();
     }
@@ -60,13 +64,20 @@ module.exports = class Application{
     startBot(){
         startTelegramBot()
     }
+    checkConfigCheckConfig(){
+        cron.schedule('* * 12 * *', () => {
+            checkEndTime()
+        })
+        cron.schedule('* * * * *', () => {
+            checkEndData(60)
+        })
+    }
     errorHandling(){
         this.#app.use((req, res, next) => {
                 next(createHttpError.NotFound("آدرس مورد نظر یافت نشد"))
         })
         this.#app.use((err, req, res, next) =>{
             const serverError = createHttpError.InternalServerError("InternalServerError")
-            console.log(err)
             const status = err.status || serverError.status;
             const message = err.message || serverError.message;
             return res.status(status).json({
