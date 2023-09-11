@@ -5,8 +5,8 @@ const { account } = require('../src/account');
 const { bill } = require('../src/bill');
 const { BOT_TOKEN } = process.env;
 
+const bot = new Telegraf(BOT_TOKEN);
 const startTelegramBot = () =>{
-    const bot = new Telegraf(BOT_TOKEN);
         bot.start(ctx => {
         const message = ctx.update.message
         ctx.reply(`سلام ${message.chat.first_name} خوش اومدی!🤗`, Markup.keyboard([["🖥 حساب کاربری"], ['🛍 پلن ها']])
@@ -21,4 +21,7 @@ const startTelegramBot = () =>{
         bot.launch();
 }
 
-module.exports = startTelegramBot
+module.exports = {
+  startTelegramBot, 
+  bot
+}
