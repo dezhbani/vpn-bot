@@ -1,6 +1,7 @@
 const { userModel } = require("../models/user");
 const JWT = require("jsonwebtoken");
 const createError = require("http-errors");
+const createHttpError = require("http-errors");
 const { ACCESS_TOKEN_SECRET_KEY } = process.env;
 function randomNumber(){
     return Math.floor((Math.random() * 90000) + 10000)
@@ -26,7 +27,7 @@ function copyObject(object){
 function configExpiryTime(month){
     const expiryTime = new Date()
     expiryTime.setMonth(expiryTime.getMonth() + month)
-    expiryTime.setDate(expiryTime.getDate() +1)
+    expiryTime.setDate(expiryTime.getDate())
     expiryTime.setHours(23)
     expiryTime.setMinutes(59)
     expiryTime.setSeconds(0)
@@ -56,6 +57,11 @@ const lastIndex = (array = []) => {
     const last = array.length - 1;
     return array[last]
 }
+
+const percentOfNumber = (number, percent) => {
+    const result = (+number / 100) * percent;
+    return result
+}
 module.exports = {
     randomNumber,
     signAccessToken,
@@ -64,5 +70,6 @@ module.exports = {
     randomString,
     copyObject,
     deleteInvalidProperties,
-    lastIndex
+    lastIndex,
+    percentOfNumber
 }
