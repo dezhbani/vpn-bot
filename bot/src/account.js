@@ -4,9 +4,8 @@ const { getOTP, checkOTP } = require("../auth/auth");
 const { validationMobile } = require("../utils/functions");
 
 const userDetails = account => {
-    return `🆔شناسه شما : ${account.chatID} \n\n👤اسم شما: ${account.first_name} ${account.last_name}\n📱 شماره موبایل: ${account.mobile}`
+    return ` شناسه شما : ${account.chatID}🆔 \n\n👤اسم شما: ${account.first_name} ${account.last_name}\n📱 شماره موبایل: ${account.mobile}`
 }
-
 const account = bot => {
     let obj = {};
     bot.hears('🖥 حساب کاربری', async ctx => {

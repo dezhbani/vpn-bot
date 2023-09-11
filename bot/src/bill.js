@@ -1,9 +1,10 @@
 const { planModel } = require("../../app/models/plan");
 const { userModel } = require("../../app/models/user");
+const { checkLogin } = require("../middleware/checkLogin");
 const { timestampToDate } = require("../utils/functions");
 
 const bill = bot => {
-    bot.hears('فاکتور های من', async ctx => {
+    bot.hears('فاکتور های من', checkLogin, async ctx => {
         const chatID = ''+ ctx.update.message.from.id;
         const user = await userModel.findOne({chatID})
         const account = await planModel.populate(user, {
@@ -11,9 +12,10 @@ const bill = bot => {
         })
         let plans = '';
         let total = 0
+        account.bills = account.bills.filter(bill => bill.planID !== null)
         account.bills.map(bill => {
             const { buy_date, planID: plan } = bill;
-            plans = `${plans}\n\n 🏷 نام بسته:  ${plan.name} \n🕙 مدت زمان کانفیگ: ${plan.month} ماهه \n👥 تعداد کاربر: ${plan.user_count} کاربر \n↕️ حجم کانفیگ: ${plan.data_size} گیگ \n💰 قیمت کانفیگ: ${plan.price} تومان\n📅 تاریخ خرید: ${timestampToDate(buy_date, true)}`
+            plans = `${plans}\n\n 🏷 نام بسته:  ${plan.name} \n🕙 مدت زمان کانفیگ: ${plan.month} ماهه \n👥 تعداد کاربر: ${plan.user_count} کاربر \n↕️ حجم کانفیگ: ${plan.data_size} گیگ \n💰 قیمت کانفیگ: ${plan.price} تومان\n📅 تاریخ خرید: ${timestampToDate(+buy_date, true)}`
             total += (+plan.price)
         })
         plans = `${plans} \n\n‏🧮 مجموع خرید شما : ${total} تومان`

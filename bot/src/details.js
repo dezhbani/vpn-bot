@@ -2,6 +2,7 @@ const { default: axios } = require('axios');
 const { Markup } = require('telegraf');
 const { clculate, totalConsumed, timestampToDate } = require("../utils/functions");
 const { userModel } = require('../../app/models/user');
+const { checkLogin } = require('../middleware/checkLogin');
 const { V2RAY_API_URL, V2RAY_PANEL_TOKEN } = process.env;
 const findConfigDetails = async id => {
   let list = [];
@@ -28,13 +29,14 @@ const findConfigDetails = async id => {
   return configDetails
 }
 const details = bot =>{
-  bot.hears('جزئیات کانفیگ های من', async ctx => {
+  bot.hears('جزئیات کانفیگ های من', checkLogin, async ctx => {
     const chatID = ''+ ctx.update.message.from.id;
     const account = await userModel.findOne({chatID})
-    let keyboards = []
+    let keyboards = [];
+    const time = new Date().getTime();
     if(account.configs.length >0){
       account.configs.map(config => {
-        keyboards.push({
+        if(config.expiry_date > time) keyboards.push({
             text: config.name,
             callback_data: config.configID
         })
