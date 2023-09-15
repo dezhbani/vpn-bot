@@ -64,7 +64,7 @@ module.exports = class Application{
     startBot(){
         startTelegramBot()
     }
-    checkConfigCheckConfig(){
+    checkConfig(){
         cron.schedule('* * 12 * *', () => {
             checkEndTime()
         })

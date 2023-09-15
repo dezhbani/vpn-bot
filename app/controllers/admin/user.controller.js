@@ -43,7 +43,6 @@ class userController extends Controllers {
                 message: "کیف پول کاربر آپدیت شد"
             })
         } catch (error) {
-            console.log(error);
             next(error)
         }
     }

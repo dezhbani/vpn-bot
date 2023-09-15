@@ -47,13 +47,11 @@ const plans = bot => {
         let selectedPlan = '';
         withLimitionPlans.map(plan => {
             bot.hears(plan, async ctx => {
-                console.log(ctx.update);
                 const text = ctx.update.message.text;
                 const price = +text.split(' ')[4]
                 const plan = await planModel.findOne({price});
                 if(!plan) return ctx.reply('بسته ارسالی وجود ندارد❌');
                 selectedPlan = plan
-                console.log(selectedPlan);
                 return ctx.reply(`بسته انتخابی شما: \n ${plan.user_count} کاربر، ${plan.data_size} گیگ: ${plan.price} ت، ${plan.name}`, Markup.inlineKeyboard([
                     {
                         text: 'پرداخت از کیف پول',
@@ -68,9 +66,7 @@ const plans = bot => {
             const owner = await userModel.findOne({mobile: '09906345580'});
             bot.on('text', async ctx => {
                 try {
-                    console.log('log from ctx:', ctx);
                     const [ first_name, last_name, mobile ] = await ctx.update.message.text.split('\n')
-                    console.log(first_name, last_name, mobile);
                     const lastConfigID = await configController.getConfigID();
                     await configController.createUser(first_name, last_name, mobile, owner._id)
                     const user = await userModel.findOne({mobile})
@@ -82,7 +78,7 @@ const plans = bot => {
                         headers: {
                             'Cookie': V2RAY_PANEL_TOKEN
                         }
-                    }).catch(error => console.log(error))
+                    })
                     const configs = {
                         name: fullName,
                         config_content,
@@ -113,7 +109,6 @@ const plans = bot => {
                     if(saveResult.modifiedCount == 0) return ctx.reply("کانفیگ برای یوزر ذخیره نشد \nبه پشتیبانی پیام ارسال شد");
                     return ctx.reply(config_content)
                 } catch (error) {
-                    console.log(error);
                     ctx.reply(error)
                 }
             })
@@ -133,11 +128,9 @@ const plans = bot => {
             bot.hears(plan, async ctx => {
                 const text = ctx.update.message.text;
                 const price = +text.split(' ')[2]
-                console.log(price);
                 const plan = await planModel.findOne({price});
                 if(!plan) return ctx.reply('بسته ارسالی وجود ندارد❌');
                 selectedPlan = plan;
-                console.log(selectedPlan);
                 return ctx.reply(`بسته انتخابی شما: \n ${plan.data_size} گیگ: ${plan.price} ت، ${plan.name}`, Markup.inlineKeyboard([
                     {
                         text: 'پرداخت از کیف پول',

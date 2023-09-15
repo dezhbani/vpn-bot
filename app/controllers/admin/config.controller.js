@@ -144,7 +144,6 @@ class configController extends Controllers {
         return lastConfigID
     }
     async createUser(first_name, last_name, mobile, by){
-        console.log(by);
         const user = await userModel.findOne({mobile})
         if(!user){
             const newUser = await userModel.create({ first_name, last_name, mobile, by })
