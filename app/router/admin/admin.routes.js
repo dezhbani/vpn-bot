@@ -11,7 +11,6 @@ router.use("/config", adminConfigRoutes);
 router.use("/user", adminUserRoutes);
 router.use("/permission", adminPermissionRoutes);
 router.use("/role", adminRoleRoutes);
-router.use("/profile", adminProfileRoutes);
 
 module.exports = {
     AdminRoutes: router

@@ -1,4 +1,4 @@
 /node_modules
 /backup
-/.dockerignore
-/Dockerfile
+# /.dockerignore
+# /Dockerfile
