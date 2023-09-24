@@ -3,7 +3,6 @@ import { getPlans } from '../services/plan.service';
 import Plan from './PlanDetails';
 import styles from './Plans.module.css'
 import Sidebar from '../public/Sidebar';
-import PlanGuide from '../plan-section/PlanGuide';
 import logo from '../assets/delta-vpn-logo.webp'
 
 const Plans = () => {
@@ -22,7 +21,6 @@ const Plans = () => {
         {
             plans?
                 <div>
-                    <PlanGuide />
                     <div className={styles.mainContainer}>
                         <div className={styles.container}>
                             {

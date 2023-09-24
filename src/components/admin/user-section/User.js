@@ -29,7 +29,7 @@ const User = ({users, editedID, setEditedID}) => {
                 <Link style={{textDecoration: 'none'}} to={`/dashboard/users/${users._id}`}>
                     <div className={styles.profile}>
                         <div className={styles.profileContainer}>
-                            <div className={styles.name}>نام:<span> {`${users.first_name} ${users.last_name}`}</span></div>
+                            <div className={styles.name}>نام:<span> {users.full_name}</span></div>
                             <div className={styles.mobile}>موبایل: {`${users.mobile}`}</div>
                             <div>{lastPlan?.planID? `بسته فعلی: ${lastPlan.planID.name}`:'بسته ای خریداری نشده'}</div>
                         </div>

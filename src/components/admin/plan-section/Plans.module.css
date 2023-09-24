@@ -1,9 +1,14 @@
 .mainContainer{
     display: flex;
     justify-content: center;
+    max-width: 80vw;
 }
 .container {
+    direction: rtl;
+    flex-wrap: wrap;
+    display: flex;
     margin-top: 80px;
+    margin-left: 20px;
 }
 
 .logoContainer{

@@ -47,7 +47,7 @@ const Sidebar = () => {
                 <Link className={styles.links} to='/dashboard/payments'>
                     <div className={styles.container}>
                         <img className={styles.icon} src={payments} alt='payments'/>
-                        <div className={styles.field}>پرداخت ها</div>
+                        <div className={styles.field}>تراکنش ها</div>
                     </div>
                 </Link>
             </div>

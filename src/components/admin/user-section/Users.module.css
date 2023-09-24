@@ -1,15 +1,20 @@
+.mainContainer{
+  display: flex;
+  width: 85vw;
+}
 .container {
+    direction: rtl;
     margin: 30px 80px;
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 .logoContainer{
-    display: flex;
-    min-height: 100vh;
-    min-width: 100vw;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  min-height: 100vh;
+  min-width: 100vw;
+  justify-content: center;
+  align-items: center;
 }
 .logo{
-    height: 350px;
+  height: 350px;
 }
