@@ -1,0 +1,16 @@
+.support{
+    width: 200px;
+    border-radius: 5px;
+    /* background-color: rgb(191 219 254); */
+    padding: 5px;
+    /* tra */
+}
+.container{
+    text-align: center;
+    align-items: center;
+}
+.supportContainer{
+    margin-top: 30px;
+    justify-content: center;
+    display: flex;
+}
