@@ -1,0 +1,21 @@
+.container{
+    /* display: grid; */
+    flex-direction: column;
+    height: 320px;
+    padding: 10px;
+    /* justify-content: space-around; */
+    /* width: max-content; */
+    overflow-y: scroll;
+    /* direction: rtl ; */
+}
+::-webkit-scrollbar {
+    width: 8px;
+}
+  
+::-webkit-scrollbar-track {
+    background: none; 
+}
+::-webkit-scrollbar-thumb {
+    background: #002b6b;
+    border-radius: 10px;
+}
