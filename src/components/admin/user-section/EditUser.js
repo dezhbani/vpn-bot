@@ -2,8 +2,8 @@ import { Box, Button, Modal, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import styles from '../plan-section/AddPlan.module.css'
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify';
-import { editUser } from '../services/users.service';
+import { toast } from 'react-toastify';
+import { editUser } from '../../services/users.service';
 
 const EditUser = ({data, editedID, openEdit, setOpenEdit, setEditedID}) => {
     const userData = (data.filter(user => user._id == editedID.ID))[0]
@@ -49,7 +49,7 @@ const EditUser = ({data, editedID, openEdit, setOpenEdit, setEditedID}) => {
                     </div>
                 </Box>
             </Modal>
-            <ToastContainer />
+             
         </div>
     );
 };

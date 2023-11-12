@@ -1,12 +1,9 @@
-import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, TextField } from '@mui/material';
+import { Box, Button, Modal, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import styles from './AddConfig.module.css'
-import add from '../assets/add.svg'
-import { addPlan, getPlans } from '../services/plan.service';
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify';
-import { addConfig } from '../services/config.service';
-import { addUser } from '../services/users.service';
+import { toast } from 'react-toastify';
+import { addUser } from '../../services/users.service';
 
 const AddUser = ({openAdd, setOpenAdd}) => {
     const [data, setData] = useState({})
@@ -47,7 +44,7 @@ const AddUser = ({openAdd, setOpenAdd}) => {
                     </div>
                 </Box>
             </Modal>
-            <ToastContainer />
+             
         </div>
     );
 };
