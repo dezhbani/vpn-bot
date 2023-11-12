@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { getPlans } from '../services/plan.service';
+import React, { useContext, useEffect, useState } from 'react';
+import { getPlans } from '../../services/plan.service';
 import Plan from './PlanDetails';
 import styles from './Plans.module.css'
 import Sidebar from '../public/Sidebar';

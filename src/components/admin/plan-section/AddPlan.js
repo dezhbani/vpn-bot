@@ -54,7 +54,7 @@ const AddPlan = () => {
                     </div>
                 </Box>
             </Modal>
-            <ToastContainer />
+             
         </div>
     );
 };

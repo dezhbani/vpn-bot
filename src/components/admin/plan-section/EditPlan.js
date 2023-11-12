@@ -49,7 +49,7 @@ const EditPlan = ({data, open, setOpen}) => {
                     </div>
                 </Box>
             </Modal>
-            <ToastContainer />
+             
         </div>
     );
 };
