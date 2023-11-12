@@ -1,0 +1,58 @@
+.mainContainer{
+    display: flex;
+    border-bottom: 1px solid silver;
+    width: calc(85% - 5px);
+    direction: rtl;
+    /* height: fit-content; */
+    justify-content: center;
+}
+.container{
+    display: flex;
+    padding: 10px;
+}
+
+.date{
+    width: 150px;
+    margin: 20px 50px;
+}
+.amount{
+    width: 100px;
+    margin: 20px 50px;
+}
+.up{
+    width: 70px;
+    height: fit-content;
+    margin: 20px 50px;
+    color: red;
+    border: 1px solid red;
+    padding: 5px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.down{
+    width: 70px;
+    margin: 20px 50px;
+    color: green;
+    border: 1px solid green;
+    padding: 5px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.amountUp{
+    width: 100px;
+    margin: 20px 50px;
+    color: red;
+}
+.amountDown{
+    width: 100px;
+    margin: 20px 50px;
+    color: green;
+}
+.for{
+    width: 200px;
+    margin: 20px 50px;
+}
