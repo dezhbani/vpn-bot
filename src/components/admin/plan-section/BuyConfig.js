@@ -1,8 +1,6 @@
 import { Box, Button, Modal, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import styles from '../user-section/AddConfig.module.css'
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify';
 import { addConfig } from '../../services/config.service';
 
 const BuyConfig = ({plan, setOpen, open}) => {
