@@ -21,6 +21,14 @@
     border-left: 1px solid #e5eaef;
 }
 
+.Loading{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .fieldsContainer{
     margin: 35px 0px;
     font-family: b-kamran;
