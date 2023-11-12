@@ -1,45 +1,47 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styles from './Auth.module.css'
 import GetMobile from './GetMobile';
 import GetOtp from './GetOtp';
-import { profile } from '../admin/services/profile.service';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ServerError from '../admin/public/errors/ServerError';
+import Loading from '../admin/public/Loading';
+import { getUserProfile } from '../services/profile.service';
+import { redirect } from '../public/function';
+import { ProfileContext } from '../context/UserProfileContext';
+import { Navigate } from 'react-router-dom';
+import Forbidden from '../admin/public/errors/Forbidden';
 
 const Auth = () => {
-
+    const data = useContext(ProfileContext)
     const [ state, setState ] = useState({sendOTP: false, mobile: ''})
-    const [ data, setData ] = useState({status: 0})
-    const accessToken = localStorage.getItem('accessToken')
-    const getProfile = async () => {
-        const profile1 = await profile()
-        setData(profile1)
-    }
-    useEffect(() => {
-        getProfile()
-    }, [])
     const checkOTP = () => {
         if(state.sendOTP) return <GetOtp state={state} />
         return <GetMobile setState={setState} state={state} />
     }
-    const checkProfile = () => {
-        if(accessToken || data?.status == 200){
-            if(data?.status == 200){
-                return window.location.href = '/dashboard'
-            }
-        }else{
-            return checkOTP()
+    const checkProfile = () => { 
+        switch (data?.status) {
+            case 200:
+                if(data.role !== "customer") return <Navigate to="/dashboard" />
+            case 401:
+                return <div className={styles.container}>{checkOTP()}</div>
+            case 403:
+                return <Forbidden />
+            case 500:
+                return <ServerError />
+            default:
+                return <ServerError />
         }
     }
     return (
-        <div className={styles.main}>
-            <div className={styles.container}>
+        <>
+            <div className={styles.main}>
                 {   
                     checkProfile()
                 }
             </div>
-            <ToastContainer />
-        </div>
+             
+        </>
     );
 };
 

@@ -58,7 +58,7 @@ const GetMobile = ({setState}) => {
                     <button onClick={clicked} type="submit">تایید</button>
                 </div>
             </div>
-            <ToastContainer />
+             
         </div>
     );
 };

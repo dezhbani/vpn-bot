@@ -62,7 +62,7 @@ const GetOtp = ({state}) => {
                     </div>
                 </div>
             </div>
-            <ToastContainer />
+             
         </div>
     );
 };
