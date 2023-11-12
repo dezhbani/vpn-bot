@@ -4,12 +4,15 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import axios from 'axios';
 import './index.css'
+import UserProfileContext from './components/context/UserProfileContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 axios.defaults.baseURL = 'http://localhost:80';
 // axios.defaults.baseURL = 'http://api.delta-dev.top';
 root.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+  <UserProfileContext>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </UserProfileContext>
 );
