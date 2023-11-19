@@ -11,7 +11,19 @@ class profileController extends Controllers {
                 status: StatusCodes.OK, 
                 full_name: `${first_name} ${last_name}`,
                 mobile, 
+                role,
                 wallet
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+    async bills(req, res, next){
+        try {
+            const { bills } = req.user;
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK, 
+                bills
             })
         } catch (error) {
             next(error)
