@@ -66,10 +66,10 @@ module.exports = class Application{
     }
     checkConfig(){
         cron.schedule('* * 12 * *', () => {
-            checkEndTime()
+            checkEndTime(2)
         })
         cron.schedule('* * * * *', () => {
-            checkEndData(60)
+            checkEndData(70)
         })
     }
     errorHandling(){
