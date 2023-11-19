@@ -28,11 +28,14 @@ class userController extends Controllers {
         try {
             const { id } = req.params;
             const { pay } = req.body;
-            const userWallet = await this.findUserByID(id);
-            const wallet = userWallet.wallet + +pay;
+            const user = await this.findUserByID(id);
+            const wallet = user.wallet + +pay;
             const bills = {
                 buy_date: new Date().getTime(),
-                for: 'افزایش اغتبار',
+                for: {
+                    description: 'افزایش اعتبار',
+                    user: user._id
+                },
                 price: pay,
                 up: false
             }
@@ -58,6 +61,7 @@ class userController extends Controllers {
                 message: "اطلاعات یوزر آپدیت شد"
             })
         } catch (error) {
+            console.log(error);
             next(error)
         }
     }
@@ -101,6 +105,21 @@ class userController extends Controllers {
     async getAllUsers(req, res, next) {
         try {
             const users = await userModel.find({}, { otp: 0 })
+            const account = await planModel.populate(users, {
+                path: 'bills.planID'
+            })
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                users: account
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+    async getUsersByOwner(req, res, next) {
+        try {
+            const user = req.user
+            const users = await userModel.find({by: user._id}, { otp: 0 })
             const account = await planModel.populate(users, {
                 path: 'bills.planID'
             })
