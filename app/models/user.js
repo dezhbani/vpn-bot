@@ -3,12 +3,17 @@ const ConfigSchema = new mongoose.Schema({
     name: {type: String, required: true}, 
     config_content: {type: String, required: true},
     expiry_date: {type: String, required: true},
-    configID: {type: String, required: true}
+    configID: {type: String, required: true},
+    endData: {type: Boolean, default: false}
 })
+const forSchema = new mongoose.Schema({
+    description: {type: String, default: '', required: true},
+    user: {type: mongoose.Types.ObjectId, ref: 'user', default: undefined}
+});
 const bill = new mongoose.Schema({
     planID: {type: mongoose.Types.ObjectId, ref: 'plan', default: null},
     buy_date: {type: Number, default: new Date().getTime()},
-    for: {type: String, default: '', required: true}, 
+    for: {type: forSchema, default: {}, required: true}, 
     price: {type: Number, default: null},
     up: {type: Boolean, default: true}
 })
