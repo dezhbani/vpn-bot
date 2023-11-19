@@ -88,14 +88,18 @@ const plans = bot => {
                     const bills = {
                         planID: plan._id,
                         buy_date: new Date().getTime(),
-                        for: 'خرید کانفیگ',
+                        for: {
+                            description: 'خرید کانفیگ'
+                        },
                         up: true, 
                         price: +plan.price
                     }
                     const ownerBills = {
                         planID: plan._id,
                         buy_date: new Date().getTime(),
-                        for: 'ثبت کانفیگ توسط کاربر ',
+                        for: {
+                            description: 'ثبت کانفیگ توسط کاربر '
+                        },
                         up: true, 
                         price: +plan.price
                     }
