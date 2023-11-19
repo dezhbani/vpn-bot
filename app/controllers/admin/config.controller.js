@@ -40,14 +40,19 @@ class configController extends Controllers {
             const bills = {
                 planID,
                 buy_date: new Date().getTime(),
-                for: 'خرید کانفیگ',
+                for: {
+                    description: 'خرید کانفیگ'
+                },
                 up: true, 
                 price: plan.price
             }
             const ownerBills = {
                 planID,
                 buy_date: new Date().getTime(),
-                for: 'ثبت کانفیگ',
+                for: {
+                    description: 'ثبت کانفیگ',
+                    user: user._id
+                },
                 up: true, 
                 price: percentOfPlan
             }
