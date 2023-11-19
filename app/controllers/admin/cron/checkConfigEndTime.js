@@ -3,7 +3,7 @@ const { timestampToDate } = require("../../../../bot/utils/functions");
 const { userModel } = require("../../../models/user");
 const { smsService } = require("../../../services/sms.service");
 
-const checkEndTime = async () => {
+const checkEndTime = async (alertDay = 2) => {
     const users = await userModel.find();
     users.filter(user => {
         user.configs.map( async config => {
@@ -16,9 +16,10 @@ const checkEndTime = async () => {
             const nowYear = new Date().getFullYear()
             time.setDate(nowDay + 2)
             time.setMonth(nowMonth + 1)
-            if(day - 1 == nowDay && month == nowMonth && year == nowYear ) {
-                smsService.endTimeMessage(user.mobile, user.full_name, 1)
-                if(user.chatID) bot.telegram.sendMessage(user.chatID, `${user.first_name} ${user.last_name} محترم 2 روز تا پایان زمان کانفیگتون باقی مانده`)
+            if(day - alertDay == nowDay && month == nowMonth && year == nowYear ) {
+                console.log('time:',`${user.first_name} ${user.last_name}`);
+                // smsService.endTimeMessage(user.mobile, user.full_name, alertDay)
+                // if(user.chatID) bot.telegram.sendMessage(user.chatID, `${user.first_name} ${user.last_name} محترم 2 روز تا پایان زمان کانفیگتون باقی مانده`)
             }
         })
     })
