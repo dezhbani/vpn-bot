@@ -1,0 +1,128 @@
+@font-face{
+    font-family: iran-sans;
+    src: url(../assets/IRANSansWeb.woff2);
+}
+.mainContainer{
+    min-height: 100vh;
+    min-width: 100vw;
+    background-color: #f1f1f1;
+}
+/* .buttonAnimation:hover{
+    animation-name: spin;
+    animation-timing-function: linear;
+    animation-duration: 10s;
+    animation-delay: 5s;
+}
+@keyframes spin {
+    0% {
+        background: linear-gradient(0deg, #000 , #38bdf8);
+    };
+    90% {
+      background: linear-gradient(90deg, #000 , #38bdf8);
+    };
+    180% {
+      background: linear-gradient(180deg, #000 , #38bdf8);
+    };
+    270% {
+      background: linear-gradient(270deg, #000 , #38bdf8);
+    };
+    360% {
+      background: linear-gradient(360deg, #000 , #38bdf8);
+    };
+  } */
+.logoContainer{
+    width: 100vmax;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+.container{
+    font-family: iran-sans;
+    background-color: #fff;
+    width: 41rem;
+    direction: rtl;
+    box-shadow: 1px 1px 10px rgb(202, 202, 202);
+    border-radius: 10px 10px 0 0;
+}
+.box{
+    background-color: #fff;
+    box-shadow: 1px 1px 10px rgb(202, 202, 202);
+    border: 20px;
+    margin: 30px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 10px;
+}
+.amountContainer{
+    display: flex;
+    justify-content: right;
+    direction: rtl;
+    flex-direction: column;
+}
+.buttonContainer{
+    display: flex;
+    justify-content: center;
+    margin: 20px 0 0 0;
+}
+.button{
+    background-color: #4f91e6;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 100px;
+    width: fit-content;
+}
+.button:hover{
+    background-color: #3798f3;
+}
+.amount{
+    padding: 15px 0;
+    direction: rtl;
+    float: left;
+    font-weight: bold;
+    font-size: 20px;
+}
+.amount span{
+    font-size: 16px;
+    color: #4f91e6;
+}
+.logo{
+    display: flex;
+    justify-content: center;
+    height: 80px;
+}
+.loading{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+}
+.directionRight{
+    direction: rtl;
+    box-shadow: 1px 1px 10px rgb(202, 202, 202);
+}
+
+.gContainer {
+    position : relative;
+    top: -20px;
+    margin: auto;
+    height : fit-content ;
+    width: fit-content;
+    filter : contrast( 20 );
+    overflow : hidden;
+    rotate: 180deg;
+    width: 82rem;
+}
+
+.gInner {
+    scale: 50%;
+    /* display: flex;
+    justify-content: center; */
+    position : relative;
+    height : 60px ;
+    background : radial-gradient(circle at 20px  0 , transparent, transparent 20px , #fff  21px , #fff  40px );
+    background-size : 47px  100% ;
+}
+
