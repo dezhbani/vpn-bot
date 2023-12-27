@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './PlanDetails.module.css'
 import BuyConfig from './BuyConfig';
+import { addCommaToPrice } from '../../public/function';
 
 const Plan = ({data}) => {
     const [open, setOpen] = useState(false);
@@ -37,7 +38,7 @@ const Plan = ({data}) => {
                     <div className={styles.dataSize}>{data.data_size} گیگ</div>
                     <div className={styles.month}>{data.month} ماهه</div>
                     <div className={data.user_count == 0?styles.userCount:styles.dataSize}>{data.user_count == 0? "بدون محدودیت": `${data.user_count} کاربره`}</div>
-                    <div className={styles.price}>{data.price} ت</div>
+                    <div className={styles.price}>{addCommaToPrice(data.price)} ت</div>
                 </div>
                 <div className={styles.buttonContainer}>
                     <button className={styles.newConfig} onClick={handleOpen}>ثبت کانفیگ</button>
