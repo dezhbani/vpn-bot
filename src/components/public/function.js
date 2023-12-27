@@ -1,6 +1,4 @@
-import { useContext } from "react";
-import { ProfileContext } from "../context/UserProfileContext";
-import Loading from "../admin/public/Loading";
+import { useLocation } from "react-router-dom";
 
 const lastIndex = (array = []) => {
     const last = array.length - 1;
@@ -29,13 +27,10 @@ const addCommaToPrice = (price) => {
     let strPrice = price? '' + price: '0'
     const arrPrice = strPrice.split('')
     arrPrice.reverse()
-    let count = 0;
     let i = 0
     arrPrice.map(p => {
         if(i%3 == 0 && i !== 0){
             arrPrice[i] += ','
-            console.log(arrPrice[i]);
-            console.log(i, i%3);
         }
         i++
     })
@@ -53,6 +48,11 @@ const timestampToTime = (timestamp) => {
     return time
 }
 
+const useQuery = () => {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    return queryParams
+}
 export {
     lastIndex,
     redirect,
@@ -60,5 +60,6 @@ export {
     p2eDigits,
     AD2solarDate,
     addCommaToPrice,
-    timestampToTime
+    timestampToTime,
+    useQuery
 }
