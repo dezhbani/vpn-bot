@@ -6,6 +6,10 @@ import Users from './components/admin/user-section/Users';
 import NotFoundError from './components/admin/public/errors/NotFoundError';
 import { ToastContainer } from 'react-toastify';
 import Bills from './components/admin/bill-section/Bills';
+import Tickets from './components/admin/support-section/Tickets';
+import NewTicket from './components/admin/support-section/NewTicket';
+import TicketDetails from './components/admin/support-section/TicketDetails';
+import VerifyPayment from './components/admin/payment-section/VerifyPayment';
 
 function App() {
   return (
@@ -17,6 +21,11 @@ function App() {
           <Route path="/dashboard/plans" element={<Plans />}/>
           <Route path="/dashboard/users" element={<Users />}/>
           <Route path="/dashboard/bills" element={<Bills />}/>
+          <Route path="/dashboard/support" element={<Tickets />}/>
+          {/* <Route path="/dashboard/ticket/new" element={<NewTicket />}/> */}
+          <Route path="/payment/:id" element={<VerifyPayment />}/>
+          <Route path="/wallet/:id" element={<VerifyPayment wallet={true} />}/>
+          {/* <Route path="/dashboard/ticket/:ticketID" element={<TicketDetails />}/> */}
           <Route path="/*" element={<NotFoundError />}/>
         </Routes>
         <ToastContainer />
