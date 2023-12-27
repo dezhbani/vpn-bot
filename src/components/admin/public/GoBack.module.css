@@ -1,0 +1,21 @@
+.topBox{
+    display: flex;
+    flex-direction: column;
+    direction: rtl;
+    height: 15%;
+    width: 100%;
+    padding: 10px 20px;
+}
+.goBack{
+    border-left: 1px solid silver;
+    padding-left: 15px;
+    width: fit-content;
+}
+.goBack p{
+    font-size: 12px;
+}
+.back{
+    height: 40px;
+    display: flex;
+    padding-left: 10px;
+}
