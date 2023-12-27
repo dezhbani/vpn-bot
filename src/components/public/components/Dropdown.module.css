@@ -1,0 +1,10 @@
+
+.arrow{
+    display: flex;
+    justify-content: end;
+    direction: ltr;
+    float: left;
+}
+.container{
+font-family: iran-sans;
+}
