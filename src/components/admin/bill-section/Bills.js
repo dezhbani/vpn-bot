@@ -8,11 +8,11 @@ import Bill from './Bill';
 const Bills = () => {
     const [bills, setBills] = useState([]);
     useEffect(() => {
-        const allUsers = async () => {
+        const userBills = async () => {
             const allBills = await getBills()
             setBills(allBills)
         }
-        allUsers()
+        userBills()
         document.title = 'dashboard';
     }, []);
     return (
@@ -20,7 +20,7 @@ const Bills = () => {
             <Sidebar />
             <div>
                 {
-                    bills?.map(bill => <Bill bill={bill} />)
+                    bills?.map(bill => <Bill key={bill._id} bill={bill} />)
                 }
             </div>
         </>
