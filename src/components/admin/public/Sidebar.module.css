@@ -7,6 +7,10 @@
     src: url(../assets/B\ Kamran\ Bold_0.ttf);
 }
 @font-face{
+    font-family: iran-sans;
+    src: url(../assets/IRANSansWeb.woff2);
+}
+@font-face{
     font-family: panton-blackcaps;
     src: url(../assets/Panton-BlackCaps.otf);
 }
@@ -16,8 +20,8 @@
     right: 0px;
     float: right;
     min-height: 100vh;
-    min-width: 15vw;
-    max-width: 15vw;
+    width: 15vw;
+    background-color: #fff;
     border-left: 1px solid #e5eaef;
 }
 
@@ -45,7 +49,7 @@
 }
 .container:hover{
     border-radius: 20px 0 0 20px;
-    background-color: #06B6D4;
+    background-color: #4f91e6;
     /* opacity: 0.8; */
     color: #fff;
 }
@@ -54,7 +58,7 @@
     display: flex;
     flex-direction: column;
     margin: 10px;
-    padding: 40px;
+    padding: 20px;
     border-bottom: 1px solid #e5eaef;
 }
 .imageContainer{
@@ -64,6 +68,8 @@
 .fullname{
     margin-top: 10px;
     font-family: panton-blackcaps;
+    display: flex;
+    justify-content: center;
 }
 .profileImage{
     justify-content: center;
@@ -77,4 +83,34 @@
 }
 .icon{
     fill: aqua;
+    height: 25px;
 }
+.wallet{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    font-family: iran-sans;
+    font-weight: bold;
+    margin: 15px;
+}
+.wallet svg{
+    height: 30px;
+    padding: 0 5px;
+}
+/* @media (min-width: 400px) and (max-width: 1800px) {
+    .field{
+        display: none;
+    }
+    .icon{
+        margin: 10px 0px;
+        height: 20px;
+    }
+    .fullname{
+        display: none;
+    }
+    .container{
+        justify-content: center;
+        margin: 0px;
+        padding: 0px;
+    }
+} */
