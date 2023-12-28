@@ -1,0 +1,48 @@
+@font-face{
+    font-family: iran-sans;
+    src: url(../assets/IRANSansWeb.woff2);
+}
+.mainContainer{
+    display: flex;
+    flex-direction: column;
+}
+.container{
+    padding: 20px;
+    display: flex;
+    font-size: 14px;
+    direction: rtl;
+    float: right;
+    border-top: 1px solid silver;
+}
+.title{
+    width: 30%;
+    margin-right: 20px;
+}
+.status{
+    width: 20%;
+}
+.time{
+    width: 20%;
+    direction: rtl;
+    float: right;
+}
+.ID{
+    width: 20%;
+    float: left;
+    direction: rtl;
+}
+.closed{
+    color: rgb(202, 202, 202);
+}
+/* .iconMail:before {
+    color: #b9bec4;
+    position: relative;
+    top: -1px;
+} */
+.iconMail::before {
+    color: #b9bec4;
+    position: relative;
+    top: -1px;
+    content: "";
+    font-family: iran-sans;
+}

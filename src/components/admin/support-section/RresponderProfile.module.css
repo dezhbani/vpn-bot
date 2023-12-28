@@ -1,0 +1,23 @@
+.profile{
+    display: flex;
+    justify-content: flex-end;
+    /* background-color: #f8f9fa; */
+    padding: 5px;
+    width: 100%;
+    border-bottom: 1px solid silver;
+}
+.fullName{
+    direction: rtl;
+    font-size: 12px;
+}
+.updatedAt{
+    font-size: 10px;
+}
+.profileImage{
+    height: 30px;
+}
+.profileContainer{
+    margin-right: 10px;
+    display: flex;    
+    flex-direction: column;
+}
