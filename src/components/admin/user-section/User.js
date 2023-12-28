@@ -14,13 +14,12 @@ const User = ({user, editedID, setEditedID}) => {
     }
 
     const repurchaseHandler = () => {
-        console.log(user.configs);
         repurchase(user._id)
     }
 
     const profile = useContext(ProfileContext)
     if(!profile?.role) return <Loading />
-    const lastPlan = lastIndex(user.bills);
+    // const lastPlan = lastIndex(user.bills);
     return (
         <div className={styles.mainContainer}>
             <div className={styles.container}>

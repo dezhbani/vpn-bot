@@ -14,7 +14,7 @@ const Transaction = ({bill}) => {
                 :
                 <div className={styles.amountDown}>{`+ ${bill.price}`}</div>
                 } */}
-                <p className={`${styles.for}`}>{bill.for}</p>
+                <p className={`${styles.for}`}>{bill.for.description}</p>
                 {bill.up?
                     <div className={styles.up}>برداشت</div>
                     :<div className={styles.down}>واریز</div>

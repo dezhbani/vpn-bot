@@ -3,12 +3,12 @@ import styles from './UserDetails.module.css'
 import React, { useState } from 'react';
 import UserInfo from './details/UserInfo';
 import Transactions from './details/Transactions';
+import Permission from './details/Permission';
 
 const UserDetails = ({user, setOpen, open}) => {
     const headerSection = ["اطلاعات کاربر", "تراکنش ها", "کانفیگ ها"]
     const [data, setData] = useState({full_name: user.full_name, wallet: user.wallet, first_name: user.first_name, last_name: user.last_name, mobile: user.mobile})
     const [value, setValue] = useState(0)
-    const [changed, setChanged] = useState(false)
     const [wallet, setWallet] = useState({wallet: 0})
     const handleClose = () => setOpen(false);
     const handleWallet = () => setWallet(false);
@@ -37,6 +37,9 @@ const UserDetails = ({user, setOpen, open}) => {
                         </div>
                         <div className={value == 1 ?styles.transactions: 'hidden'}>
                             <Transactions bills={user.bills} />
+                        </div>
+                        <div className={value == 2 ?styles.transactions: 'hidden'}>
+                            <Permission />
                         </div>
                     </div>
                 </div>
