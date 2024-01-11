@@ -3,10 +3,12 @@ const createHttpError = require("http-errors");
 const { mongoID } = require("../public.schema");
 
 const addConfigSchema = Joi.object({
-    first_name: Joi.string().min(1).max(20).error(createHttpError.BadRequest("نام وارد شده صحیح نمی باشد")),
-    last_name: Joi.string().min(1).max(20).error(createHttpError.BadRequest("نام خانوادگی وارد شده صحیح نمی باشد")),
-    mobile: Joi.string().empty().length(11).pattern(/^09[0-9]{9}$/).error(createHttpError.BadRequest("شماره موبایل وارد شده صحیح نمی باشد")),
-    planID: Joi.string().allow().pattern(mongoID).error(createHttpError.BadRequest("شناسه وارد شده صحیح نیست"))
+    full_name: Joi.string().required().min(2).max(20).error(createHttpError.BadRequest("اسم وارد شده صحیح نمی باشد")),
+    first_name: Joi.string().required().min(2).max(20).error(createHttpError.BadRequest("نام لاتین وارد شده صحیح نمی باشد")),
+    last_name: Joi.string().required().min(2).max(20).error(createHttpError.BadRequest("نام خانوادگی لاتین وارد شده صحیح نمی باشد")),
+    mobile: Joi.string().required().empty().length(11).pattern(/^09[0-9]{9}$/).error(createHttpError.BadRequest("شماره موبایل وارد شده صحیح نمی باشد")),
+    planID: Joi.string().required().allow().pattern(mongoID).error(createHttpError.BadRequest("شناسه وارد شده صحیح نیست")),
+    payType: Joi.string().required().error(createHttpError.BadRequest("نوع پرداخت انتخاب شده صحیح نمی باشد"))
 })
 
 const deleteConfigSchema = Joi.object({
