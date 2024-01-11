@@ -1,6 +1,25 @@
-const { randomNumber, randomString, configExpiryTime } = require("./functions");
+// const { randomNumber, randomString } = require("./functions");
 const { v4: uuidv4 } = require('uuid');
 const { V2RAY_API_URL } = process.env
+
+const configExpiryTime = month => {
+    const expiryTime = new Date()
+    expiryTime.setMonth(expiryTime.getMonth() + month)
+    expiryTime.setDate(expiryTime.getDate()) 
+    expiryTime.setHours(23)
+    expiryTime.setMinutes(59)
+    expiryTime.setSeconds(0)
+    expiryTime.setMilliseconds(0)
+    console.log(expiryTime.getTime());
+    return expiryTime.getTime()
+}
+const randomString = () => {
+    const random = Math.random().toString(36).substring(2, 8);
+    return random
+}
+function randomNumber(){
+    return Math.floor((Math.random() * 90000) + 10000)
+}
 
 const createVlessKcp = async (lastID, plan, fullName) => {
     const expiryTime = +configExpiryTime(plan.month);
