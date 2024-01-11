@@ -3,6 +3,7 @@ const { permissionModel } = require("../models/permission");
 const { roleModel } = require("../models/role");
 const { mongoID } = require("../validations/public.schema");
 const { lastIndex } = require("../utils/functions");
+const { userModel } = require("../models/user");
 
 function checkPermission(){
     return async function(req, res, next){
@@ -15,8 +16,13 @@ function checkPermission(){
             if(testID) arrayOfUrl[index] = 'id';
             const { first_name, last_name } = req.user;
             const name = `${first_name} ${last_name}`
-            const role = await roleModel.findOne({name});
-            if(!role) throw createHttpError.Forbidden('شما به این قسمت دسترسی ندارید')
+            let role 
+            role = await roleModel.findOne({name});
+            if(!role) {
+                const user = await userModel.findOne({first_name, last_name})
+                role = await roleModel.findOne({name: user.role})
+            }
+            // if(!role) throw createHttpError.Forbidden('شما به این قسمت دسترسی ندارید')
             const permissions = await permissionModel.find({_id: {$in: role.permissions}});
             const permission = await permissionModel.findOne({main: arrayOfUrl[2], sub: arrayOfUrl[3]});
             const userPermission = permissions.filter(p => p?._id.toString() == permission?._id.toString());
