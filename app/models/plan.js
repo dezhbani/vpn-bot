@@ -5,7 +5,6 @@ const planSchema = new mongoose.Schema({
     price: {type: Number, required: true},
     user_count: {type: Number, required: true},
     data_size: {type: Number, required: true},
-    pay_link: {type: String, required: false},
     month: {type: Number, default: 1}
 }, {
     versionKey: false

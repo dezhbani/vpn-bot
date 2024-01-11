@@ -6,8 +6,11 @@ const { addUserSchema } = require("../../validations/admin/user.schema");
 const { IDvalidator } = require("../../validations/public.schema");
 const { planModel } = require("../../models/plan");
 const { configController } = require("./config.controller");
-const { copyObject } = require("../../utils/functions");
+const { copyObject, lastIndex } = require("../../utils/functions");
 const { smsService } = require("../../services/sms.service");
+const { paymentController } = require("./payment.controller");
+const { PaymentModel } = require("../../models/payment");
+
 
 class userController extends Controllers {
     async addUser(req, res, next) {
@@ -26,24 +29,14 @@ class userController extends Controllers {
     }
     async updateWallet(req, res, next) {
         try {
+            const owner = req.user;
             const { id } = req.params;
             const { pay } = req.body;
-            const user = await this.findUserByID(id);
-            const wallet = user.wallet + +pay;
-            const bills = {
-                buy_date: new Date().getTime(),
-                for: {
-                    description: 'افزایش اعتبار',
-                    user: user._id
-                },
-                price: pay,
-                up: false
-            }
-            const walletResult = await userModel.updateOne({ _id: id }, { $set: { wallet }, $push: { bills } });
-            if (walletResult.modifiedCount == 0) throw createHttpError.InternalServerError("پول به کیف پول کاربر اصافه نشد");
+            if(!pay) throw createHttpError.BadRequest("مبلغ نمیتواند خالی باشد")
+            const createPayLink = await paymentController.paymentTransaction("", pay, owner, id)
             return res.status(StatusCodes.OK).json({
-                status: StatusCodes.CREATED,
-                message: "کیف پول کاربر آپدیت شد"
+                status: StatusCodes.OK,
+                payLink: createPayLink.data.gatewayURL
             })
         } catch (error) {
             next(error)
@@ -141,6 +134,38 @@ class userController extends Controllers {
             return res.status(StatusCodes.OK).json({
                 status: StatusCodes.OK,
                 user: userDetails
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+    async getBillByID(req, res, next) {
+        try {
+            const { billID } = req.params;
+            const { _id: id } = req.user;
+            const user = await this.findUserByID(id);
+            const bill = user.bills.find(bill=> JSON.stringify(bill._id) == JSON.stringify(billID));
+            let billDetails;
+            if(bill.planID) {
+                billDetails = await planModel.populate(bill, {
+                    path: 'planID'
+                })
+            }
+            if(bill.paymentID) {
+                billDetails = await PaymentModel.populate(bill, {
+                    path: 'paymentID',
+                    select: 'invoiceNumber verify amount'
+                })
+            }
+            if(bill.for.user) {
+                billDetails = await userModel.populate(bill, {
+                    path: 'for.user',
+                    select: 'full_name mobile'
+                })
+            }
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                bill: billDetails
             })
         } catch (error) {
             next(error)

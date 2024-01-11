@@ -15,7 +15,8 @@ const bill = new mongoose.Schema({
     buy_date: {type: Number, default: new Date().getTime()},
     for: {type: forSchema, default: {}, required: true}, 
     price: {type: Number, default: null},
-    up: {type: Boolean, default: true}
+    up: {type: Boolean, default: true},
+    paymentID: {type: mongoose.Types.ObjectId, ref: 'payment', default: null}
 })
 const UserSchema = new mongoose.Schema({
     first_name: {type: String},
@@ -31,7 +32,8 @@ const UserSchema = new mongoose.Schema({
     chatID: {type: String},
     wallet: {type: Number, default: 0},
     by: {type: mongoose.Types.ObjectId, ref: 'users', default: this._id},
-    role: {type: String, default: 'customer'}
+    role: {type: String, default: 'customer'},
+    percent: {type: Number}
 }, {
     versionKey: false
 })
