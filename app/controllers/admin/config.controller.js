@@ -10,7 +10,6 @@ const { userModel } = require("../../models/user");
 const { createVlessKcp } = require("../../utils/config.type");
 const { IDvalidator } = require("../../validations/public.schema");
 const { smsService } = require("../../services/sms.service");
-// const { paymentController } = require("./payment.controller");
 const autoBind = require("auto-bind");
 const paymentController = require("./payment.controller");
 

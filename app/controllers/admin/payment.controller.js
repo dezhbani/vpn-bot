@@ -1,7 +1,6 @@
 const createHttpError = require("http-errors");
 const { StatusCodes } = require("http-status-codes");
 const { Controllers } = require("../controller");
-const ZarinpalCheckout = require('zarinpal-checkout');
 const { default: axios } = require("axios");
 const { invoiceNumberGenerator, copyObject, lastIndex, tomanToRial, rialToToman, createConfig } = require("../../utils/functions");
 const moment = require("moment-jalali");
