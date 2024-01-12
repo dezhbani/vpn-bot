@@ -11,6 +11,7 @@ const totalConsumed = (up, down) => {
 }
 const timestampToDate = (timestamp, time=false) =>{
     const date = new Date(timestamp);
+    if(!timestamp) return 'زمان وجود ندارد'
     if(date.getFullYear() < new Date().getFullYear()){
       return "بدون محدودیت زمانی"
     }else{

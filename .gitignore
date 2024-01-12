@@ -1,5 +1,6 @@
 /node_modules
 /backup
 /vpn-store.users.json
-# /.dockerignore
-# /Dockerfile
+# /app/controllers/admin/support
+/.dockerignore
+/Dockerfile
