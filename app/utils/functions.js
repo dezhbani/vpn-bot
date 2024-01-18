@@ -131,6 +131,14 @@ const getV2rayCookie = async () => {
     });
     process.env.V2RAY_TOKEN = loginResponse.headers['set-cookie'][0].split(';')[0];
 }
+const getStartAndEndOfMonthTimestamps = () => {
+    const currentDate = new Date();
+    const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 2);
+    const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+    const startTimestamp = startDate.getTime();
+    const endTimestamp = endDate.getTime();
+    return { startTimestamp, endTimestamp };
+}
 module.exports = {
     randomNumber,
     signAccessToken,
@@ -145,5 +153,6 @@ module.exports = {
     rialToToman,
     tomanToRial,
     createConfig,
-    getV2rayCookie
+    getV2rayCookie,
+    getStartAndEndOfMonthTimestamps
 }
