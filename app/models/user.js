@@ -35,7 +35,11 @@ const UserSchema = new mongoose.Schema({
     role: {type: String, default: 'customer'},
     percent: {type: Number}
 }, {
-    versionKey: false
+    versionKey: false,
+    timestamps:{
+        createdAt: true,
+        updatedAt: true
+    }
 })
 
 module.exports = {
