@@ -189,6 +189,18 @@ class configController extends Controllers {
             next(error)
         }
     }
+    async deleteListOfConfigs(){
+        arr = [41, 42, 43, 44, 45, 46, 47, 49];
+        arr.map( async value => {
+            const configs = (await axios.post(`${V2RAY_API_URL}/xui/inbound/del/${value}`, {}, {
+                withCredentials: true,
+                headers: {
+                    'Cookie': V2RAY_TOKEN
+                }
+            })).data
+            console.log(configs);
+        })
+    }
     async getAllConfigs(){
         const configs = (await axios.post(`${V2RAY_API_URL}/xui/inbound/list`, {}, {
             withCredentials: true,
