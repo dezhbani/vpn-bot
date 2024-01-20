@@ -12,6 +12,7 @@ const { IDvalidator } = require("../../validations/public.schema");
 const { smsService } = require("../../services/sms.service");
 const autoBind = require("auto-bind");
 const paymentController = require("./payment.controller");
+const user = require("../../models/user");
 
 
 class configController extends Controllers {
@@ -112,6 +113,21 @@ class configController extends Controllers {
                 status: StatusCodes.CREATED, 
                 message: "کانفیگ ایجاد شد",
                 configContent: config_content
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+    async getAll(req, res, next){
+        try {
+            const { _id: userID } = req.user;
+            const list = await userModel.find({by: userID}, {configs: 1})
+            list.map(user => {
+                user.configs = user.configs.filter(config => config.expiry_date > new Date().getTime())
+            })
+            return res.status(StatusCodes.CREATED).json({
+                status: StatusCodes.OK, 
+                configs: list
             })
         } catch (error) {
             next(error)

@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const ConfigSchema = new mongoose.Schema({
     name: {type: String, required: true}, 
+    status: {type: Boolean, default: true},
     config_content: {type: String, required: true},
     expiry_date: {type: String, required: true},
     configID: {type: String, required: true},
