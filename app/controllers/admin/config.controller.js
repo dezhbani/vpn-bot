@@ -147,21 +147,44 @@ class configController extends Controllers {
             next(error)
         }
     }
+    async changeStatus(req, res, next){
+        try {
+            const { configID, userID } = req.body
+            const user = await userModel.findById(userID)
+            if(!user) throw createHttpError.NotFound("کاربر یافت نشد")
+            let configsData = await this.findConfigByID(configID, 'configController')
+            if (!configsData) throw createHttpError.NotFound("کانفیگ مورد نظر وجود ندارد")
+            console.log(configsData.enable);
+            configsData.enable = !configsData.enable;
+            console.log(configsData.enable);
+            const result = await this.updateConfig(configsData.id, configsData)
+            console.log(result);
+            // update user 
+            if(result) throw createHttpError.InternalServerError("مشکلی در تغییر وضعیت کانفیگ به وجود آمد")
+            await smsService.repurchaseMessage(user.mobile, user.full_name)
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK, 
+                message: configsData.enable? 'کانفیگ روشن شد': 'کانفیگ خاموش شد'
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
     async repurchase(req, res, next){
         try {
             const owner = req.user
             const {userID} = req.params;
             const user = await userModel.findById(userID)
+            if(!user) throw createHttpError.NotFound("کاربر یافت نشد")
             const config = user.configs.pop()
             const lastPlan = user.bills.pop()
-        console.log(V2RAY_TOKEN);
             let configsData = await this.findConfigByID(config.configID, 'configController')
             const plan = await this.findPlanByID(lastPlan.planID.toString())
             configsData.expiryTime = +configExpiryTime(plan.month)
             configsData.up = 0
             configsData.down = 0
             configsData.enable = true
-            const result = await this.repurchaseConfig(configsData.id, configsData)
+            const result = await this.updateConfig(configsData.id, configsData)
             const configs = {
                 name: config.name,
                 config_content: config.config_content,
@@ -196,7 +219,7 @@ class configController extends Controllers {
             const saveResult = await userModel.updateOne({ _id: userID }, { $push: { configs, bills }})
             if(saveResult.modifiedCount == 0) throw createHttpError("کانفیگ برای یوزر ذخیره نشد");
             if(result) throw createHttpError.InternalServerError("کانفیگ تمدید نشد")
-            // await smsService.repurchaseMessage(user.mobile, user.full_name)
+            await smsService.repurchaseMessage(user.mobile, user.full_name)
             return res.status(StatusCodes.OK).json({
                 status: StatusCodes.OK, 
                 message: "کانفیگ تمدید شد"
@@ -266,7 +289,7 @@ class configController extends Controllers {
             return config[0]
         }
     }
-    async repurchaseConfig(configID, data) {
+    async updateConfig(configID, data) {
         const configs = (await axios.post(`${V2RAY_API_URL}/xui/inbound/update/${configID}`, data, {
             withCredentials: true,
             headers: {
