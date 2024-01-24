@@ -55,7 +55,6 @@ class configController extends Controllers {
             }
             if(payType == 'اعتبار') return this.addConfig(req, res, next);
         } catch (error) {
-            console.log(error);
         }
     }
     async addConfig(req, res, next){
@@ -154,11 +153,8 @@ class configController extends Controllers {
             if(!user) throw createHttpError.NotFound("کاربر یافت نشد")
             let configsData = await this.findConfigByID(configID, 'configController')
             if (!configsData) throw createHttpError.NotFound("کانفیگ مورد نظر وجود ندارد")
-            console.log(configsData.enable);
             configsData.enable = !configsData.enable;
-            console.log(configsData.enable);
             const result = await this.updateConfig(configsData.id, configsData)
-            console.log(result);
             // update user 
             if(result) throw createHttpError.InternalServerError("مشکلی در تغییر وضعیت کانفیگ به وجود آمد")
             await smsService.repurchaseMessage(user.mobile, user.full_name)
@@ -237,7 +233,6 @@ class configController extends Controllers {
                     'Cookie': V2RAY_TOKEN
                 }
             })).data
-            console.log(configs);
         })
     }
     async getAllConfigs(){
@@ -299,7 +294,6 @@ class configController extends Controllers {
         return configs.data.obj.success
     }
     async findPlanByID(planID) {
-        console.log(planID);
         const plan = await planModel.findById(planID);
         if (!plan) throw createHttpError.NotFound("پلنی یافت نشد");
         return plan

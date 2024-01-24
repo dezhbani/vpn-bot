@@ -10,7 +10,6 @@ const configExpiryTime = month => {
     expiryTime.setMinutes(59)
     expiryTime.setSeconds(0)
     expiryTime.setMilliseconds(0)
-    console.log(expiryTime.getTime());
     return expiryTime.getTime()
 }
 const randomString = () => {

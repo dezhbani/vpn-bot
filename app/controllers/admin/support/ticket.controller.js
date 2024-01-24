@@ -12,7 +12,6 @@ class ticketController extends Controllers {
             const { _id: user } = req.user;
             const { title, description } = await createTicketSchema.validateAsync(req.body);
             const createResult = await ticketModel.create({title, description, user});
-            // console.log(createResult);
             if(!createResult) throw createHttpError.InternalServerError("تیکت شما ثبت نشد. لطفا مچدد تلاش کنید");
             return res.status(StatusCodes.CREATED).json({
                 status: StatusCodes.CREATED, 

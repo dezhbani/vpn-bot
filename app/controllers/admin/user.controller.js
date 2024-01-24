@@ -54,7 +54,6 @@ class userController extends Controllers {
                 message: "اطلاعات یوزر آپدیت شد"
             })
         } catch (error) {
-            console.log(error);
             next(error)
         }
     }

@@ -93,7 +93,6 @@ const createConfig = async (mobile, planID) => {
         const user = await userModel.findOne({mobile})
         const fullName = `${user.first_name} ${user.last_name}`;
         const { details, configContent: config_content, id } = await createVlessKcp(lastConfigID, plan, fullName)
-        console.log(axios.defaults.jar);
         const addConfig = await axios.post(`${V2RAY_API_URL}/xui/inbound/add`, details, {
             withCredentials: true,
             headers: {

@@ -36,7 +36,6 @@ class paymentController extends Controllers {
     async createTransaction(req, res, next){
         try {
             const { amount, description, billID, user, callback } = req.body
-            // console.log(user);
             const zarinpal_request_url = "https://api.zarinpal.com/pg/v4/payment/request.json";
             const zarinpalGatewayURL = "https://www.zarinpal.com/pg/StartPay"
             const zapripal_options = {
@@ -51,14 +50,11 @@ class paymentController extends Controllers {
             const RequestResult = await axios.post(zarinpal_request_url, zapripal_options)
             .then(result => result.data)
             .catch(err =>{
-                console.error("error", err);
                 return res.status(err.data.status).json({
                     message: err.data.message
                 })
             })
-            console.log(RequestResult);
             const {authority, code} = RequestResult.data;
-            console.log(RequestResult.errors);
             await PaymentModel.create({
                 invoiceNumber: invoiceNumberGenerator(),
                 paymentDate: moment().format("jYYYYjMMjDDHHmmss"),
@@ -77,14 +73,12 @@ class paymentController extends Controllers {
             }
             // throw createHttpError.BadRequest("اتصال به درگاه پرداخت انجام نشد")
         } catch (error) {
-            console.log(error);
             next(error)
         }
     }
     async verifyTransaction(req, res, next){
         try {
             const { billID, authority } = req.params;
-            console.log(authority);
             const verifyURL = "https://api.zarinpal.com/pg/v4/payment/verify.json";
             const payment = await PaymentModel.findOne({authority});
             if(!payment) throw createHttpError.NotFound("تراکنش در انتظار پرداخت یافت نشد")
@@ -100,7 +94,6 @@ class paymentController extends Controllers {
                 },
                 body: verifyBody
             }).then(result => result.json())
-            // console.log(verifyResult.data.errors.validations);
             const bills = (await userModel.findOne(payment.user)).bills;
             const bill = bills.find(bill=> bill._id == billID);
             await PaymentModel.populate(bill, {
@@ -127,7 +120,6 @@ class paymentController extends Controllers {
                 let configResult;
                 if(bill.planID && bill.up == null) {
                     configResult = await createConfig(mobile, bill.planID)
-                    console.log(configResult);
                 }else{
                     throw createHttpError.BadRequest("کانفیگ قبلا ثبت شده")
                 }
@@ -149,9 +141,8 @@ class paymentController extends Controllers {
             }
             throw createHttpError.BadRequest("پرداخت انجام نشد در صورت کسر وجه طی ۷۲ ساعت به حساب شما بازمیگردد")
         } catch (error) {
-            // console.log(error);
-            next(error);
             next(createHttpError.InternalServerError("خطای داخلی سرور"))
+            // next(error);
         }
     }
     async verifyWalletTransaction(req, res, next){
@@ -173,11 +164,9 @@ class paymentController extends Controllers {
                 body: verifyBody
             }).then(result => result.json())
             const bills = (await userModel.findById(payment.user))?.bills;
-            const payments = await PaymentModel.populate(bills, {path: "paymentID"})
-            console.log(verifyResult);
+            await PaymentModel.populate(bills, {path: "paymentID"})
             if(!bills) throw createHttpError.NotFound("تراکنشی یافت نشد")
             const bill = bills.find(bill => bill._id == billID );
-            console.log(bill)
             if(!bill) throw createHttpError.NotFound("تراکنشی یافت نشد")
             if(verifyResult.data.code == 101) {
                 return res.status(StatusCodes.OK).json({
@@ -215,7 +204,6 @@ class paymentController extends Controllers {
             }
             throw createHttpError.BadRequest("پرداخت انجام نشد در صورت کسر وجه طی ۷۲ ساعت به حساب شما بازمیگردد")
         } catch (error) {
-            console.log(error);
             next(error)
         }
     }
