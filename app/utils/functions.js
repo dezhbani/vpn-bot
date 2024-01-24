@@ -125,7 +125,7 @@ const findPlanByID = async (planID, type) => {
     return plan
 }
 const getV2rayCookie = async () => {
-    const loginResponse = await axios.post('http://s1.delta-dev.top:1000/login', {
+    const loginResponse = await axios.post(V2RAY_API_URL, {
         username: V2RAY_USERNAME,
         password: V2RAY_PASSWORD
     });

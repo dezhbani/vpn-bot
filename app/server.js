@@ -63,7 +63,7 @@ module.exports = class Application{
         this.#app.use(AllRoutes)
     }
     async setCookie(){
-        cron.schedule('* * * * 7', () => {
+        cron.schedule('0 3 * * 3', () => {
             getV2rayCookie()
         })
     }
