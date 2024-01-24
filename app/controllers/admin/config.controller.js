@@ -132,6 +132,39 @@ class configController extends Controllers {
             next(error)
         }
     }
+    async getAllEndedTime(req, res, next){
+        try {
+            const { _id } = req.user;
+            const list = [];
+            const alertDay = 2;
+            const users = await userModel.find({by: _id});
+            users.filter(user => {
+                user.configs.map( async config => {
+                    // user config time
+                    const time = new Date(+config.expiry_date);
+                    const month = time.getMonth() 
+                    const year = time.getFullYear()
+                    // // now time
+                    const today = new Date();
+                    const nowMonth = new Date().getMonth() 
+                    const nowYear = new Date().getFullYear()
+                    time.setMonth(nowMonth + 1)
+                    const daysUntilTime = Math.ceil((time - today) / (1000 * 60 * 60 * 24));
+                    if(daysUntilTime == alertDay && month == 1 && year == nowYear && config.status ) {
+                        const { mobile, first_name, last_name, full_name, chatID, _id: userID } = user;
+                        const { expiry_date, _id: configID } = config;
+                        list.push({mobile, first_name, last_name, full_name, userID, expiry_date, configID, chatID, untilEndTime: daysUntilTime - 1})
+                    }
+                })
+            })
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK, 
+                configs: list
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
     async deleteConfig(req, res, next){
         try {
             const { configID, userID } = await deleteConfigSchema.validateAsync(req.body);
