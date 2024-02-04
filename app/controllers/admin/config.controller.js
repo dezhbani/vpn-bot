@@ -1,7 +1,7 @@
 const createHttpError = require("http-errors");
 const { planModel } = require("../../models/plan");
 const { StatusCodes } = require("http-status-codes");
-const { deleteConfigSchema, addConfigSchema } = require("../../validations/admin/config.shema");
+const { deleteConfigSchema, addConfigSchema, repurchaseConfigSchema } = require("../../validations/admin/config.shema");
 const { Controllers } = require("../controller");
 const { percentOfNumber, lastIndex, configExpiryTime, cookie } = require("../../utils/functions");
 const { V2RAY_API_URL, V2RAY_TOKEN, REDIRECT_URL } = process.env
@@ -13,6 +13,7 @@ const { smsService } = require("../../services/sms.service");
 const autoBind = require("auto-bind");
 const paymentController = require("./payment.controller");
 const user = require("../../models/user");
+const { configModel } = require("../../models/config");
 
 
 class configController extends Controllers {
@@ -24,8 +25,6 @@ class configController extends Controllers {
             if(!(payType == 'مستقیم' || payType == 'اعتبار')) throw createHttpError.BadRequest("نوع پرداخت انتخاب شده صحیح نمی باشد");
             if(payType == 'مستقیم') {
                 const plan = await planModel.findById(planID);
-                
-                // const {bills, ownerBills, configs} = await this.createConfig(req, res, next)
                 const percentOfPlan = percentOfNumber(plan.price, 70);
                 const user = await userModel.findOne({mobile})
                 const ownerBills = {
@@ -79,7 +78,9 @@ class configController extends Controllers {
                 name: fullName,
                 config_content,
                 expiry_date: +configExpiryTime(plan.month), 
-                configID: id
+                configID: id,
+                userID: user._id,
+                planID: plan._id
             }
             const bills = {
                 planID,
@@ -104,9 +105,13 @@ class configController extends Controllers {
             // update owner
             if(!addConfig.data.success) throw createHttpError.InternalServerError("کانفیگ ایجاد نشد")
             const updateWallet = await userModel.updateOne({ mobile: owner.mobile }, { $set: {wallet}, $push: {bills: ownerBills} })
+            console.log(updateWallet);
             // update user 
+            if (payType == 'اعتبار') {
+                await configModel.create(configs)
+            }
             if(updateWallet.modifiedCount == 0) throw createHttpError.InternalServerError('کانفیگ ثبت نشد')
-            const saveResult = await userModel.updateOne({ mobile }, { $push: payType == 'اعتبار' ? {configs, bills} : { bills }})
+            const saveResult = await userModel.updateOne({ mobile }, {$push: {bills}})
             if(saveResult.modifiedCount == 0) throw createHttpError("کانفیگ برای یوزر ذخیره نشد");
             return res.status(StatusCodes.CREATED).json({
                 status: StatusCodes.CREATED, 
@@ -120,10 +125,12 @@ class configController extends Controllers {
     async getAll(req, res, next){
         try {
             const { _id: userID } = req.user;
-            const list = await userModel.find({by: userID}, {configs: 1})
-            list.map(user => {
-                user.configs = user.configs.filter(config => config.expiry_date > new Date().getTime())
+            const configs = await configModel.find()
+            let list = await userModel.populate(configs, {
+                path: 'userID',
+                select: "by -_id"
             })
+            list = list.filter(config => config.userID && +config.expiry_date > new Date().getTime() && `${config.userID.by}` == userID)
             return res.status(StatusCodes.CREATED).json({
                 status: StatusCodes.OK, 
                 configs: list
@@ -132,32 +139,52 @@ class configController extends Controllers {
             next(error)
         }
     }
+    
     async getAllEndedTime(req, res, next){
         try {
-            const { _id } = req.user;
-            const list = [];
-            const alertDay = 2;
-            const users = await userModel.find({by: _id});
-            users.filter(user => {
-                user.configs.map( async config => {
+            const { _id: ownerID } = req.user;
+            let list = [];
+            let alertDay = 2;
+            const configs = await configModel.find();
+            await Promise.all(
+                configs.map(async config => {
                     // user config time
                     const time = new Date(+config.expiry_date);
-                    const month = time.getMonth() 
+                    const month = time.getMonth()
                     const year = time.getFullYear()
-                    // // now time
+                    // now time
                     const today = new Date();
                     const nowMonth = new Date().getMonth() 
                     const nowYear = new Date().getFullYear()
-                    time.setMonth(nowMonth + 1)
-                    const daysUntilTime = Math.ceil((time - today) / (1000 * 60 * 60 * 24));
-                    if(daysUntilTime == alertDay && month == 1 && year == nowYear && config.status ) {
+                    let daysUntilTime = Math.abs(time.getTime() - today.getTime());
+                    daysUntilTime = Math.ceil(daysUntilTime / (1000 * 60 * 60 * 24 ))
+                    if(daysUntilTime == alertDay && month == nowMonth && year == nowYear && config.status ) {
+                        const user = await userModel.findOne({by: ownerID, _id: config.userID});
+                        if(!user) throw createHttpError.Forbidden("این کاربر توسط شما ثبت نشده،شما نمیتوانید اطلاعات آن را ببینید")
                         const { mobile, first_name, last_name, full_name, chatID, _id: userID } = user;
                         const { expiry_date, _id: configID } = config;
                         list.push({mobile, first_name, last_name, full_name, userID, expiry_date, configID, chatID, untilEndTime: daysUntilTime - 1})
                     }
                 })
-            })
+            )
             return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK, 
+                config: list
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+    async getCustomerActiveConfigs(req, res, next){
+        try {
+            const { _id: userID } = req.user;
+            const configs = await configModel.find()
+            let list = await userModel.populate(configs, {
+                path: 'userID',
+                select: "by -_id"
+            })
+            list = list.filter(config => config.userID && +config.expiry_date > new Date().getTime() && `${config.userID.by}` == userID)
+            return res.status(StatusCodes.CREATED).json({
                 status: StatusCodes.OK, 
                 configs: list
             })
@@ -167,10 +194,15 @@ class configController extends Controllers {
     }
     async deleteConfig(req, res, next){
         try {
-            const { configID, userID } = await deleteConfigSchema.validateAsync(req.body);
-            await this.findConfigByID(userID, configID);
-            const result = await userModel.updateOne({ _id: userID }, { $pull: { config: {_id: configID} }});
-            if (result.modifiedCount == 0) throw createHttpError.InternalServerError("کانفیگ حذف نشد")
+            const { configID } = req.body
+            const findV2rayConfig = await this.findConfigByID(configID)
+            const config = await configModel.findOne({configID})
+            console.log(config);
+            if (!config || !findV2rayConfig) throw createHttpError.NotFound("کانفیگ مورد نظر وجود ندارد")
+            findV2rayConfig.enable = false;
+            const configResult = await this.updateConfig(findV2rayConfig.id, findV2rayConfig)
+            const result = await configModel.updateOne({ configID }, {$set: {status: false}});
+            if (result.modifiedCount == 0 || configResult.modifiedCount == 0) throw createHttpError.InternalServerError("کانفیگ حذف نشد")
             return res.status(StatusCodes.OK).json({
                 status: StatusCodes.OK,
                 message: "کانفیگ حذف شد"
@@ -184,7 +216,7 @@ class configController extends Controllers {
             const { configID, userID } = req.body
             const user = await userModel.findById(userID)
             if(!user) throw createHttpError.NotFound("کاربر یافت نشد")
-            let configsData = await this.findConfigByID(configID, 'configController')
+            let configsData = await this.findConfigByID(configID)
             if (!configsData) throw createHttpError.NotFound("کانفیگ مورد نظر وجود ندارد")
             configsData.enable = !configsData.enable;
             const result = await this.updateConfig(configsData.id, configsData)
@@ -202,24 +234,20 @@ class configController extends Controllers {
     async repurchase(req, res, next){
         try {
             const owner = req.user
-            const {userID} = req.params;
+            const { userID, configID } = await repurchaseConfigSchema.validateAsync(req.body);
             const user = await userModel.findById(userID)
             if(!user) throw createHttpError.NotFound("کاربر یافت نشد")
-            const config = user.configs.pop()
-            const lastPlan = user.bills.pop()
-            let configsData = await this.findConfigByID(config.configID, 'configController')
-            const plan = await this.findPlanByID(lastPlan.planID.toString())
+            const config = await configModel.findOne({userID, configID})
+            if(!config) throw createHttpError.NotFound("کانفیگ یافت نشد، لطفا با پشتیبانی تماس بگیرید")
+            const plan = await planModel.findOne({_id: config.planID})
+            if (!plan) throw createHttpError.NotFound("پلن مورد نظر وجود ندارد یا حذف شده، لطفا با پشتیبانی تماس بگیرید")
+            let configsData = await this.findConfigByID(configID)
+            if(!configsData) throw createHttpError.NotFound("کانفیگ یافت نشد، لطفا با پشتیبانی تماس بگیرید")
             configsData.expiryTime = +configExpiryTime(plan.month)
             configsData.up = 0
             configsData.down = 0
             configsData.enable = true
             const result = await this.updateConfig(configsData.id, configsData)
-            const configs = {
-                name: config.name,
-                config_content: config.config_content,
-                expiry_date: +configExpiryTime(plan.month), 
-                configID: config.configID,
-            }
             const percentOfPlan = percentOfNumber(plan.price, 70)
             if(owner.wallet < percentOfPlan) throw createHttpError.BadRequest("موجودی حساب شما کافی نمی باشد")
             const bills = {
@@ -235,7 +263,7 @@ class configController extends Controllers {
                 planID: plan._id,
                 buy_date: new Date().getTime(),
                 for: {
-                    description: 'تمدید کانفیگ',
+                    description: 'تمدید کانفیگ کاربر',
                     user: user._id
                 },
                 up: true, 
@@ -243,11 +271,11 @@ class configController extends Controllers {
             }
             const wallet = owner.wallet - percentOfPlan;
             const updateWallet = await userModel.updateOne({ mobile: owner.mobile }, { $set: {wallet}, $push: {bills: ownerBills} })
+            const updateConfig = await configModel.updateOne({ configID }, { $set: {expiry_date: +configExpiryTime(plan.month), endData: false}})
             // update user 
-            if(result || updateWallet.modifiedCount == 0) throw createHttpError.InternalServerError("کانفیگ تمدید نشد")
-            const saveResult = await userModel.updateOne({ _id: userID }, { $push: { configs, bills }})
+            if(result || updateWallet.modifiedCount == 0 || updateConfig.modifiedCount == 0) throw createHttpError.InternalServerError("کانفیگ تمدید نشد")
+            const saveResult = await userModel.updateOne({ _id: userID }, { $push: { bills }})
             if(saveResult.modifiedCount == 0) throw createHttpError("کانفیگ برای یوزر ذخیره نشد");
-            if(result) throw createHttpError.InternalServerError("کانفیگ تمدید نشد")
             await smsService.repurchaseMessage(user.mobile, user.full_name)
             return res.status(StatusCodes.OK).json({
                 status: StatusCodes.OK, 
@@ -303,9 +331,9 @@ class configController extends Controllers {
             }
         })).data.obj
         const config = configs.filter(config => JSON.parse(config.settings).clients[0].id == configID);
-        const seed = JSON.parse(config[0].streamSettings).kcpSettings?.seed;
-        const name = config[0].remark.replace(" ", "%20")
-        const config_content = `vless://${configID}@s1.delta-dev.top:${config[0].port}?type=kcp&security=none&headerType=none&seed=${seed}#${name}`
+        // const seed = JSON.parse(config[0].streamSettings).kcpSettings?.seed;
+        // const name = config[0].remark.replace(" ", "%20")
+        // const config_content = `vless://${configID}@s1.delta-dev.top:${config[0].port}?type=kcp&security=none&headerType=none&seed=${seed}#${name}`
         if (!config) throw createHttpError.NotFound("کانفیگی یافت نشد");
         if(type == 'userController'){
             return {
@@ -324,6 +352,7 @@ class configController extends Controllers {
               'Cookie': V2RAY_TOKEN
             }
         }))
+        console.log(configs.data);
         return configs.data.obj.success
     }
     async findPlanByID(planID) {

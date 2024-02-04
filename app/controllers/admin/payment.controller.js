@@ -126,7 +126,8 @@ class paymentController extends Controllers {
                 bill.up = true;
                 // update user
                 const { bills: userBills, configs } = configResult;
-                const user = await userModel.updateOne({mobile}, {$set: {bills: userBills}, $push: {configs}});
+                const user = await userModel.updateOne({mobile}, {$set: {bills: userBills}});
+                await configModel.create(configs)
                 if(user.modifiedCount == 0) throw createHttpError.InternalServerError("کانفیگ برای یوزر ذخیره نشد")
                 await userModel.updateOne({_id: payment.user}, {
                     $push: {

@@ -4,8 +4,8 @@ const { V2RAY_API_URL } = process.env
 
 const configExpiryTime = month => {
     const expiryTime = new Date()
-    expiryTime.setMonth(expiryTime.getMonth() + month)
-    expiryTime.setDate(expiryTime.getDate()) 
+    expiryTime.setMonth(expiryTime.getMonth())
+    expiryTime.setDate(expiryTime.getDate() + 2) 
     expiryTime.setHours(23)
     expiryTime.setMinutes(59)
     expiryTime.setSeconds(0)

@@ -15,8 +15,13 @@ const deleteConfigSchema = Joi.object({
     userID: Joi.string().allow().pattern(mongoID).error(createHttpError.BadRequest("شناسه کاربر صحیح نیست")),
     configID: Joi.string().allow().pattern(mongoID).error(createHttpError.BadRequest("شناسه کانفیگ صحیح نیست"))
 })
+const repurchaseConfigSchema = Joi.object({
+    userID: Joi.string().allow().pattern(mongoID).error(createHttpError.BadRequest("شناسه کاربر صحیح نیست")),
+    configID: Joi.string().allow().guid({version: 'uuidv4'}).error(createHttpError.BadRequest("شناسه کانفیگ صحیح نیست"))
+})
 
 module.exports = {
     addConfigSchema,
-    deleteConfigSchema
+    deleteConfigSchema,
+    repurchaseConfigSchema
 }

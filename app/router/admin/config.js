@@ -7,7 +7,7 @@ router.get("/endedTime", configController.getAllEndedTime);
 router.post("/changeStatus", configController.changeStatus);
 router.post("/add", configController.buyConfig);
 router.delete("/delete", configController.deleteConfig);
-router.post("/repurchase/:userID", configController.repurchase)
+router.post("/repurchase", configController.repurchase)
 
 module.exports = {
     adminConfigRoutes: router
