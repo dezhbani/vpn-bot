@@ -175,16 +175,17 @@ class configController extends Controllers {
             next(error)
         }
     }
-    async getCustomerActiveConfigs(req, res, next){
+    async getUserActiveConfigs(req, res, next){
         try {
-            const { _id: userID } = req.user;
-            const configs = await configModel.find()
+            const { _id: ownerID } = req.user;
+            const { userID } = req.params;
+            const configs = await configModel.find({userID})
             let list = await userModel.populate(configs, {
                 path: 'userID',
                 select: "by -_id"
             })
-            list = list.filter(config => config.userID && +config.expiry_date > new Date().getTime() && `${config.userID.by}` == userID)
-            return res.status(StatusCodes.CREATED).json({
+            list = list.filter(config => config.status && !(config.expiry_date < new Date().getTime()) && config.userID.by == `${ownerID}`)
+            return res.status(StatusCodes.OK).json({
                 status: StatusCodes.OK, 
                 configs: list
             })
