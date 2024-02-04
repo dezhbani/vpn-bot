@@ -8,9 +8,6 @@ const Bill = ({bill}) => {
     const [ open, setOpen ] = useState(false)
     const handleOpen = () => {
         setOpen(true);
-        console.log(document.body.style.overflow);
-        document.body.style.overflow = 'hidden'
-
     }
     const date = AD2solarDate(bill.buy_date)
     return (

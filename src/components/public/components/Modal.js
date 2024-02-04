@@ -6,6 +6,8 @@ import './Modal.css'
 
 const Modal = ({ isOpen, onClose, children }) => {
 
+  document.body.style.overflow = isOpen? 'hidden' : ''
+
   return (
     isOpen && (
     <div className="modal-overlay">

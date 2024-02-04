@@ -10,7 +10,6 @@ const Receipt = ({setOpen, open, bill}) => {
     const [data, setData] = useState({})
     const handleClose = () => {
         setOpen(false);
-    document.body.style.overflow = ''
 
     }
     const userBills = async () => {
