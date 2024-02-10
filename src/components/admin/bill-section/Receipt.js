@@ -105,7 +105,7 @@ const Receipt = ({setOpen, open, bill}) => {
                     </li>
                     <li className={LiStyle}>
                         <span className="select-none">تاریخ</span>
-                        <span>{`${timestampToTime(bill.buy_date)} ${p2eDigits(date)}`}</span>
+                        <span>{timestampToTime(bill.buy_date)}</span>
                     </li>
                 </ul>
             </>

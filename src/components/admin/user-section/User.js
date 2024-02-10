@@ -5,13 +5,16 @@ import Loading from '../public/Loading';
 import { ProfileContext } from '../../context/UserProfileContext';
 import UserDetails from './UserDetails';
 import { repurchase } from '../../services/users.service';
+import RepurchaseConfig from './RepurchaseConfig';
 
 const User = ({user, editedID, setEditedID}) => {
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const changeHandler = event =>{
-        setEditedID({edit: true, ID: event.target.value})
-    }
+    const [openDetails, setOpenDetails] = useState(false);
+    const [openRepurchase, setOpenRepurchase] = useState(false);
+    const handleOpenDetails = () => setOpenDetails(true);
+    const handleOpenRepurchase = () => setOpenRepurchase(true);
+    // const changeHandler = event =>{
+    //     setEditedID({edit: true, ID: event.target.value})
+    // }
 
     const repurchaseHandler = () => {
         repurchase(user._id)
@@ -26,10 +29,11 @@ const User = ({user, editedID, setEditedID}) => {
                 <p>{user.full_name}</p>
                 <p>{user.mobile}</p>
                 <div className={styles.buttonContainer}>
-                    <button className={`bg-none border-none text-blue-500`} onClick={handleOpen}>جزئیات</button>
-                    <button className={styles.repurchase} onClick={repurchaseHandler}>تمدید کانفیگ</button>
+                    <button className={`bg-none border-none text-blue-500`} onClick={handleOpenDetails}>جزئیات</button>
+                    <button className={styles.repurchase} onClick={handleOpenRepurchase}>تمدید کانفیگ</button>
                 </div>
-                <UserDetails open={open} setOpen={setOpen} user={user} />
+                <UserDetails open={openDetails} setOpen={setOpenDetails} user={user} />
+                <RepurchaseConfig open={openRepurchase} setOpen={setOpenRepurchase} userID={user._id} />
             </div>
             {/*   */}
         </div>

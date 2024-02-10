@@ -14,7 +14,7 @@ const Bill = ({bill}) => {
         <div className={styles.mainContainer}>
             <div className={styles.container}>
                 <Receipt open={open} setOpen={setOpen} bill={bill} />
-                <div className={`${styles.date}`}>{`${timestampToTime(bill.buy_date)} ${p2eDigits(date)}`}</div>
+                <div className={`${styles.date}`}>{timestampToTime(bill.buy_date)}</div>
                 <div className={`${styles.amount}`}>{addCommaToPrice(bill.price)}</div>
                 <p className={`${styles.for}`}>{bill.for.description}</p>
                 {bill.up == null?

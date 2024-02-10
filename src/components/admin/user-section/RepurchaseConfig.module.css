@@ -1,0 +1,27 @@
+@font-face{
+    font-family: iran-sans;
+    src: url(../assets/IRANSansWeb.woff2);
+}
+.buttonContainer{
+    width: 350px;
+    display: flex;
+    font-size: 14pt;
+    font-family: iran-sans;
+    justify-content: center;
+}
+.help{
+    font-family: iran-sans;
+    font-size: 12pt;
+
+}
+.buttonContainer button{
+   /* background-color: #0663E5; */
+   /* border: 1px solid #0663E5;
+   color: #0663E5; */
+   border-radius: 5px;
+  transition: all 0.2s ease-in;
+  padding: 5px 40px;
+  background-color: #0663E5;
+  /* border: 1px solid #0663E5; */
+  color: #fff;
+}
