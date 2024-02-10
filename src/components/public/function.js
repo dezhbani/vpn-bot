@@ -1,3 +1,4 @@
+import farvardin from "farvardin";
 import { useLocation } from "react-router-dom";
 
 const lastIndex = (array = []) => {
@@ -39,13 +40,24 @@ const addCommaToPrice = (price) => {
     return result;
 }
 
-const timestampToTime = (timestamp) => {
+const timestampToTime = (timestamp, time=true) =>{
     const date = new Date(timestamp);
-    const hour = date.getHours()
-    const minute = date.getMinutes()
-    const second = date.getSeconds()
-    const time = `${hour}:${minute}:${second}`;
-    return time
+    if(!timestamp) return 'زمان وجود ندارد'
+    if(date.getFullYear() < new Date().getFullYear()){
+      return "بدون محدودیت زمانی"
+    }else{
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate() ;
+        const fullDate = farvardin.gregorianToSolar(year , month , day , "string");
+        if(time){
+            const hours = date.getHours();
+            const minute = date.getMinutes();
+            const second = date.getSeconds();
+            return `${fullDate} ${hours}:${minute}:${second}`
+        }
+      return fullDate
+    }
 }
 
 const useQuery = () => {
