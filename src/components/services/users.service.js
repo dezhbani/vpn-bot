@@ -47,9 +47,9 @@ const editUser = async data => {
         toast.error(error.response.data.message, {autoClose: 2000})
     }
 }
-const repurchase = async id => {
+const repurchase = async (userID, configID) => {
     try {
-        const result = await axios.post(`admin/config/repurchase/${id}`,{}, headers)
+        const result = await axios.post('admin/config/repurchase', {userID, configID}, headers)
         toast.success(result.data.message)
         return result.data
     } catch (error) {
