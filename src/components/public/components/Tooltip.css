@@ -1,0 +1,24 @@
+@font-face{
+    font-family: b-kamran;
+    src: url(../../admin/assets/B\ Kamran\ Bold_0.ttf);
+}
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+  
+.tooltip {
+    position: absolute;
+    background-color: #0663E5;
+    color: #fff;
+    padding: 0 5px;
+    border-radius: 3px;
+    z-index: 1;
+    top: -150%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-family: b-kamran;
+    font-size: 16pt;
+}
+  
