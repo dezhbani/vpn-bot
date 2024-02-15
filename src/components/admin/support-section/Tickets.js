@@ -7,10 +7,10 @@ import { Link } from 'react-router-dom';
 
 const Tickets = () => {
     const [tickets, setTickets] = useState([]);
-    const getList = async () => setTickets(await getTickets())
-    useEffect(() =>{
-        getList()
-    }, [])
+    // const getList = async () => setTickets(await getTickets())
+    // useEffect(() =>{
+    //     getList()
+    // }, [])
 
     return (
         <div className={styles.mainContainer}>

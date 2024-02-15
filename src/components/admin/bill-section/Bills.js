@@ -18,7 +18,7 @@ const Bills = () => {
     return (
         <>
             <Sidebar />
-            <div>
+            <div className={styles.container}>
                 {
                     bills?.map(bill => <Bill key={bill._id} bill={bill} />)
                 }

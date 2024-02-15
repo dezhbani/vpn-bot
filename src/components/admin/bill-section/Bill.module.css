@@ -6,7 +6,7 @@
     display: flex;
     /* border-bottom: 1px solid silver; */
     font-family: iran-sans;
-    margin: 10px;
+    margin: 20px 10px;
     width: calc(85% - 5px);
     direction: rtl;
     justify-content: center;
