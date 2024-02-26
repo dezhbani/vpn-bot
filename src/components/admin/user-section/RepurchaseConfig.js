@@ -8,37 +8,42 @@ import Config from '../public/Config';
 const RepurchaseConfig = ({open, setOpen, userID}) => {
     const [configs, setConfigs] = useState([]);
     const [selected, setSelected] = useState([]);
-    const handleClose = () => setOpen(false);
+    const [loading, setLoading] = useState(false);
+    const handleClose = () => {
+        setOpen(false);
+        setLoading(false);
+
+    }
     const repurchaseHandler = async () => {
         const { list } = await activeConfig(userID);
         if (list.length > 1) {
             configs.length == 0 && setConfigs(list);
         } else {
-            console.log(list);
-            repurchase(userID, list[0].configID)
-            handleClose()
+            repurchase(userID, list[0].configID, handleClose)
         }
     }
-    const send = () => {
-        selected.map(configID => repurchase(userID, configID))
+    const send = (e) => {
+        selected.map(configID => repurchase(userID, configID, handleClose))
+        setLoading(true);
+        setSelected([])
     }
     if(open) repurchaseHandler();
 
-    if (configs.length > 1) return (
-        <Modal isOpen={open} onClose={handleClose}>
-            <h4 className={styles.help}>روی کانفیگ مورد نظرت کلیک کن</h4>
-            <div>
-                {
-                    configs.map(config => <Config config={config} selected={selected} setSelected={setSelected} />)
-                }
-            </div>
-            <div className={styles.buttonContainer}>
-                {
-                    selected.length > 0 && <button onClick={send}>تمدید</button>
-                }
-            </div>
+    return (
+        <Modal isOpen={open} onClose={handleClose} loading={!(!loading && configs.length > 0)}>
+                    <h4 className={styles.help}>روی کانفیگ مورد نظرت کلیک کن</h4>
+                    <div>
+                        {
+                            configs.map(config => <Config config={config} selected={selected} setSelected={setSelected} />)
+                        }
+                    </div>
+                    <div className={styles.buttonContainer}>
+                        {
+                            <button onClick={send}>تمدید</button>
+                        }
+                    </div>
         </Modal>
-    );
+    )
 };
 
 export default RepurchaseConfig;

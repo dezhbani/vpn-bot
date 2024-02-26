@@ -5,26 +5,33 @@ import card from '../assets/card.svg';
 import wallet from '../assets/Wallet.svg';
 
 const BuyConfig = ({plan, setOpen, open}) => {
+    const [loading, setLoading] = useState(false)
     const [data, setData] = useState({})
     const handleClose = () => setOpen(false);
     const change = event =>{
         setData({...data, [event.target.name]: event.target.value});
     }
     const sendData = async event =>{
+        setLoading(true)
         data.planID = plan._id;
         data.payType = event.target.name;
         const result = await addConfig(data);
-        console.log(result);
-        if(result?.gatewayURL) document.location.href = result?.gatewayURL
+        setLoading(false)
+        
+        console.log(result, data);
+        if(result) handleClose()
+        if(result?.gatewayURL) {
+            document.location.href = result?.gatewayURL
+        }
     }
     return (
-        <Modal isOpen={open} onClose={handleClose}>
+        <Modal isOpen={open} onClose={handleClose} loading={loading}>
             <div className='w-full flex justify-center'>
                 <div className='w-fit flex flex-col'>
-                    <input onChange={change} name='full_name' placeholder='نام و نام خانوادگی فارسی' type='text' className='appearance-none my-1 border border-gray-500 rounded w-52 py-2 px-3 text-lg text-black mb-3 leading-tight focus:border-blue-500 focus:outline-none focus:shadow-outline'/>  
-                    <input onChange={change} name='first_name' placeholder='نام لاتین' type='text' className='appearance-none my-1 border border-gray-500 rounded w-52 py-2 px-3 text-lg text-black mb-3 leading-tight focus:border-blue-500 focus:outline-none focus:shadow-outline'/>  
-                    <input onChange={change} name='last_name' placeholder='نام خانوادگی لاتین' type='text' className='appearance-none my-1 border border-gray-500 rounded w-52 py-2 px-3 text-lg text-black mb-3 leading-tight focus:border-blue-500 focus:outline-none focus:shadow-outline'/>  
-                    <input onChange={change} name='mobile' placeholder='موبایل' type='text' className='appearance-none my-1 border border-gray-500 rounded w-52 py-2 px-3 text-lg text-black mb-3 leading-tight focus:border-blue-500 focus:outline-none focus:shadow-outline'/>  
+                    <input onChange={change} name='full_name' value={data.full_name} placeholder='نام و نام خانوادگی فارسی' type='text' className='appearance-none my-1 border border-gray-500 rounded w-52 py-2 px-3 text-lg text-black mb-3 leading-tight focus:border-blue-500 focus:outline-none focus:shadow-outline'/>  
+                    <input onChange={change} name='first_name' value={data.first_name} placeholder='نام لاتین' type='text' className='appearance-none my-1 border border-gray-500 rounded w-52 py-2 px-3 text-lg text-black mb-3 leading-tight focus:border-blue-500 focus:outline-none focus:shadow-outline'/>  
+                    <input onChange={change} name='last_name' value={data.last_name} placeholder='نام خانوادگی لاتین' type='text' className='appearance-none my-1 border border-gray-500 rounded w-52 py-2 px-3 text-lg text-black mb-3 leading-tight focus:border-blue-500 focus:outline-none focus:shadow-outline'/>  
+                    <input onChange={change} name='mobile' value={data.mobile} placeholder='موبایل' type='text' className='appearance-none my-1 border border-gray-500 rounded w-52 py-2 px-3 text-lg text-black mb-3 leading-tight focus:border-blue-500 focus:outline-none focus:shadow-outline'/>  
                 </div>
             </div>
             <div className='flex my-3'>
