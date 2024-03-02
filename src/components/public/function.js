@@ -65,6 +65,9 @@ const useQuery = () => {
     const queryParams = new URLSearchParams(location.search);
     return queryParams
 }
+const setTitle = title => {
+    document.title = title;
+}
 export {
     lastIndex,
     redirect,
@@ -73,5 +76,6 @@ export {
     AD2solarDate,
     addCommaToPrice,
     timestampToTime,
-    useQuery
+    useQuery,
+    setTitle
 }
