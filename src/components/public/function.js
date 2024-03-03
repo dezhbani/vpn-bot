@@ -68,6 +68,11 @@ const useQuery = () => {
 const setTitle = title => {
     document.title = title;
 }
+const copyElement = (tag, length) => {
+    console.log(tag);
+    const numbers = Array.from({ length: length }, (_, index) => index + 1);
+    return numbers.map(() => tag)
+}
 export {
     lastIndex,
     redirect,
@@ -77,5 +82,6 @@ export {
     addCommaToPrice,
     timestampToTime,
     useQuery,
-    setTitle
+    setTitle,
+    copyElement
 }
