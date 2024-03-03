@@ -1,0 +1,18 @@
+.mainContainer{
+    display: flex;
+    width: 85vw;
+}
+  .container {
+    direction: rtl;
+    margin: 0px 80px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+.skeleton{
+  width: 960px;
+  height: 80px;
+}
+.blur{
+  backdrop-filter: blur(20px);
+}
