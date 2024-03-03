@@ -1,7 +1,6 @@
-import { Box, Button, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import styles from '../user-section/AddConfig.module.css'
-import { addConfig } from '../../services/config.service';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { headers } from '../../public/function';

@@ -9,13 +9,8 @@ const UserDetails = ({user, setOpen, open}) => {
     const headerSection = ["اطلاعات کاربر", "تراکنش ها", "کانفیگ ها"]
     const [data, setData] = useState({full_name: user.full_name, wallet: user.wallet, first_name: user.first_name, last_name: user.last_name, mobile: user.mobile})
     const [value, setValue] = useState(0)
-    const [wallet, setWallet] = useState({wallet: 0})
     const handleClose = () => setOpen(false);
-    const handleWallet = () => setWallet(false);
-    
-    const changeWallet = event =>{
-        setWallet({wallet: event.target.value});
-    }
+
     const click = event =>{
         const value = event.target.getAttribute('value')
         setValue(value)

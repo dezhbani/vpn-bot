@@ -21,7 +21,6 @@ const Configs = () => {
         const response = await changeConfigsStatus({userID, configID})
         allConfigs()
         if(response) setLoading(false)
-        console.log(loading);
         return response.configStatus
     }
     

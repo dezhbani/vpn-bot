@@ -1,11 +1,10 @@
 import styles from './PlanGuide.module.css'
-import React, { useState } from 'react';
+import React from 'react';
 import AddPlan from './AddPlan';
 
 
 
 const PlanGuide = () => {
-    // const [open, setOpen] = useState(false);
     return (
         <div className={styles.mainContainer}>
             <div className={styles.container}>

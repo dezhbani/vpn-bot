@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styles from './Bills.module.css';
 import Sidebar from '../public/Sidebar';
 import { getBills } from '../../services/profile.service';
-import Transaction from '../user-section/details/Transaction';
 import Bill from './Bill';
 
 const Bills = () => {

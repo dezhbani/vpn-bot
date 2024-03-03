@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styles from './AddPlan.module.css'
 import { editPlan } from '../services/plan.service';
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const EditPlan = ({data, open, setOpen}) => {
     const handleClose = () => setOpen(false);

@@ -4,7 +4,7 @@ import styles from './AddPlan.module.css'
 import add from '../assets/add.svg'
 import { addPlan } from '../services/plan.service';
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const AddPlan = () => {
     

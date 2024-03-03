@@ -1,13 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styles from './Auth.module.css'
 import GetMobile from './GetMobile';
 import GetOtp from './GetOtp';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ServerError from '../admin/public/errors/ServerError';
-import Loading from '../admin/public/Loading';
-import { getUserProfile } from '../services/profile.service';
-import { redirect } from '../public/function';
 import { ProfileContext } from '../context/UserProfileContext';
 import { Navigate } from 'react-router-dom';
 import Forbidden from '../admin/public/errors/Forbidden';

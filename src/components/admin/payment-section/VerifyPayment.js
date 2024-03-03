@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
-import { addCommaToPrice, useQuery } from '../../public/function';
+import { Link, useParams } from 'react-router-dom';
+import { useQuery } from '../../public/function';
 import { verifyTransaction, verifyWalletTransaction } from '../../services/payment.service';
 import styles from './VerifyPayment.module.css';
 import Loading from '../public/Loading';
@@ -11,7 +11,6 @@ const VerifyPayment = ({wallet = false}) => {
     const { id } = useParams();
     const authority = query.get('Authority');
     const verify = async () => setTransaction(await verifyTransaction(id, authority));
-    console.log(transaction);
     const verifyWallet = async () => {
         setTransaction(await verifyWalletTransaction(id, authority))
     };

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './Bill.module.css';
 import ReceiptIcon from '../assets/Receipt.svg';
-import { AD2solarDate, addCommaToPrice, p2eDigits, timestampToTime } from '../../public/function';
+import { AD2solarDate, addCommaToPrice, timestampToTime } from '../../public/function';
 import Receipt from './Receipt';
 
 const Bill = ({bill}) => {

@@ -1,10 +1,8 @@
 import React, { useContext, useState } from 'react';
 import styles from './User.module.css';
-import { lastIndex } from '../../public/function';
 import Loading from '../public/Loading';
 import { ProfileContext } from '../../context/UserProfileContext';
 import UserDetails from './UserDetails';
-import { repurchase } from '../../services/users.service';
 import RepurchaseConfig from './RepurchaseConfig';
 
 const User = ({user, editedID, setEditedID}) => {
@@ -12,17 +10,10 @@ const User = ({user, editedID, setEditedID}) => {
     const [openRepurchase, setOpenRepurchase] = useState(false);
     const handleOpenDetails = () => setOpenDetails(true);
     const handleOpenRepurchase = () => setOpenRepurchase(true);
-    // const changeHandler = event =>{
-    //     setEditedID({edit: true, ID: event.target.value})
-    // }
-
-    const repurchaseHandler = () => {
-        repurchase(user._id)
-    }
 
     const profile = useContext(ProfileContext)
     if(!profile?.role) return <Loading />
-    // const lastPlan = lastIndex(user.bills);
+    
     return (
         <div className={styles.mainContainer}>
             <div className={styles.container}>

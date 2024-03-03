@@ -3,8 +3,6 @@ import Sidebar from '../public/Sidebar';
 import { getUsers } from '../../services/users.service';
 import styles from './Users.module.css'
 import User from './User';
-import logo from '../assets/delta-vpn-logo.webp'
-import Forbidden from '../public/errors/Forbidden';
 
 const Users = () => {
     const [users, setUsers] = useState([]);
@@ -23,13 +21,6 @@ const Users = () => {
         allUsers()
         document.title = 'dashboard';
     }, []);
-    // const lastPlan = lastIndex(users.bills)
-    // if(status) return (
-    //     <>
-    //         <Sidebar />
-    //         <Forbidden />
-    //     </>
-    // )
     
     return (
         <>

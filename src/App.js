@@ -7,8 +7,6 @@ import NotFoundError from './components/admin/public/errors/NotFoundError';
 import { ToastContainer } from 'react-toastify';
 import Bills from './components/admin/bill-section/Bills';
 import Tickets from './components/admin/support-section/Tickets';
-import NewTicket from './components/admin/support-section/NewTicket';
-import TicketDetails from './components/admin/support-section/TicketDetails';
 import VerifyPayment from './components/admin/payment-section/VerifyPayment';
 import Configs from './components/admin/config-section/Configs';
 import 'react-loading-skeleton/dist/skeleton.css'
