@@ -11,6 +11,16 @@ const addConfig = async data => {
         toast.error(error.response.data.message, {autoClose: 2000})
     }
 }
+const changeConfigsStatus = async data => {
+    try {
+        const result = await axios.post('admin/config/changeStatus', data, headers)
+        toast.success(result.data.message)
+        return result.data
+    } catch (error) {
+        toast.error(error.response.data.message, {autoClose: 2000})
+        return error.response.data.message
+    }
+}
 const activeConfig = async ID => {
     try {
         const result = await axios.get(`admin/config/active/${ID}`, headers)
@@ -30,8 +40,19 @@ const resendConfig = async data => {
         toast.error(error.response.data.message, {autoClose: 2000})
     }
 }
+const getConfigsList = async () => {
+    try{
+        const result = await axios.get('admin/config', headers)
+        toast.success(result.data.message)
+        return result.data
+    } catch (error) {
+        toast.error(error.response.data.message, {autoClose: 2000})
+    }
+}
 export {
     addConfig,
     activeConfig,
+    getConfigsList,
+    changeConfigsStatus,
     resendConfig
 }
