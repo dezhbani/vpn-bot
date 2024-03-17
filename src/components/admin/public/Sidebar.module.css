@@ -23,6 +23,7 @@
     width: 15vw;
     background-color: #fff;
     border-left: 1px solid #e5eaef;
+    z-index: 100;
 }
 
 .Loading{

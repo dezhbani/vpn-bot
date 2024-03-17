@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 const Timer = ({mobile}) => {
   const [minutes, setMinutes] = useState(2);
   const [seconds, setSeconds] = useState(0);
+  const [resend, setResend] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,7 +26,7 @@ const Timer = ({mobile}) => {
     return () => {
       clearInterval(interval);
     };
-  }, [seconds]);
+  }, [seconds, resend]);
 
   const resendOTP = async () => {
     try {
@@ -35,15 +36,16 @@ const Timer = ({mobile}) => {
       toast.success(res.data.message)
       setMinutes(2);
       setSeconds(0);
+      setResend(true);
     } catch (error) {
         toast.error(error.response.data.message, {autoClose: 2000})
     }
   };
 
   return (
-    <div className="container">
+    <div className="container mt-3 dir-rtl">
       <div className="card">
-        <div className="countdown-text">
+        <div className="text-blue-500 font-bold text-sm font-[iran-sans] ">
           {seconds > 0 || minutes > 0 ? (
             <p>
               {minutes < 10 ? `0${minutes}` : minutes}:

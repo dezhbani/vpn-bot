@@ -13,12 +13,13 @@ import { ProfileContext } from '../../context/UserProfileContext';
 import Loading from './Loading';
 import { addCommaToPrice } from '../../public/function';
 import UpdateWallet from '../payment-section/UpdateWallet';
+import Modal from '../../public/components/Modal';
 
 const Sidebar = () => {
     const [ open, setOpen ] = useState(false)
     const handleOpen = () => setOpen(true);
     const profile = useContext(ProfileContext)
-    if(!profile?.role) return <div className={styles.Loading}><Loading /></div>
+    if(!profile?.role) return <Modal isOpen={true} loading={true} />
     return (
         <div className={styles.main}>
             <UpdateWallet setOpen={setOpen} open={open} userID={profile._id} />
