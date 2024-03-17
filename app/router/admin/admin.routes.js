@@ -13,7 +13,7 @@ router.use("/user", adminUserRoutes);
 router.use("/permission", adminPermissionRoutes);
 router.use("/role", adminRoleRoutes);
 router.use("/report", adminReportRoutes);
-// router.use("/support", adminSupportRoutes);
+router.use("/support", adminSupportRoutes);
 
 module.exports = {
     AdminRoutes: router

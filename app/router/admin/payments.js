@@ -1,6 +1,4 @@
-const { StatusCodes } = require("http-status-codes");
-const { configController } = require("../../controllers/admin/config.controller");
-const { paymentController } = require("../../controllers/admin/payment.controller");
+const { paymentController } = require("../../controllers/admin/payment/payment.controller");
 const { verifyToken } = require("../../middlewares/verifyAccessToken");
 const router = require("express").Router();
 

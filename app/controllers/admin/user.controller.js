@@ -8,8 +8,10 @@ const { planModel } = require("../../models/plan");
 const { configController } = require("./config.controller");
 const { copyObject, lastIndex } = require("../../utils/functions");
 const { smsService } = require("../../services/sms.service");
-const { paymentController } = require("./payment.controller");
+// const { paymentController } = require("./payment.controller");
 const { PaymentModel } = require("../../models/payment");
+const { paymentTransaction } = require("./payment/payment");
+const { paymentController } = require("./payment/payment.controller");
 
 
 class userController extends Controllers {
@@ -33,10 +35,10 @@ class userController extends Controllers {
             const { id } = req.params;
             const { pay } = req.body;
             if(!pay) throw createHttpError.BadRequest("مبلغ نمیتواند خالی باشد")
-            const createPayLink = await paymentController.paymentTransaction("", pay, owner, id)
+            const createPayLink = await paymentController.paymentTransaction("افزایش اعتبار", pay, owner, id)
             return res.status(StatusCodes.OK).json({
                 status: StatusCodes.OK,
-                payLink: createPayLink.data.gatewayURL
+                payLink: createPayLink.gatewayURL
             })
         } catch (error) {
             next(error)
@@ -96,13 +98,14 @@ class userController extends Controllers {
     }
     async getAllUsers(req, res, next) {
         try {
-            const users = await userModel.find({}, { otp: 0 })
+            const { _id: ownerID } = req.user
+            const users = await userModel.find({by: ownerID}, { otp: 0 })
             const account = await planModel.populate(users, {
                 path: 'bills.planID'
             })
             return res.status(StatusCodes.OK).json({
                 status: StatusCodes.OK,
-                users: account
+                users: account.length? account: null
             })
         } catch (error) {
             next(error)

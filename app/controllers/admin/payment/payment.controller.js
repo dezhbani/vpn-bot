@@ -1,36 +1,13 @@
 const createHttpError = require("http-errors");
 const { StatusCodes } = require("http-status-codes");
-const { Controllers } = require("../controller");
+const { Controllers } = require("../../controller");
 const { default: axios } = require("axios");
-const { invoiceNumberGenerator, copyObject, lastIndex, tomanToRial, rialToToman, createConfig } = require("../../utils/functions");
+const { invoiceNumberGenerator, lastIndex, rialToToman, createConfig, tomanToRial } = require("../../../utils/functions");
 const moment = require("moment-jalali");
-const { PaymentModel } = require("../../models/payment");
-const { userModel } = require("../../models/user");
-const { userController } = require("./user.controller");
-// const { configController, ConfigController } = require("../admin/config.controller");
-const { ZARINPAL_MERCHANT_ID, CallbackURL, REDIRECT_URL, BASE_URL } = process.env;
+const { PaymentModel } = require("../../../models/payment");
+const { userModel } = require("../../../models/user");
+const { ZARINPAL_MERCHANT_ID, REDIRECT_URL, BASE_URL } = process.env;
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-
-// const { amount, description } = req.body;
-//             const zarinpal_request_url = "https://api.zarinpal.com/pg/v4/payment/request.json";
-//             const zarinpalGatewayURL = "https://www.zarinpal.com/pg/StartPay"
-//              const zapripal_options = {
-//                  merchant_id: ZARINPAL_MERCHANT_ID,
-//                  amount,
-//                  currency: 'IRR',
-//                  description ,
-//                  callback_url: "http://localhost:80/verify"
-//              }
-//              const RequestResult = await axios.post(zarinpal_request_url, zapripal_options).then(result => result.data);
-//              const {authority, code} = RequestResult.data
-//              // const url = result.url
-//              if(code == 100 && authority){
-//                  return res.status(StatusCodes.OK).json({
-//                      statusCode: StatusCodes.OK,
-//                     gatewayURL: `${zarinpalGatewayURL}/${authority}`
-//                 })
-//             }
-//             throw createHttpError.BadRequest("اتصال به درگاه پرداخت انجام نشد")
 
 class paymentController extends Controllers {
     async createTransaction(req, res, next){
@@ -41,9 +18,9 @@ class paymentController extends Controllers {
             const zapripal_options = {
                 merchant_id: ZARINPAL_MERCHANT_ID,
                 amount,
-                description: 'kkkkk' ,
+                description,
                 metadata:{
-                    mobile: user.mobile
+                    mobile: user.mobile,
                 },
                 callback_url: callback || `${REDIRECT_URL}/payment/${billID}`
             }
@@ -71,7 +48,7 @@ class paymentController extends Controllers {
                     gatewayURL: `${zarinpalGatewayURL}/${authority}`
                 })
             }
-            // throw createHttpError.BadRequest("اتصال به درگاه پرداخت انجام نشد")
+            throw createHttpError.BadRequest("اتصال به درگاه پرداخت انجام نشد")
         } catch (error) {
             next(error)
         }
@@ -208,7 +185,7 @@ class paymentController extends Controllers {
             next(error)
         }
     }
-    async paymentTransaction(description, pay, userID, owner){
+    async paymentTransaction (description, pay, owner, userID) {
         const bills = {
             buy_date: new Date().getTime(),
             for: {
@@ -233,7 +210,7 @@ class paymentController extends Controllers {
             user: ownerDetails,
             callback: `${REDIRECT_URL}/wallet/${billID}`
         })
-        return createPayLink
+        return createPayLink.data
     }
 }
 

@@ -5,6 +5,7 @@ class Controllers{
         autoBind(this)
     }
     testMethod(){
+        console.log("test string");
         return "test string"
     }
 }

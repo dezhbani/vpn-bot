@@ -4,3 +4,4 @@
 # /app/controllers/admin/support
 /.dockerignore
 /Dockerfile
+/data.txt

@@ -16,14 +16,12 @@ const checkEndData = async (percent) => {
             const configDetails = user.configs.filter(config => config.configID == configID && !(+config.expiry_date < new Date().getTime()))
             let message
             if(!configDetails[0].endData) message = await smsService.endData(user.mobile, user.full_name, `${percent} درصد`)
-            console.log(configDetails);
             const index = user.configs.findIndex(config => config == configDetails[0])
             const newConfigs = copyObject(user.configs);
             configDetails[0].endData = true
             newConfigs[index] = configDetails[0]
             if(!configDetails[0].endData && Number.isInteger(message)) await userModel.updateOne({'configs.configID': {$in: configID}}, {$set: {configs: newConfigs}});
             // bot.telegram.sendMessage('5803093467', `${user.full_name} محترم 60 درصد از حجم کانفیگتون مصرف شده برای مشاهده جزئیات کلیک کنید`, )
-            console.log('data:',config.remark)
         }
     })
 }

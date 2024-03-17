@@ -124,7 +124,7 @@ const findPlanByID = async (planID, type) => {
     return plan
 }
 const getV2rayCookie = async () => {
-    const loginResponse = await axios.post(V2RAY_API_URL, {
+    const loginResponse = await axios.post(`${V2RAY_API_URL}/login`, {
         username: V2RAY_USERNAME,
         password: V2RAY_PASSWORD
     });
