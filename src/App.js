@@ -13,7 +13,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 function App() {
   return (
-    <div>
+    <div className='bg-[#f5f5f5]'>
         <Routes>
           <Route path="/" element={<Navigate to="/sign-up"/>} />
           <Route path="/sign-up" element={<Auth />} />

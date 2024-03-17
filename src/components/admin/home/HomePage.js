@@ -4,9 +4,8 @@ import Sidebar from '../public/Sidebar';
 const HomePage = () => {
 
     return (
-        <div>
+        <div className='h-screen'>
             <Sidebar />
-            <h2>HomePage</h2>
         </div>
     );
 };
