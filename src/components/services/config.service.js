@@ -49,10 +49,20 @@ const getConfigsList = async () => {
         toast.error(error.response.data.message, {autoClose: 2000})
     }
 }
+const getConfigsByDay = async day => {
+    try{
+        const result = await axios.post('admin/config/endedTime', day, headers)
+        toast.success(result.data.message)
+        return result.data
+    } catch (error) {
+        toast.error(error.response.data.message, {autoClose: 2000})
+    }
+}
 export {
     addConfig,
     activeConfig,
     getConfigsList,
     changeConfigsStatus,
-    resendConfig
+    resendConfig,
+    getConfigsByDay
 }

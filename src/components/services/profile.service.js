@@ -8,7 +8,7 @@ const getUserProfile = async (setData) => {
         setData(result?.data)
     } catch (error) {
         setData(error.response?.data);
-        toast.error(error.response?.data.message || "مشکل در اتصال به سرور", {autoClose: 2000})
+        // toast.error(error.response?.data.message || "مشکل در اتصال به سرور", {autoClose: 2000})
     }
 }
 const getBills = async () => {
