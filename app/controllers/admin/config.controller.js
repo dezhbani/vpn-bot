@@ -338,7 +338,7 @@ class configController extends Controllers {
           const newUser = await userModel.create({ full_name, first_name, last_name, mobile, by })
           if(!newUser) return createHttpError.InternalServerError('یوزر ثبت نشد')
         }
-      if(user && user.by !== by) throw createHttpError.Forbidden("این کاربر توسط ادمین دیگری ثبت شده")
+      if(!(JSON.stringify(user.by)== JSON.stringify(by))) throw createHttpError.Forbidden("این کاربر توسط ادمین دیگری ثبت شده")
     }
     async findConfigByID(configID) {
         const configs = (await axios.post(`${V2RAY_API_URL}/xui/inbound/list`, {}, {

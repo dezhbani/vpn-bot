@@ -12,6 +12,8 @@ const cron = require('node-cron');
 const { checkEndTime } = require('./controllers/admin/cron/checkConfigEndTime');
 const { checkEndData } = require('./controllers/admin/cron/checkEndData');
 const { getV2rayCookie } = require('./utils/functions');
+// const key = fs.readFileSync("/etc/letsencrypt/live/api.delta-dev.top/privkey.pem");
+// const cert = fs.readFileSync("/etc/letsencrypt/live/api.delta-dev.top/fullchain.pem");
 module.exports = class Application{
     #app = express();
     #DB_URL;
@@ -37,6 +39,7 @@ module.exports = class Application{
     }
     createServer(){
         const server = http.createServer(this.#app)
+        // const server = https.createServer({ key, cert }, app);
         server.listen(this.#PORT, () => {
             console.log(`run => http://localhost:${this.#PORT}`);
         })
@@ -100,9 +103,9 @@ module.exports = class Application{
 // const { details } = require('./app/details');
 // const { plans } = require('./app/plans');
 // const fs = require('fs')
-// // const key = fs.readFileSync("/etc/letsencrypt/live/s1.delta-dev.top/privkey.pem");
-// // const cert = fs.readFileSync("/etc/letsencrypt/live/s1.delta-dev.top/fullchain.pem");
-// // const server = https.createServer({ key, cert }, app);
+// const key = fs.readFileSync("/etc/letsencrypt/live/s1.delta-dev.top/privkey.pem");
+// const cert = fs.readFileSync("/etc/letsencrypt/live/s1.delta-dev.top/fullchain.pem");
+// const server = https.createServer({ key, cert }, app);
 
 
 // app.post('/bot', express.json(), (req, res) => {
