@@ -21,6 +21,7 @@ const GetMobile = ({setState, loading, setLoading}) => {
             const res = await axios.post("auth/get-otp",{
                 mobile: data.mobile
             });
+            console.log(res.data);
             const { message, mobile, status } = res.data;
             if(status == 200){
                 setLoading(false)

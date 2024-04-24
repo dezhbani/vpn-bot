@@ -15,43 +15,19 @@ const User = ({user, editedID, setEditedID}) => {
     if(!profile?.role) return <Loading />
     
     return (
-        <div className={styles.mainContainer}>
-            <div className={styles.container}>
-                <p>{user.full_name}</p>
-                <p>{user.mobile}</p>
-                <div className={styles.buttonContainer}>
-                    <button className={`bg-none border-none text-blue-500`} onClick={handleOpenDetails}>جزئیات</button>
-                    <button className={styles.repurchase} onClick={handleOpenRepurchase}>تمدید کانفیگ</button>
+        <div className="flex max-md:w-full no-underline flex-col m-3 font-[iran-sans] text-base sm:mx-4 sm:my-4"> 
+            <div className="flex bg-white flex-col md:w-72 px-1 py-4 shadow-md rounded-lg">
+                <p className='flex justify-center p-1 text-sm'>{user.full_name}</p>
+                <p className='flex justify-center p-1 text-sm'>{user.mobile}</p>
+                <div className='flex justify-center p-1 font-medium'>
+                    <button className='bg-none border-none text-blue-500 flex justify-center items-center p-1 mx-1' onClick={handleOpenDetails}>جزئیات</button>
+                    <button className='bg-blue-500 text-white flex justify-center items-center py-1 px-3 mx-1  rounded' onClick={handleOpenRepurchase}>تمدید کانفیگ</button>
                 </div>
                 <UserDetails open={openDetails} setOpen={setOpenDetails} user={user} />
                 <RepurchaseConfig open={openRepurchase} setOpen={setOpenRepurchase} userID={user._id} />
             </div>
-            {/*   */}
         </div>
     );
 };
 
 export default User;
-
-// {editedID.edit ?
-//     <div className={styles.radioContainer}>
-//         <FormControl>
-//             <RadioGroup aria-labelledby="demo-radio-buttons-group-label" defaultValue="female" name="radio-buttons-group" >
-//                 <FormControlLabel checked={editedID.ID == users._id} onChange={changeHandler} value={users._id} control={<Radio />}/>
-//             </RadioGroup>
-//         </FormControl>
-//     </div>
-//     :
-//     <div className={styles.imageContainer}>
-//         < img alt='profile' className={styles.image} src={profile} />
-//     </div>
-//     }
-// <Link style={{textDecoration: 'none'}} to={`/dashboard/users/${users._id}`}>
-//     <div className={styles.profile}>
-//         <div className={styles.profileContainer}>
-//             <div className={styles.name}>نام:<span> {users.full_name}</span></div>
-//             <div className={styles.mobile}>موبایل: {`${users.mobile}`}</div>
-//             <div>{lastPlan?.planID? `بسته فعلی: ${lastPlan.planID.name}`:'بسته ای خریداری نشده'}</div>
-//         </div>
-//     </div>
-// </Link>

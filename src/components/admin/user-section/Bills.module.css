@@ -13,6 +13,6 @@
     background: none; 
   }
   ::-webkit-scrollbar-thumb {
-    background: #002b6b;
+    background: none;
     border-radius: 10px;
   }

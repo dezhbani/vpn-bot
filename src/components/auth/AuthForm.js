@@ -8,6 +8,7 @@ import { ProfileContext } from '../context/UserProfileContext';
 import { Navigate } from 'react-router-dom';
 import Forbidden from '../admin/public/errors/Forbidden';
 import Modal from '../public/components/Modal';
+import Loading from './Loading';
 
 const Auth = () => {
     const data = useContext(ProfileContext)
@@ -18,17 +19,18 @@ const Auth = () => {
         return <GetMobile loading={loading} setLoading={setLoading} setState={setState} state={state} />
     }
     const checkProfile = () => { 
+        console.log(data);
         switch (data?.status) {
             case 200:
                 if(data.role !== "customer") return <Navigate to="/dashboard" />
             case 401:
                 return <div className='bg-white rounded-lg p-7 m-24 h-80 w-fit'>{checkOTP()}</div>
             case 403:
-                return <Forbidden />
+                return <Navigate to="/dashboard" />
             case 500:
-                return <ServerError />
+                return <Navigate to="/dashboard" />
             default:
-                return <Modal isOpen={true} loading={true} />
+                return <Navigate to="/dashboard" />
         }
     }
     return (

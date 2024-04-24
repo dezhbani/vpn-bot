@@ -1,9 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+*{
+    margin: 0px;
+    padding: 0px;
+}
 .dir-rtl{
     direction: rtl;
 }
 .dir-ltr{
     direction: ltr;
+}
+@font-face{
+    font-family: iran-sans;
+    src: url(./components/admin/assets/IRANSansWeb.woff2);
 }
