@@ -33,15 +33,15 @@ const RepurchaseConfig = ({open, setOpen, userID}) => {
 
     return (
         <Modal isOpen={open} onClose={handleClose} loading={!(!loading && configs.length > 0)}>
-                    <h4 className={styles.help}>روی کانفیگ مورد نظرت کلیک کن</h4>
+                    <h4 className="font-[iran-sans]">روی کانفیگ مورد نظرت کلیک کن</h4>
                     <div>
                         {
                             configs.map(config => <Config config={config} selected={selected} setSelected={setSelected} />)
                         }
                     </div>
-                    <div className={styles.buttonContainer}>
+                    <div className="w-full flex text-base font-[iran-sans] justify-center">
                         {
-                            <button onClick={send}>تمدید</button>
+                            <button className='rounded-md delay-200 ease-in py-1.5 px-10 bg-blue-600 text-white' onClick={send}>تمدید</button>
                         }
                     </div>
         </Modal>
