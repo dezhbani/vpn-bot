@@ -15,7 +15,9 @@ const RepurchaseConfig = ({open, setOpen, userID}) => {
 
     }
     const repurchaseHandler = async () => {
-        const { list } = await activeConfig(userID);
+        const result = await activeConfig(userID);
+        if(!result) return handleClose()
+        const { list } = result;
         if (list.length > 1) {
             configs.length == 0 && setConfigs(list);
         } else {
