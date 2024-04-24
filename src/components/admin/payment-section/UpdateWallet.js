@@ -1,6 +1,5 @@
 import { Button, TextField } from '@mui/material';
 import React, { useState } from 'react';
-import styles from '../user-section/AddConfig.module.css'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { headers } from '../../public/function';
@@ -30,8 +29,8 @@ const UpdateWallet = ({setOpen, open, userID}) => {
     return (
         <Modal isOpen={open} onClose={handleClose} loading={loading}>
             <h2>شارژ حساب کاربری</h2>
-            <div className={styles.inputBox}>
-                <TextField margin='normal' size='small' onChange={change} name='wallet' value={data.wallet} className={styles.field} label='(تومان)مبلغ' variant="outlined" />
+            <div >
+                <TextField margin='normal' size='small' onChange={change} name='wallet' value={data.wallet} label='(تومان)مبلغ' variant="outlined" />
                 <Button onClick={sendData}>پرداخت</Button>
             </div>
         </Modal>

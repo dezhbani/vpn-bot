@@ -1,11 +1,10 @@
 import React, { useContext, useState } from 'react';
-import styles from './User.module.css';
 import Loading from '../public/Loading';
 import { ProfileContext } from '../../context/UserProfileContext';
 import UserDetails from './UserDetails';
 import RepurchaseConfig from './RepurchaseConfig';
 
-const User = ({user, editedID, setEditedID}) => {
+const User = ({user}) => {
     const [openDetails, setOpenDetails] = useState(false);
     const [openRepurchase, setOpenRepurchase] = useState(false);
     const handleOpenDetails = () => setOpenDetails(true);
