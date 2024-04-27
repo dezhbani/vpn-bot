@@ -39,7 +39,6 @@ function configExpiryTime(month) {
     expiryTime.setMilliseconds(0)
     return expiryTime.getTime()
 }
-
 const randomString = () => {
     const random = Math.random().toString(36).substring(2, 8);
     return random
@@ -54,7 +53,6 @@ function deleteInvalidProperties(data = {}, blackListFields){
         if(nullishData.includes(data[key])) delete data[key];
     })
 }
-
 function copyObject(object){
     return JSON.parse(JSON.stringify(object))
 }
@@ -62,7 +60,6 @@ const lastIndex = (array = []) => {
     const last = array.length - 1;
     return array[last]
 }
-
 const percentOfNumber = (number, percent) => {
     const result = (+number / 100) * percent;
     return result
@@ -128,7 +125,8 @@ const getV2rayCookie = async () => {
         username: V2RAY_USERNAME,
         password: V2RAY_PASSWORD
     });
-    process.env.V2RAY_TOKEN = loginResponse.headers['set-cookie'][0].split(';')[0];
+    process.env['V2RAY_TOKEN'] = loginResponse.headers['set-cookie'][0].split(';')[0];
+    console.log(process.env['V2RAY_TOKEN']);
 }
 const getStartAndEndOfMonthTimestamps = () => {
     const currentDate = new Date();
@@ -137,6 +135,10 @@ const getStartAndEndOfMonthTimestamps = () => {
     const startTimestamp = startDate.getTime();
     const endTimestamp = endDate.getTime();
     return { startTimestamp, endTimestamp };
+}
+const exportConfigDetails = config => {
+    // console.log(JSON.parse(config.settings));
+    // console.log(config.setting);
 }
 module.exports = {
     randomNumber,
@@ -153,5 +155,6 @@ module.exports = {
     tomanToRial,
     createConfig,
     getV2rayCookie,
-    getStartAndEndOfMonthTimestamps
+    getStartAndEndOfMonthTimestamps,
+    exportConfigDetails
 }

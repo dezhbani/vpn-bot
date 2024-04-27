@@ -3,7 +3,7 @@ const { planModel } = require("../../models/plan");
 const { StatusCodes } = require("http-status-codes");
 const { deleteConfigSchema, repurchaseConfigSchema, addConfigSchema, buyConfigSchema } = require("../../validations/admin/config.shema");
 const { Controllers } = require("../controller");
-const { percentOfNumber, lastIndex, configExpiryTime, copyObject } = require("../../utils/functions");
+const { percentOfNumber, lastIndex, configExpiryTime, copyObject, exportConfigDetails } = require("../../utils/functions");
 const { V2RAY_API_URL, V2RAY_TOKEN, REDIRECT_URL } = process.env
 const { default: axios } = require('axios');
 const { userModel } = require("../../models/user");
@@ -123,6 +123,7 @@ class configController extends Controllers {
     async getAll(req, res, next){
         try {
             const { _id: userID } = req.user;
+            await this.updateConfigDetails()
             const adminsCustomer = await userModel.find({by: userID}, {_id: 1})
             const adminAllConfigs = await configModel.find({userID: { $in: adminsCustomer } })
             const list = adminAllConfigs.map(config => {
@@ -194,6 +195,7 @@ class configController extends Controllers {
                 return data
             })
             list = list.filter(config => config.userID.by == `${ownerID}`)
+            if(list.length == 0) throw createHttpError.NotFound("برای کاربر مورد نطر هیچ کانفیگی ثبت نشده")
             return res.status(StatusCodes.OK).json({
                 status: StatusCodes.OK, 
                 list
@@ -318,7 +320,7 @@ class configController extends Controllers {
                 'Cookie': V2RAY_TOKEN
             }
         })).data.obj
-        fs.writeFile('./configs.txt', ('' + configs))
+        // fs.writeFile('./configs.txt', ('' + configs))
         return configs
     }
     async getConfigID(){
@@ -973,6 +975,13 @@ class configController extends Controllers {
         } catch (error) {
             next(error)
         }
+    }
+    async updateConfigDetails(){
+      const configs = await this.getAllConfigs()
+      configs.map(async config => {
+        const configID = JSON.parse(config.settings).clients[0].id
+        await configModel.updateOne({configID}, {$set: {status: config.enable, expiry_date: config.expiryTime}})
+      })
     }
 }
 
