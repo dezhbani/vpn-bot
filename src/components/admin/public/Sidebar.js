@@ -44,7 +44,7 @@ const Sidebar = () => {
     if(!profile?.role) return <Modal isOpen={true} loading={true} />
     return (
         <>
-        <div className={`${menu? 'w-1/3': 'w-[4.5rem]'} bg-white dir-rtl fixed right-0 float-right min-h-screen border-l-2 border-solid border-[#e5eaef] sm:w-1/4 lg:w-1/6 xl:w-[15%]`}>
+        <div className={`${menu? 'w-1/2': 'w-[4.5rem]'} bg-white dir-rtl fixed right-0 float-right min-h-screen border-l-2 border-solid border-[#e5eaef] sm:w-1/4 lg:w-1/6 xl:w-[15%]`}>
             <UpdateWallet setOpen={setOpen} open={open} userID={profile._id} />
             <div className='p-4 sm:p-6'>
                 <div className='sm:hidden m-2'>
