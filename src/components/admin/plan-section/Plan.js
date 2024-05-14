@@ -29,16 +29,16 @@ const Plan = ({data}) => {
 // <EditPlan open={open} setOpen={setOpen} data={data} />
 
     return (
-        <div className={styles.mainContainer}>
-            <div className={styles.container}>
-                <div className={styles.planName}>
-                    <div className={styles.name}>{data.name}</div>
+        <div className="flex dir-rtl text-end text-sm sm:text-lg">
+            <div className="flex flex-wrap m-2 bg-white shadow-md rounded-lg dir-rtl flex-col p-2 sm:p-4 sm:m-5">
+                <div className="border-x-2 mt-12 flex justify-center border-blue-600 border-solid">
+                    <p>{data.name}</p>
                 </div>
-                <div className={styles.plan}>
-                    <div className={styles.dataSize}>{data.data_size} گیگ</div>
-                    <div className={styles.month}>{data.month} ماهه</div>
-                    <div className={data.user_count == 0?styles.userCount:styles.dataSize}>{data.user_count == 0? "بدون محدودیت": `${data.user_count} کاربره`}</div>
-                    <div className={styles.price}>{addCommaToPrice(data.price)} ت</div>
+                <div className="flex w-52 h-60 flex-col justify-center sm:w-72 sm:h-72">
+                    <div className="flex justify-center border-b-[1px] border-[silver] p-1">{data.data_size == 0? "نامحدود": `${data.data_size} گیگ`}</div>
+                    <div className="flex justify-center border-b-[1px] border-[silver] p-1">{data.month} ماهه</div>
+                    <div className="flex justify-center border-b-[1px] border-[silver] p-1">{data.user_count == 0? "بدون محدودیت کاربر": `${data.user_count} کاربره`}</div>
+                    <div className="flex justify-center border-b-[1px] border-[silver] p-1">{addCommaToPrice(data.price)} ت</div>
                 </div>
                 <div className={styles.buttonContainer}>
                     <button className={styles.newConfig} onClick={handleOpen}>ثبت کانفیگ</button>
