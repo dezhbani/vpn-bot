@@ -25,6 +25,19 @@ async function verifyToken(req, res, next) {
     })
 }
 
+async function verifyTokenInGraphql(req, res) {
+    try { 
+        const token = getToken(req.headers);
+        const { mobile } = jwt.verify(token, ACCESS_TOKEN_SECRET_KEY);
+        const user = await userModel.findOne({ mobile }, { otp: 0 });
+        if (!user) throw createHttpError.Unauthorized("حساب کاربری یافت نشد");
+        return user
+    } catch (error) {
+        throw new createHttpError.Unauthorized("مجددا وارد حساب کاربری خود شوید")
+    }
+    
+}
 module.exports = {
-    verifyToken
+    verifyToken,
+    verifyTokenInGraphql
 }
