@@ -25,8 +25,8 @@ module.exports = class Application{
         this.connectToDB();
         this.createServer();
         this.createRoutes();
-        this.setCookie();
-        this.checkConfig();
+        // this.setCookie();
+        // this.checkConfig();
         this.startBot();
         this.errorHandling();
     }
@@ -67,7 +67,8 @@ module.exports = class Application{
     }
     async setCookie(){
         // cron.schedule('0 3 * * 3', () => {
-            // getV2rayCookie()
+            getV2rayCookie()
+            // updateConfig(38, data)
             // console.log(process.env);
 
         // })
@@ -89,7 +90,7 @@ module.exports = class Application{
         })
         this.#app.use((err, req, res, next) =>{
             console.log(err);
-            const serverError = createHttpError.InternalServerError("InternalServerError")
+            const serverError = createHttpError.InternalServerError("خظای داخلی سرور")
             const status = err.status || serverError.status;
             const message = err.message || serverError.message;
             return res.status(status).json({

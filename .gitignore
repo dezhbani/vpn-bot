@@ -5,3 +5,7 @@
 /.dockerignore
 /Dockerfile
 /data.txt
+/data.json
+/vpn.json
+/.dockerignore
+/Dockerfile
