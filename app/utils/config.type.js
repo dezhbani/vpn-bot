@@ -1,7 +1,11 @@
-// const { randomNumber, randomString } = require("./functions");
 const { v4: uuidv4 } = require('uuid');
-const { V2RAY_API_URL } = process.env
 
+const randomHost = () => {
+    const Host = ['google.com', 'speedtest.net']
+    const Referer = ['digikala.com', 'snapp.ir']
+    const randomIndex = max => Math.floor((Math.random() * max));
+    return {Host: [Host[randomIndex(Host.length)]], Referer: [Referer[randomIndex(Referer.length)]]}
+}
 const configExpiryTime = month => {
     const expiryTime = new Date()
     expiryTime.setMonth(expiryTime.getMonth())
@@ -50,8 +54,8 @@ const createVlessKcp = async (lastID, plan, fullName) => {
             flow: 'xtls-rprx-direct',
             email,
             limitIp: plan.user_count,
-            totalGB: dataSize,
-            expiryTime,
+            totalGB: 0,
+            expiryTime: 0,
           },
         ],
         decryption: 'none',
@@ -88,9 +92,9 @@ const createVlessTcp = async (lastID, plan, fullName) => {
     const id = uuidv4();
     const email = `${randomString()}@x-ui-english.dev`;;
     const port = randomNumber();
-    const password = randomString()
     const name = fullName.replace(/\s/g, '%20')
     const dataSize = (+plan.data_size) * 1024 * 1024 * 1024
+    const { Host, Referer } = randomHost()
     const streamSettingsObj = {
         network: 'tcp',
         security: 'none',
@@ -104,9 +108,8 @@ const createVlessTcp = async (lastID, plan, fullName) => {
                         "/"
                     ],
                     headers: {
-                        Host: [
-                        "digikala.com"
-                    ]
+                        Host,
+                        Referer
                     }
                 },
                 response: {
@@ -125,8 +128,8 @@ const createVlessTcp = async (lastID, plan, fullName) => {
             flow: 'xtls-rprx-direct',
             email,
             limitIp: plan.user_count,
-            totalGB: dataSize,
-            expiryTime,
+            totalGB: 0,
+            expiryTime: 0
           },
         ],
         decryption: 'none',
@@ -159,7 +162,71 @@ const createVlessTcp = async (lastID, plan, fullName) => {
         tag: `inbound-${randomNumber()}`,
         sniffing
     };
-    const configContent = `vless://${id}@${V2RAY_API_URL}:${port}?type=Tcp&security=none&headerType=http&seed=${password}#${name}`
+    const configContent = `vless://${id}@s1.delta-dev.top:${port}?type=tcp&security=none&path=%2F&host=${Host[0]}&headerType=http#${name}`
+    // const configContent = `vless://${id}@${V2RAY_API_URL}:${port}?type=Tcp&security=none&headerType=http&seed=${password}#${name}`
+    const obj = { details, configContent, id }
+    return obj
+}
+const createVlessWs = async (lastID, plan, fullName) => {
+    const expiryTime = +configExpiryTime(plan.month);
+    const id = uuidv4();
+    const email = `${randomString()}@x-ui-english.dev`;;
+    const port = randomNumber();
+    const name = fullName.replace(/\s/g, '%20')
+    const dataSize = (+plan.data_size) * 1024 * 1024 * 1024
+    const { Host } = randomHost()
+    const streamSettingsObj = {
+        network: 'ws',
+        security: 'none',
+        wsSettings: {
+            acceptProxyProtocol: false,
+            headers: {Host: Host[0]},
+            path: "/"
+            }
+    };
+    const settingsObj = {
+        clients: [
+          {
+            id,
+            flow: 'xtls-rprx-direct',
+            email,
+            limitIp: plan.user_count,
+            totalGB: 0,
+            expiryTime: 0
+          },
+        ],
+        decryption: 'none',
+        fallbacks: []
+    };
+    const sniffingObj = { 
+        sniffing: {
+            enabled: true,
+            destOverride: [
+                "http",
+                "tls"
+            ]
+        }
+    };
+    const sniffing = JSON.stringify(sniffingObj)
+    const settings = JSON.stringify(settingsObj)
+    const streamSettings = JSON.stringify(streamSettingsObj)
+    const details = {
+        id: lastID,
+        total: dataSize,
+        remark: fullName,
+        enable: true,
+        expiryTime,
+        clientStats: [],
+        listen: "",
+        port,
+        protocol: "vless",
+        settings,
+        streamSettings,
+        tag: `inbound-${randomNumber()}`,
+        sniffing
+    };
+    const configContent = `vless://${id}@s1.delta-dev.top:${port}?type=ws&security=none&path=%2F&host=${Host[0]}#${name}`
+    // const configContent = vless://b0dd04d6-1f17-45bc-9d71-9420ae234a3e@s1.delta-dev.top:43207?type=ws&security=none&path=%2F&host=speedtest.net#sadra%20ganbarnezhad
     const obj = { details, configContent, id }
     return obj
 }
@@ -220,5 +287,7 @@ const createVmess = () => {
 // vless://c4cf9b5f-78b8-4a70-abc7-162299fbeff3@s3.delta-dev.top:17047?type=tcp&security=none&path=%2F&host=digikala.com&headerType=http#matin%20dezhbani
 module.exports = {
     createVlessKcp,
-    createVmess
+    createVmess,
+    createVlessTcp,
+    createVlessWs
 }
