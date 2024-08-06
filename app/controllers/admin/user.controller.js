@@ -6,11 +6,10 @@ const { addUserSchema } = require("../../validations/admin/user.schema");
 const { IDvalidator } = require("../../validations/public.schema");
 const { planModel } = require("../../models/plan");
 const { configController } = require("./config.controller");
-const { copyObject, lastIndex } = require("../../utils/functions");
+const { copyObject } = require("../../utils/functions");
 const { smsService } = require("../../services/sms.service");
 // const { paymentController } = require("./payment.controller");
 const { PaymentModel } = require("../../models/payment");
-const { paymentTransaction } = require("./payment/payment");
 const { paymentController } = require("./payment/payment.controller");
 
 

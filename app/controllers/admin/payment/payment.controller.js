@@ -2,10 +2,11 @@ const createHttpError = require("http-errors");
 const { StatusCodes } = require("http-status-codes");
 const { Controllers } = require("../../controller");
 const { default: axios } = require("axios");
-const { invoiceNumberGenerator, lastIndex, rialToToman, createConfig, tomanToRial } = require("../../../utils/functions");
+const { invoiceNumberGenerator, lastIndex, rialToToman, createConfig, tomanToRial, upgradeConfig } = require("../../../utils/functions");
 const moment = require("moment-jalali");
 const { PaymentModel } = require("../../../models/payment");
 const { userModel } = require("../../../models/user");
+const { configModel } = require("../../../models/config");
 const { ZARINPAL_MERCHANT_ID, REDIRECT_URL, BASE_URL } = process.env;
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
@@ -55,7 +56,8 @@ class paymentController extends Controllers {
     }
     async verifyTransaction(req, res, next){
         try {
-            const { billID, authority } = req.params;
+            const { authority } = req.params;
+            const { billID, configID } = req.body;
             const verifyURL = "https://api.zarinpal.com/pg/v4/payment/verify.json";
             const payment = await PaymentModel.findOne({authority});
             if(!payment) throw createHttpError.NotFound("تراکنش در انتظار پرداخت یافت نشد")
@@ -73,18 +75,19 @@ class paymentController extends Controllers {
             }).then(result => result.json())
             const bills = (await userModel.findOne(payment.user)).bills;
             const bill = bills.find(bill=> bill._id == billID);
+            if(!bill) throw createHttpError.NotFound("تراکنش مورد نظر یافت نشد")
             await PaymentModel.populate(bill, {
                 path: 'paymentID',
-                select: 'invoiceNumber verify amount'
+                select: 'invoiceNumber verify amount description'
             })
-            if(verifyResult.data.code == 101) {
+            if(verifyResult.data.code == 100) {
                 return res.status(StatusCodes.OK).json({
                     code: 101,
                     message: "تراکنش قبلا پرداخت شده",
                     bill
                 })
             }
-            if(verifyResult.data.code == 100){
+            if(verifyResult.data.code == 101){
                 await PaymentModel.updateOne({authority}, {
                     $set: {
                         refID: verifyResult.data.ref_id,
@@ -95,21 +98,28 @@ class paymentController extends Controllers {
                 const { mobile } = await userModel.findById(payment.user)
                 bill.paymentID = payment._id;
                 let configResult;
+                console.log(bill.for.description, bill.paymentID);
+                if(bill.for.description == "ارتقا کانفیگ به پلن بالاتر") configResult = await upgradeConfig(mobile, bill.planID, configID)
                 if(bill.planID && bill.up == null) {
                     configResult = await createConfig(mobile, bill.planID)
                 }else{
                     throw createHttpError.BadRequest("کانفیگ قبلا ثبت شده")
                 }
                 bill.up = true;
+                if(!configResult) throw createHttpError.InternalServerError("کانفیگ ثبت نشد")
                 // update user
                 const { bills: userBills, configs } = configResult;
                 const user = await userModel.updateOne({mobile}, {$set: {bills: userBills}});
-                await configModel.create(configs)
                 if(user.modifiedCount == 0) throw createHttpError.InternalServerError("کانفیگ برای یوزر ذخیره نشد")
+                await configModel.create(configs)
                 await userModel.updateOne({_id: payment.user}, {
                     $push: {
                         bills
                     }
+                })
+                await PaymentModel.populate(bill, {
+                    path: 'paymentID',
+                    select: 'invoiceNumber verify amount'
                 })
                 return res.status(StatusCodes.OK).json({
                     code: 100,
@@ -119,8 +129,8 @@ class paymentController extends Controllers {
             }
             throw createHttpError.BadRequest("پرداخت انجام نشد در صورت کسر وجه طی ۷۲ ساعت به حساب شما بازمیگردد")
         } catch (error) {
-            next(createHttpError.InternalServerError("خطای داخلی سرور"))
-            // next(error);
+            next(error)
+            console.log(error);
         }
     }
     async verifyWalletTransaction(req, res, next){
