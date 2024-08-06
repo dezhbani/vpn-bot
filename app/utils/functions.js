@@ -6,6 +6,7 @@ const jMoment = require("moment-jalali");
 const { createVlessKcp } = require("./config.type");
 const { default: axios } = require("axios");
 const { planModel } = require("../models/plan");
+const { configModel } = require("../models/config");
 const { V2RAY_API_URL, V2RAY_PASSWORD, V2RAY_USERNAME, ACCESS_TOKEN_SECRET_KEY } = process.env
 
 function randomNumber(){
@@ -77,7 +78,7 @@ const getConfigID = async () =>{
     const configs = ((await axios.post(`${V2RAY_API_URL}/xui/inbound/list`,{}, {
         withCredentials: true,
         headers: {
-          'Cookie': cookie
+          'Cookie': process.env['V2RAY_TOKEN']
         }
     })).data.obj)
     const lastIndex = configs.length - 1
@@ -93,14 +94,16 @@ const createConfig = async (mobile, planID) => {
         const addConfig = await axios.post(`${V2RAY_API_URL}/xui/inbound/add`, details, {
             withCredentials: true,
             headers: {
-                'Cookie': cookie
+                'Cookie': process.env['V2RAY_TOKEN']
             }
         })
         const configs = {
             name: fullName,
             config_content,
             expiry_date: +configExpiryTime(plan.month), 
-            configID: id
+            configID: id,
+            userID: user._id,
+            planID
         }
         const bills = {
             planID,
@@ -115,6 +118,66 @@ const createConfig = async (mobile, planID) => {
         const obj = {configs, bills}
         return obj
 }
+const updateConfig = async (ID, data) => {
+    const configs = (await axios.post(`${V2RAY_API_URL}/xui/inbound/update/${ID}`, data, {
+        withCredentials: true,
+        headers: {
+          'Cookie': process.env['V2RAY_TOKEN']
+        }
+    }))
+    return configs.data.obj.success
+}
+const findConfigByID = async (configID) => {
+    const configs = (await axios.post(`${V2RAY_API_URL}/xui/inbound/list`, {}, {
+        withCredentials: true,
+        headers: {
+          'Cookie': process.env['V2RAY_TOKEN']
+        }
+    })).data.obj
+    const config = configs.filter(config => JSON.parse(config.settings).clients[0].id == configID);
+    console.log(config, configID);
+    if (!config) throw createHttpError.NotFound("کانفیگی یافت نشد");
+    return config[0]
+}
+
+const upgradeConfig = async (userID, planID, configID, price) => {
+    const user = await userModel.findOne(userID)
+    if(!user) throw createHttpError.NotFound("کاربر یافت نشد")
+        
+    console.log(userID, configID);
+    const config = await configModel.findOne({userID, configID})
+    if(!config) throw createHttpError.NotFound("کانفیگ یافت نشد، لطفا با پشتیبانی تماس بگیرید")
+    console.log(config);
+
+    const plan = await planModel.findOne({_id: planID})
+    if (!plan) throw createHttpError.NotFound("پلن مورد نظر وجود ندارد یا حذف شده، لطفا با پشتیبانی تماس بگیرید")
+
+    let configsData = await findConfigByID(configID)
+    if(!configsData) throw createHttpError.NotFound("کانفیگ یافت نشد، لطفا با پشتیبانی تماس بگیرید")
+
+    configsData.expiryTime = +configExpiryTime(plan.month)
+    configsData.total = GbToBit(plan.data_size)
+    configsData.enable = true
+    // update config details (upgrade config)
+    const result = await updateConfig(configsData.id, configsData)
+
+    const bills = {
+        planID: plan._id,
+        buy_date: new Date().getTime(),
+        for: {
+            description: 'ارتقا کانفیگ'
+        },
+        up: true, 
+        price
+    }
+    const updateWallet = await userModel.updateOne({ _id: userID }, { $push: {bills} })
+    const updateConfigResult = await configModel.updateOne({ configID }, { $set: {endData: false, planID}})
+    // update user 
+    if(result || updateWallet.modifiedCount == 0 || updateConfigResult.modifiedCount == 0) throw createHttpError.InternalServerError("مشکلی در ارتقا کانفیگ به وجود امد")
+
+    // await smsService.repurchaseMessage(user.mobile, user.full_name)
+}
+const GbToBit = GB => (+GB) * 1024 * 1024 * 1024
 const findPlanByID = async (planID, type) => {
     const plan = await planModel.findById(planID);
     if (!plan) throw createHttpError.NotFound("پلنی یافت نشد");
@@ -156,5 +219,8 @@ module.exports = {
     createConfig,
     getV2rayCookie,
     getStartAndEndOfMonthTimestamps,
-    exportConfigDetails
+    exportConfigDetails,
+    GbToBit,
+    upgradeConfig,
+    updateConfig
 }
