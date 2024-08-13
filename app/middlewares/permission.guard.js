@@ -1,9 +1,6 @@
 const createHttpError = require("http-errors");
 const { permissionModel } = require("../models/permission");
 const { roleModel } = require("../models/role");
-const { mongoID } = require("../validations/public.schema");
-const { lastIndex } = require("../utils/functions");
-const { userModel } = require("../models/user");
 
 // function checkPermission(){
 //     return async function(req, res, next){
