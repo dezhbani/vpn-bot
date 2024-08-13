@@ -8,10 +8,9 @@ const { permissionModel } = require("../../../models/permission");
 class PermissionController extends Controllers {
     async addPermission(req, res, next) {
         try {
-            // const { name, collection, subset } = await addPermissionSchema.validateAsync(req.body);
-            const { name, main, sub } = req.body;
+            const { name, section } = await addPermissionSchema.validateAsync(req.body);
             await this.findPermissionByName(name);
-            const createPermission = await permissionModel.create({ name, main, sub });
+            const createPermission = await permissionModel.create({ name, section });
             if (!createPermission) throw createHttpError.InternalServerError("سطح دسترسی ایجاد نشد");
             return res.status(httpStatus.CREATED).json({
                 statusCode: httpStatus.CREATED,
