@@ -32,7 +32,7 @@ class configController extends Controllers {
     async addConfig(req, res, next){
         try {
             const owner = req.user
-            const { full_name, first_name, last_name, mobile, planID, payType } = await addConfigSchema.validateAsync(req.body);
+            const { full_name, first_name, last_name, mobile, planID} = await addConfigSchema.validateAsync(req.body);
             const plan = await this.findPlanByID(planID);
             const percentOfPlan = percentOfNumber(plan.price, 70);
             if(owner.wallet < percentOfPlan) throw createHttpError.BadRequest("موجودی حساب شما کافی نمی باشد")
@@ -64,25 +64,13 @@ class configController extends Controllers {
                 up: true, 
                 price: plan.price
             }
-            const ownerBills = {
-                planID,
-                buy_date: new Date().getTime(),
-                for: {
-                    description: 'ثبت کانفیگ',
-                    user: user._id
-                },
-                up: true, 
-                price: percentOfPlan
-            }
-            const wallet = owner.wallet - percentOfPlan;
             // update owner
             if(!addConfig.data.success) throw createHttpError.InternalServerError("کانفیگ ایجاد نشد")
-            const updateWallet = await userModel.updateOne({ mobile: owner.mobile }, { $set: {wallet}, $push: {bills: ownerBills} })
             // update user 
-            if (payType == 'اعتبار') {
-                await configModel.create(configs)
-            }
-            if(updateWallet.modifiedCount == 0) throw createHttpError.InternalServerError('کانفیگ ثبت نشد')
+            const paymentType = await checkPaymentType('ثبت کانفیگ کاربر', percentOfPlan, owner._id, user._id)
+            if(paymentType) return res.status(StatusCodes.OK).json(paymentType);
+            const createResult = await configModel.create(configs)
+            if(!createResult) throw createHttpError.InternalServerError('کانفیگ ثبت نشد')
             const saveResult = await userModel.updateOne({ mobile }, {$push: {bills}})
             if(saveResult.modifiedCount == 0) throw createHttpError("کانفیگ برای یوزر ذخیره نشد");
             return res.status(StatusCodes.CREATED).json({
@@ -317,7 +305,6 @@ class configController extends Controllers {
                 'Cookie': V2RAY_TOKEN
             }
         })).data.obj
-        this.replaceAllConfigs()
         const jsonData = JSON.stringify(configs, null, 2);
         fs.writeFile('./data.json', jsonData, (err) => {
             if (err) {
