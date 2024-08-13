@@ -7,8 +7,8 @@ const addRoleSchema = Joi.object({
     permission : Joi.array().items(Joi.string().pattern(mongoID)).error(new Error("دسترسی های ارسال شده صحیح نمی باشد"))
 });
 const addPermissionSchema = Joi.object({
-    name : Joi.string().min(3).max(30).error(new Error("اسم دسترسی ها صحیح نمیباشد")),
-    main : Joi.string().min(3).max(100).error(new Error("توضیحات دسترسی ها صحیح نمی باشد"))
+    name : Joi.string().min(3).max(40).error(new Error("اسم دسترسی ها صحیح نمیباشد")),
+    section : Joi.string().min(3).max(40).error(new Error("توضیحات دسترسی ها صحیح نمی باشد"))
 });
 
 module.exports = {
