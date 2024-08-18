@@ -2,7 +2,7 @@ const { GraphQLObjectType, GraphQLSchema } = require("graphql");
 const { getProfileDetails, getBills } = require("./queries/user.resolver");
 const { getConfigs } = require("./queries/config.resolver");
 const { getPlans } = require("./queries/plan.resolver");
-const { buyConfig } = require("./mutations/config.resolver");
+const { buyConfig, repurchaseConfig } = require("./mutations/config.resolver");
 
 const rootQuery = new GraphQLObjectType({
     name: "rootQuery",
@@ -17,7 +17,8 @@ const rootQuery = new GraphQLObjectType({
 const rootMutation = new GraphQLObjectType({
     name: "rootMutation",
     fields: {
-        buyConfig
+        buyConfig,
+        repurchaseConfig
     }
 });
 const graphqlSchema = new GraphQLSchema({

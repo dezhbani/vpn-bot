@@ -9,6 +9,8 @@ const { checkToken } = require("../queries/public.resolver");
 const { GraphQLString } = require("graphql");
 const { userModel } = require("../../models/user");
 const { configExpiryTime } = require("../../utils/functions");
+const { toString } = require("../utils/functions");
+const { smsService } = require("../../services/sms.service");
 const { V2RAY_API_URL, V2RAY_TOKEN } = process.env
 
 const buyConfig = {
@@ -26,6 +28,53 @@ const buyConfig = {
         const result = addConfig(userID, plan)
         return result
     }
+}
+const repurchaseConfig = {
+    type: responseType,
+    args: {
+        configID: {type: GraphQLString}
+    },
+    resolve: async (_, args, context) => {
+        const {_id: userID, mobile, full_name} = await checkToken(context);
+        const { configID } = args
+        const config = await configModel.findOne({configID});
+        if (!config) throw createHttpError.NotFound("کانفیگ مورد نظر وجود ندارد، لطفا با پشتیبانی تماس بگیرید")
+            console.log(JSON.stringify(config.userID) == JSON.stringify(userID));
+        if (toString(config.userID) != toString(userID)) throw createHttpError.Forbidden("این کانفیگ متعلق به شما نیست")
+        const plan = await planModel.findOne({_id: config.planID})
+        if (!plan) throw createHttpError.NotFound("پلن مورد نظر وجود ندارد یا حذف شده")
+        let configsData = await findConfigByID(configID)
+        if(!configsData) throw createHttpError.NotFound("کانفیگ یافت نشد، لطفا با پشتیبانی تماس بگیرید")
+        configsData.expiryTime = +configExpiryTime(plan.month)
+        configsData.up = 0
+        configsData.down = 0
+        configsData.enable = true
+        const paymentType = await checkPaymentType("تمدید کانفیگ", plan.price, userID)
+        if(paymentType) return {statusCode: 200, data: paymentType }
+        const configResult = await updateConfig(configsData.id, configsData)
+        const updateUserConfig = await configModel.updateOne({ configID }, { $set: {expiry_date: +configExpiryTime(plan.month), endData: false}})
+            // update user 
+        if(configResult || updateUserConfig.modifiedCount == 0) throw createHttpError.InternalServerError("کانفیگ تمدید نشد")
+        await smsService.repurchaseMessage(mobile, full_name)
+        return {
+            statusCode: 200, 
+            data: {
+                message: "کانفیگ تمدید شد"
+            }
+        }
+    }
+}
+
+const findConfigByID = async (configID) => {
+    const configs = (await axios.post(`${V2RAY_API_URL}/xui/inbound/list`, {}, {
+        withCredentials: true,
+        headers: {
+          'Cookie': V2RAY_TOKEN
+        }
+    })).data.obj
+    const config = configs.filter(config => JSON.parse(config.settings).clients[0].id == configID);
+    if (!config) throw createHttpError.NotFound("کانفیگی یافت نشد");
+    return config[0]
 }
 
 const addConfig = async (userID, plan) => {
@@ -63,7 +112,15 @@ const addConfig = async (userID, plan) => {
         throw createHttpError.InternalServerError(error.message)
     }
 }
-
+const updateConfig = async (configID, data) => {
+    const configs = (await axios.post(`${V2RAY_API_URL}/xui/inbound/update/${configID}`, data, {
+        withCredentials: true,
+        headers: {
+          'Cookie': V2RAY_TOKEN
+        }
+    }))
+    return configs.data.obj.success
+}
 const getConfigID = async () => {
     const configs = ((await axios.post(`${V2RAY_API_URL}/xui/inbound/list`,{}, {
         withCredentials: true,
@@ -77,5 +134,6 @@ const getConfigID = async () => {
 }
 
 module.exports = {
-    buyConfig
+    buyConfig,
+    repurchaseConfig
 }
