@@ -41,7 +41,9 @@ function toObject(value){
         if(typeof value === "string" && value.charAt(0) === "{")  return JSON.parse(value)
         return null
 }
-
+function toString(value) {
+    return JSON.stringify(value)
+}
 // function checkArray(value){
 //     if(value) {
 //         if (Array.isArray(value)) return value;
@@ -54,5 +56,6 @@ module.exports = {
     toObject,
     parseLiteral,
     parseValueNode,
-    parseObject
+    parseObject,
+    toString
 }
