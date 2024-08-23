@@ -13,7 +13,16 @@ const getConfigs = {
         return configs
     }
 }
-
+const getConfigsUsages ={
+    type: new GraphQLList(configType),
+    resolve: async (_, args, context) => {
+        const {_id: userID} = await checkToken(context);
+        const configs = await configModel.find({userID}).populate([
+            {path:'planID'}
+        ])
+        return configs
+    }
+}
 module.exports = {
     getConfigs
 }
