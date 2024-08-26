@@ -9,3 +9,4 @@
 /vpn.json
 /.dockerignore
 /Dockerfile
+/.vscode
