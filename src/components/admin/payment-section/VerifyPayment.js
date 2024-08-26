@@ -6,13 +6,14 @@ import styles from './VerifyPayment.module.css';
 import Loading from '../public/Loading';
 
 const VerifyPayment = ({wallet = false}) => {
-    const [ transaction , setTransaction ] = useState()
+    const [ transaction , setTransaction ] = useState({})
     const query = useQuery();
-    const { id } = useParams();
+    const { billID, configID } = useParams();
     const authority = query.get('Authority');
-    const verify = async () => setTransaction(await verifyTransaction(id, authority));
+    const verify = async () => setTransaction(await verifyTransaction(billID, configID, authority));
+    console.log(transaction);
     const verifyWallet = async () => {
-        setTransaction(await verifyWalletTransaction(id, authority))
+        setTransaction(await verifyWalletTransaction(billID, authority))
     };
     useEffect(() => {
         wallet? verifyWallet() : verify()
@@ -38,7 +39,7 @@ const VerifyPayment = ({wallet = false}) => {
                                 </li>
                                 <li className="flex items-center justify-between gap-4 border-b-2 border-solid border-gray-300 py-2 text-sm transition-all last:border-none lg:text-base">
                                     <span className="select-none">مبلغ</span>
-                                    <span>{transaction.bill.paymentID?.amount}</span>
+                                    <span>{transaction?.bill?.paymentID?.amount}</span>
                                 </li>
                                 <li className="flex items-center justify-between gap-4 border-b-2 border-solid border-gray-300 py-2 text-sm transition-all last:border-none lg:text-base">
                                         <span className="select-none">نوع پرداخت</span>

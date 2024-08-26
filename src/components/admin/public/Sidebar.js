@@ -23,28 +23,13 @@ const Sidebar = () => {
     const openMenu = () => setMenu(true);
     const closeMenu = () => setMenu(false);
     const profile = useContext(ProfileContext)
-    function getWidth() {
-        return Math.max(
-          document.body.scrollWidth,
-          document.documentElement.scrollWidth,
-          document.body.offsetWidth,
-          document.documentElement.offsetWidth,
-          document.documentElement.clientWidth
-        );
-      }
-      let screenWidth = 0
-      useEffect(() => {
-        screenWidth = getWidth()
-        console.log(screenWidth);
-
-    }, [screenWidth])
 
     const ItemStyle = menu? "flex px-2 text-xl" : "hidden sm:px-2 sm:flex sm:text-xl md:text-2xl"
 
     if(!profile?.role) return <Modal isOpen={true} loading={true} />
     return (
         <>
-        <div className={`${menu? 'w-1/2': 'w-[4.5rem]'} bg-white dir-rtl fixed right-0 float-right min-h-screen border-l-2 border-solid border-[#e5eaef] sm:w-1/4 lg:w-1/6 xl:w-[15%]`}>
+        <div className={`${menu? 'w-1/2': 'w-[4.5rem]'} bg-white z-0 dir-rtl fixed right-0 float-right h-screen border-l-2 border-solid border-[#e5eaef] sm:w-1/4 lg:w-1/6 xl:w-[15%]`}>
             <UpdateWallet setOpen={setOpen} open={open} userID={profile._id} />
             <div className='p-4 sm:p-6'>
                 <div className='sm:hidden m-2'>

@@ -12,8 +12,11 @@ import Configs from './components/admin/config-section/Configs';
 import 'react-loading-skeleton/dist/skeleton.css'
 
 function App() {
+  
+  // document.body.style.backgroundColor = '#EBF3FC'
+  document.body.style.backgroundColor = '#FFF'
   return (
-    <div className='bg-white h-full'>
+    <div className=''> 
         <Routes>
           <Route path="/" element={<Navigate to="/sign-up"/>} />
           <Route path="/sign-up" element={<Auth />} />
@@ -24,7 +27,7 @@ function App() {
           <Route path="/dashboard/support" element={<Tickets />}/>
           <Route path="/dashboard/configs" element={<Configs />}/>
           {/* <Route path="/dashboard/ticket/new" element={<NewTicket />}/> */}
-          <Route path="/payment/:id" element={<VerifyPayment />}/>
+          <Route path="/payment/:billID/:configID" element={<VerifyPayment />}/>
           <Route path="/wallet/:id" element={<VerifyPayment wallet={true} />}/>
           {/* <Route path="/dashboard/ticket/:ticketID" element={<TicketDetails />}/> */}
           <Route path="/*" element={<NotFoundError />}/>

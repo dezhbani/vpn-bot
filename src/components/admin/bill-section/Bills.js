@@ -17,7 +17,7 @@ const Bills = () => {
     return (
         <>
             <Sidebar />
-            <div className={styles.container}>
+            <div className={`py-2.5 overflow-scroll w-[calc(85%-5px)] sm:w-3/4 lg:w-5/6 xl:w-[85%]`}>
                 {
                     bills?.map(bill => <Bill key={bill._id} bill={bill} />)
                 }

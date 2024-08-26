@@ -14,8 +14,8 @@ const User = ({user}) => {
     if(!profile?.role) return <Loading />
     
     return (
-        <div className="flex max-md:w-full no-underline flex-col m-3 font-[iran-sans] text-base sm:mx-4 sm:my-4"> 
-            <div className="flex bg-white flex-col md:w-72 px-1 py-4 shadow-md rounded-lg">
+        <div className="flex max-md:w-full no-underline flex-col m-3 font-[iran-sans] text-base sm:mx-10 sm:my-7"> 
+            <div className="flex bg-white flex-col md:w-80 px-1 py-4 shadow-md rounded-lg">
                 <p className='flex justify-center p-1 text-sm'>{user.full_name}</p>
                 <p className='flex justify-center p-1 text-sm'>{user.mobile}</p>
                 <div className='flex justify-center p-1 font-medium'>

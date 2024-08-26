@@ -4,7 +4,6 @@ import axios from 'axios';
 
 //styles
 import 'react-toastify/dist/ReactToastify.css';
-import style from'./GetMobile.module.css';
 import Modal from '../public/components/Modal';
 
 const GetMobile = ({setState, loading, setLoading}) => {

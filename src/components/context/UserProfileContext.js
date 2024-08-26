@@ -6,7 +6,9 @@ export const ProfileContext = createContext()
 const UserProfileContext = ({children}) => {
     const [profile, setProfile] = useState({});
     const UserProfile = async () => {
-        await getUserProfile(setProfile)
+        const result = await getUserProfile()
+        setProfile(result)
+        console.log(result);
     }
     useEffect(() => {
         UserProfile()

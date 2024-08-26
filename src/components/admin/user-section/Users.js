@@ -26,7 +26,7 @@ const Users = () => {
             {
                 <div>
                     <div className="w-[calc(100%-72px)] flex sm:w-3/4 lg:w-5/6 xl:w-[85%]">
-                        <div className="w-full dir-rtl m-3 flex-wrap flex justify-between 2xl:justify-start">
+                        <div className="w-full dir-rtl m-3 flex-wrap flex justify-start">
                             {
                                 users?.length? 
                                     users?.map(user => <User key={user._id} editedID={editedID} setEditedID={setEditedID} user={user}/>) : 

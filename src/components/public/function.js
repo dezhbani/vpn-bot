@@ -1,5 +1,6 @@
 import farvardin from "farvardin";
 import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const lastIndex = (array = []) => {
     const last = array.length - 1;
@@ -40,25 +41,33 @@ const addCommaToPrice = (price) => {
     return result;
 }
 
-const timestampToTime = (timestamp, time=true) =>{
+const padWithZeros = (number) => {
+    return number.toString().padStart(2, '0');
+  };
+  
+  const timestampToTime = (timestamp, time = true) => {
+    if (!timestamp) return 'زمان وجود ندارد';
+  
     const date = new Date(timestamp);
-    if(!timestamp) return 'زمان وجود ندارد'
-    if(date.getFullYear() < new Date().getFullYear()){
-      return "بدون محدودیت زمانی"
-    }else{
-        const year = date.getFullYear();
-        const month = date.getMonth() + 1;
-        const day = date.getDate() ;
-        const fullDate = farvardin.gregorianToSolar(year , month , day , "string");
-        if(time){
-            const hours = date.getHours();
-            const minute = date.getMinutes();
-            const second = date.getSeconds();
-            return `${fullDate} ${hours}:${minute}:${second}`
-        }
-      return fullDate
+  
+    if (date.getFullYear() < new Date().getFullYear()) {
+      return "بدون محدودیت زمانی";
+    } else {
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const fullDate = farvardin.gregorianToSolar(year, month, day, "string");
+  
+      if (time) {
+        const hours = padWithZeros(date.getHours());
+        const minutes = padWithZeros(date.getMinutes());
+        const seconds = padWithZeros(date.getSeconds());
+        return `${fullDate} ${hours}:${minutes}:${seconds}`;
+      }
+  
+      return fullDate;
     }
-}
+  };
 
 const useQuery = () => {
     const location = useLocation();
@@ -72,6 +81,10 @@ const copyElement = (tag, length) => {
     const numbers = Array.from({ length: length }, (_, index) => index + 1);
     return numbers.map(() => tag)
 }
+
+const handleError = error => {
+    toast.error(error.response.data.message || "مشکل در اتصال به سرور", {autoClose: 2000})
+}
 export {
     lastIndex,
     redirect,
@@ -82,5 +95,6 @@ export {
     timestampToTime,
     useQuery,
     setTitle,
-    copyElement
+    copyElement,
+    handleError
 }

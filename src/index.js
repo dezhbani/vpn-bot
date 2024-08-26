@@ -7,8 +7,8 @@ import './index.css'
 import UserProfileContext from './components/context/UserProfileContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-axios.defaults.baseURL = 'http://localhost:8000';
-// axios.defaults.baseURL = 'http://s2.delta-dev.top:8000';
+axios.defaults.baseURL = 'http://localhost:80';
+// axios.defaults.baseURL = 'https://s1.delta-dev.top:8000';
 root.render(
   <UserProfileContext>
     <BrowserRouter>

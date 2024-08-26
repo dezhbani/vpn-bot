@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 
 //style
 import 'react-toastify/dist/ReactToastify.css';
-import style from './GetOtp.module.css';
 import Timer from '../public/Timer';
 import { copyElement } from '../public/function';
 

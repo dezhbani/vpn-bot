@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import styles from './RepurchaseConfig.module.css';
 import Modal from '../../public/components/Modal';
 import { activeConfig } from '../../services/config.service';
 import { repurchase } from '../../services/users.service';

@@ -11,8 +11,8 @@ const Modal = ({ isOpen , onClose, children, loading }) => {
 
   return (
     isOpen && loading? (
-      <div className="modal-overlay">
-        <div className='bg-white opacity-50 h-full w-full fixed'></div>
+      <div className="modal-overlay z-50">
+        <div className='bg-white opacity-50 h-screen w-screen fixed'></div>
         <div className='modal-container'>
                 <Loading />
         </div>

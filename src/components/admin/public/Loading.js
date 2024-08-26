@@ -4,7 +4,12 @@ import { Navigate } from 'react-router-dom';
 
 const Loading = () => { 
     
-    const profile = useContext(ProfileContext)
+    let profile;
+    const useProfile = async () => {
+        profile = await useContext(ProfileContext)
+    }
+    useProfile()
+    console.log(profile);
     if(!profile || profile?.role == 'customer' || profile?.message) return <Navigate to="/sign-up" />
     return (
         <div className="w-full h-full">

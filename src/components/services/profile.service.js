@@ -2,13 +2,13 @@ import axios from "axios"
 import { toast } from "react-toastify"
 import { headers } from "../public/function"
 
-const getUserProfile = async (setData) => {
+const getUserProfile = async () => {
     try {
         const result = await axios.get('profile', headers)
-        setData(result?.data)
+        return result?.data
     } catch (error) {
-        setData(error.response?.data);
-        // toast.error(error.response?.data.message || "مشکل در اتصال به سرور", {autoClose: 2000})
+        // return error.response?.data
+        toast.error(error.response?.data.message || "مشکل در اتصال به سرور", {autoClose: 2000})
     }
 }
 const getBills = async () => {

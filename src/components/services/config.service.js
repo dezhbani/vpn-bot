@@ -1,5 +1,5 @@
 import axios from "axios"
-import { headers } from "../public/function"
+import { handleError, headers } from "../public/function"
 import { toast } from "react-toastify"
 
 const addConfig = async data => {
@@ -8,7 +8,7 @@ const addConfig = async data => {
         toast.success(result.data.message)
         return result.data
     } catch (error) {
-        toast.error(error.response.data.message, {autoClose: 2000})
+        handleError(error)
     }
 }
 const changeConfigsStatus = async data => {
@@ -17,7 +17,7 @@ const changeConfigsStatus = async data => {
         toast.success(result.data.message)
         return result.data
     } catch (error) {
-        toast.error(error.response.data.message, {autoClose: 2000})
+        handleError(error)
         return error.response.data.message
     }
 }
@@ -28,7 +28,7 @@ const activeConfig = async ID => {
         toast.success(result.data.message)
         return result.data
     } catch (error) {
-        toast.error(error.response.data.message, {autoClose: 2000})
+        handleError(error)
     }
 }
 const resendConfig = async data => {
@@ -37,7 +37,7 @@ const resendConfig = async data => {
         toast.success(result.data.message)
         return result.data
     } catch (error) {
-        toast.error(error.response.data.message, {autoClose: 2000})
+        handleError(error)
     }
 }
 const getConfigsList = async () => {
@@ -46,7 +46,7 @@ const getConfigsList = async () => {
         toast.success(result.data.message)
         return result.data
     } catch (error) {
-        toast.error(error.response.data.message, {autoClose: 2000})
+        handleError(error)
     }
 }
 const getConfigsByDay = async day => {
@@ -55,7 +55,7 @@ const getConfigsByDay = async day => {
         toast.success(result.data.message)
         return result.data
     } catch (error) {
-        toast.error(error.response.data.message, {autoClose: 2000})
+        handleError(error)
     }
 }
 export {

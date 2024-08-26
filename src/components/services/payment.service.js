@@ -2,9 +2,9 @@ import axios from "axios"
 import { toast } from "react-toastify"
 import { headers } from "../public/function"
 
-const verifyTransaction = async (id, authority) => {
+const verifyTransaction = async (billID, configID, authority) => {
     try {
-        const result = await axios.get(`payment/verify/${id}/${authority}`, headers)
+        const result = await axios.post(`payment/verify/${authority}`, {billID, configID}, headers)
         console.log(result.data.bill);
         return result?.data
     } catch (error) {

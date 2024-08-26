@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import styles from './Auth.module.css'
 import GetMobile from './GetMobile';
 import GetOtp from './GetOtp';
 import 'react-toastify/dist/ReactToastify.css';
@@ -20,17 +19,16 @@ const Auth = () => {
     }
     const checkProfile = () => { 
         console.log(data);
+        if(!data?.status) return <ServerError />
         switch (data?.status) {
             case 200:
                 if(data.role !== "customer") return <Navigate to="/dashboard" />
             case 401:
                 return <div className='bg-white rounded-lg p-7 m-24 h-80 w-fit'>{checkOTP()}</div>
             case 403:
-                return <Navigate to="/dashboard" />
-            case 500:
-                return <Navigate to="/dashboard" />
+                // return <Navigate to="/dashboard" />
             default:
-                return <Navigate to="/dashboard" />
+                return <Modal isOpen={true} loading={true} />
         }
     }
     return (
