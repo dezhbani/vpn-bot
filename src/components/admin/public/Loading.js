@@ -4,13 +4,8 @@ import { Navigate } from 'react-router-dom';
 
 const Loading = () => { 
     
-    let profile;
-    const useProfile = async () => {
-        profile = await useContext(ProfileContext)
-    }
-    useProfile()
-    console.log(profile);
-    if(!profile || profile?.role == 'customer' || profile?.message) return <Navigate to="/sign-up" />
+    // let profile = useContext(ProfileContext)
+    // if(!profile || profile?.role == 'customer' || profile?.message) return <Navigate to="/sign-up" />
     return (
         <div className="w-full h-full">
             <div className="flex justify-center items-center w-1">

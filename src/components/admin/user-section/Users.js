@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../public/Sidebar';
-import { getUsers } from '../../services/users.service';
+import { getUsers } from '../services/users.service';
 import User from './User';
 import { copyElement } from '../../public/function';
 import Skeleton from 'react-loading-skeleton';

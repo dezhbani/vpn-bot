@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './UserInfo.module.css'
-import { editUser } from '../../../services/users.service';
+import { editUser } from '../../services/users.service';
 
 const UserInfo = ({data, setData, user}) => {
     const change = event =>{

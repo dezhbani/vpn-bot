@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from '../../public/components/Modal';
-import { activeConfig } from '../../services/config.service';
-import { repurchase } from '../../services/users.service';
+import { activeConfig } from '../services/config.service';
+import { repurchase } from '../services/users.service';
 import Config from '../public/Config';
 
 const RepurchaseConfig = ({open, setOpen, userID}) => {

@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './Tickets.module.css';
-import { getTickets } from '../../services/support.service';
-import Ticket from './Ticket';
 import Sidebar from '../public/Sidebar';
-import { Link } from 'react-router-dom';
 
 const Tickets = () => {
     const [tickets, setTickets] = useState([]);

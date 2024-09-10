@@ -1,7 +1,7 @@
 // import { Box, Modal } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import styles from './Receipt.module.css'
-import { getBillDetails } from '../../services/users.service';
+import { getBillDetails } from '../services/users.service';
 import { AD2solarDate, timestampToTime } from '../../public/function';
 import Dropdown from '../../public/components/Dropdown';
 import Modal from '../../public/components/Modal';

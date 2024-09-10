@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '../../public/function';
-import { verifyTransaction, verifyWalletTransaction } from '../../services/payment.service';
+import { verifyTransaction, verifyWalletTransaction } from '../services/payment.service';
 import styles from './VerifyPayment.module.css';
 import Loading from '../public/Loading';
 
