@@ -1,4 +1,4 @@
-import React,{ useState, useEffect, useRef } from 'react';
+import React,{ useState, useEffect, useRef, useContext } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
@@ -6,11 +6,12 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Timer from '../public/Timer';
 import { copyElement } from '../public/function';
+import { ProfileContext } from '../context/UserProfileContext';
+import { Navigate } from 'react-router-dom';
 
 const GetOtp = ({state, loading, setLoading}) => {
-
+    const userdata = useContext(ProfileContext)
     const [data, setData] = useState([]);
-    const [focus, setFocus] = useState(1);
     const inputRefs = useRef([]); 
     const handleKeyPress = index => e => {       
         console.log(e.key);   
@@ -40,7 +41,10 @@ const GetOtp = ({state, loading, setLoading}) => {
             if(status == 200){
                 toast.success(message)
                 localStorage.setItem("accessToken", accessToken)
-                setTimeout(() => window.location.href = '/dashboard', 5000)
+                let panelUrl
+                if(userdata.role == 'customer') panelUrl = '/profile'
+                else if(['owner', 'admin'].includes(userdata.role)) panelUrl = '/dashboard'
+                panelUrl && setTimeout(() => window.location.href = panelUrl, 5000)
             }
         } catch (error) {
             toast.error(error.response.data.message, {autoClose: 2000})
