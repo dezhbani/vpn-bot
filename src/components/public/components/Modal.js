@@ -1,9 +1,8 @@
 // Modal.js
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import './Modal.css'
-import Loading from '../../admin/public/Loading';
+import Loading from './Loading';
 
 const Modal = ({ isOpen , onClose, children, loading }) => {
 
