@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { getUserProfile } from '../services/profile.service';
+import { getUserProfile } from '../admin/services/profile.service';
 
 export const ProfileContext = createContext()
 
@@ -8,7 +8,6 @@ const UserProfileContext = ({children}) => {
     const UserProfile = async () => {
         const result = await getUserProfile()
         setProfile(result)
-        console.log(result);
     }
     useEffect(() => {
         UserProfile()
