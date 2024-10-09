@@ -44,7 +44,7 @@ const Sidebar = () => {
             {/* <Navbar /> */}
             <Modal isOpen={!user} loading={!user}/>
             <div className='w-full flex'>
-                <div className={`${true ? 'w-1/2' : 'w-[4.5rem]'} z-50 m-8 rounded-xl shadow-[2px_4px_30px_0px_#00000010] h-[92%] bg-white  dir-rtl fixed right-0 float-right sm:w-1/4 lg:w-1/6 xl:w-[15%]`}>
+                <div className={`${true ? 'w-1/2' : 'w-[4.5rem]'} z-20 m-8 rounded-xl shadow-[2px_4px_30px_0px_#00000010] h-[92%] bg-white  dir-rtl fixed right-0 float-right sm:w-1/4 lg:w-1/6 xl:w-[15%]`}>
                     <div className='py-2 pr-2 flex flex-col'>
                         <section className='profile flex items-center float-right dir-rtl my-5'>
                             <div style={{ backgroundColor: bg, color: textColor }} className="p-4 rounded-full w-fit mx-2">{profileImg()}</div>
