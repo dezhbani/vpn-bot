@@ -16,8 +16,6 @@ const BuyConfig = ({plan, setOpen, open}) => {
         data.planID = plan._id;
         const result = await addConfig(data);
         setLoading(false)
-        
-        console.log(result, data);
         if(result) {
             handleClose()
             setData({})

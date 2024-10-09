@@ -15,6 +15,10 @@
     font-family: iran-sans;
     src: url(./components/admin/assets/IRANSansWeb.woff2);
 }
+@font-face{
+    font-family: outfit-semiBold;
+    src: url(./components/user/assets/Outfit-SemiBold.ttf);
+}
 
  svg .svg-elem-1 {
     stroke-dashoffset: 17.27101421356201px;
@@ -36,5 +40,22 @@
   
   svg.active .svg-elem-2 {
     stroke-dashoffset: 0;
+  }
+  @keyframes blink {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+  .bg-main-blue {
+    background-color: #0095FF;
+  }
+  .text-main-blue {
+    color: #0095FF;
+  }
+  .animate-blink {
+    animation: blink 500ms step-start infinite;
   }
   

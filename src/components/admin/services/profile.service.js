@@ -10,7 +10,9 @@ const getUserProfile = async () => {
     } catch (error) {
         // return error.response?.data
         toast.error(error.response?.data.message || "مشکل در اتصال به سرور", {autoClose: 2000})
-        return 'go-signup'
+        console.log(error.response.status);
+        
+        return error.response
     }
 }
 const getBills = async () => {

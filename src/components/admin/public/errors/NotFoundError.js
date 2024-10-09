@@ -1,15 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Loading from '../../../public/components/Loading';
+import { ProfileContext } from '../../../context/UserProfileContext';
 
 const NotFoundError = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const data = useContext(ProfileContext);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 3000);
-
-    return () => clearTimeout(timer); // Cleanup timer on unmount
+    }, 2000);
+    const timer2 = setTimeout(() => {
+      if(data) window.location.replace("/sign-up")
+    }, 6000);
+    console.log(timer);
+    
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(timer2);
+     } // Cleanup timer on unmount
   }, []);
 
   if (isLoading) {

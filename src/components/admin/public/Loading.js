@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { ProfileContext } from '../../context/UserProfileContext';
 import { Navigate } from 'react-router-dom';
 
 const Loading = () => { 
