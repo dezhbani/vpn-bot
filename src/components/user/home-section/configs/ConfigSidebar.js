@@ -1,13 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
-import Config from './Config';
-import Status from './Status';
-import { getConfigDetails } from '../../services/config.service';
-import { addCommaToPrice, clculateData, timestampToTime } from '../../../public/function';
-import { toast } from 'react-toastify';
-import Modal from '../../../public/components/Modal';
-import { ProfileContext } from '../../../context/UserProfileContext';
-import UploadIcon from '../../assets/Upload.svg';
-import DownloadIcon from '../../assets/Download.svg';
+import React from 'react';
 
 const ConfigSidebar = ({ configs, selectedItem: configID, setSelectedItem }) => {
 

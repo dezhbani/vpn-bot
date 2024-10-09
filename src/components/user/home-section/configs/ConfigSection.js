@@ -1,31 +1,10 @@
-// import React, { useEffect, useState } from 'react';
-// import Config from './Config';
-// import ConfigSidebar from './ConfigSidebar';
-
-// const Configs = ({configs}) => {
-//     const [selectedItem, setSelectedItem] = useState(null);
-//     console.log(selectedItem);
-    
-//     return (
-//         <div className='flex mt-32'>
-//             <ConfigSidebar selectedItem={selectedItem} setSelectedItem={setSelectedItem} configs={configs}/>
-//         </div>
-//     );
-// };
-
-// export default Configs;
-
-
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Config from './Config';
 import Status from './Status';
 import { getConfigDetails } from '../../services/config.service';
-import { addCommaToPrice, clculateData, timestampToTime } from '../../../public/function';
+import { timestampToTime } from '../../../public/function';
 import { toast } from 'react-toastify';
 import Modal from '../../../public/components/Modal';
-import { ProfileContext } from '../../../context/UserProfileContext';
-import UploadIcon from '../../assets/Upload.svg';
-import DownloadIcon from '../../assets/Download.svg';
 import ConfigSidebar from './ConfigSidebar';
 import Repurchase from './Repurchase';
 
@@ -60,10 +39,6 @@ const ConfigSection = ({ configs }) => {
         }
     }, [selectedItem]);
 
-    const handleItemClick = (item) => {
-        setSelectedItem(item);
-    };
-
     useEffect(() => {
         if (configs && configs.length > 0 && !selectedItem) setSelectedItem(configs[0].configID);
     }, [configs, selectedItem, setSelectedItem]);
@@ -73,8 +48,8 @@ const ConfigSection = ({ configs }) => {
             <Modal isOpen={loading} loading={loading} />
             {
                 !loading && (
-                    <div className='flex h-[92%] dir-ltr bg-white w-4/5 shadow-[2px_4px_30px_0px_#00000010] mx-5  mt-32 rounded-xl'>
-                        <div className={'flex mx-4 h-96 my-8 z-50 dir-ltr float-left w-full'}>
+                    <div className='flex h-[92%] z-20 dir-ltr bg-white w-4/5 shadow-[2px_4px_30px_0px_#00000010] mx-5 mt-32 rounded-xl'>
+                        <div className={'flex mx-4 z-4=30 h-96 my-8 dir-ltr float-left w-full'}>
                             <ConfigSidebar configs={configs} selectedItem={selectedItem} setSelectedItem={setSelectedItem} />
                             <div className='w-full flex justify-around'>
                                 <Config data={data}/>
