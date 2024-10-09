@@ -18,7 +18,7 @@ const Status = ({ status='unknown' }) => {
         <div className='h-fit w-fit flex justify-end flex-col mx-5'>
             <div className="flex items-center justify-end m-4 h-fit min-w-full"> {/* Set minimum width */}
                 <div className="min-w-[120px] text-right"> {/* Adjust min-width to reserve enough space for the typewriter effect */}
-                    <p className='font-[b-kamran] text-3xl font-normal'>
+                    <div className='font-[b-kamran] text-3xl font-normal'>
                         <Typewriter
                             options={{
                                 strings: [checkStatus.text], // Use an array to pass the string
@@ -30,7 +30,7 @@ const Status = ({ status='unknown' }) => {
                                 deleteSpeed: 150,
                             }}
                         />
-                    </p>
+                    </div>
                 </div>
                 <div className="relative flex items-center justify-center m-5">
                     <div className={`absolute w-8 h-8 ${checkStatus.color} rounded-full opacity-30 blur-md animate-pulse`}></div>
