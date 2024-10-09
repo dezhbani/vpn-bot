@@ -1,17 +1,14 @@
-import React,{ useState, useEffect, useRef, useContext } from 'react';
-import axios from 'axios';
+import React,{ useState, useRef } from 'react';
 import { toast } from 'react-toastify';
+import Timer from '../public/Timer';
+import { checkOTP } from './services/auth.service';
+import { handleError } from '../public/function';
 
 //style
 import 'react-toastify/dist/ReactToastify.css';
-import Timer from '../public/Timer';
-import { copyElement } from '../public/function';
-import { ProfileContext } from '../context/UserProfileContext';
-import { Navigate } from 'react-router-dom';
 
-const GetOtp = ({state, loading, setLoading}) => {
-    const userdata = useContext(ProfileContext)
-    const [data, setData] = useState([]);
+const GetOtp = ({state, setLoading, setData}) => {
+    const [code, setCode] = useState([]);
     const inputRefs = useRef([]); 
     const handleKeyPress = index => e => {       
         console.log(e.key);   
@@ -24,30 +21,36 @@ const GetOtp = ({state, loading, setLoading}) => {
 
     const change = event =>{
         if(!isNaN(+event.target.value)){
-            const arr = [...data]
+            const arr = [...code]
             arr[+event.target.name - 1] = event.target.value
-            setData(arr)
+            setCode(arr)
         }
     }
 
     const send = async () =>{
         try {
-            const code = data.join('')
-            const res = await axios.post("auth/check-otp",{
+            setLoading(true)
+            const mergedCode = code.join('')
+            const res = await checkOTP({
                 mobile: state.mobile,
-                code
+                code: mergedCode
             })
-            const { message, status, accessToken } = res.data;
+            const { message, status, accessToken } = res;
             if(status == 200){
+                setData(res)
                 toast.success(message)
                 localStorage.setItem("accessToken", accessToken)
                 let panelUrl
-                if(userdata.role == 'customer') panelUrl = '/profile'
-                else if(['owner', 'admin'].includes(userdata.role)) panelUrl = '/dashboard'
-                panelUrl && setTimeout(() => window.location.href = panelUrl, 5000)
+                if((res.status !== 401) && !res.user.first_name || !res.user.last_name || !res.user.full_name) panelUrl = '/complete-signup' 
+                else if(res.user.role == 'customer') panelUrl = '/home'
+                else if(['owner', 'admin'].includes(res.user.role)) panelUrl = '/dashboard'
+                panelUrl && setTimeout(() => {
+                    window.location.href = panelUrl
+                    setLoading(false)
+                }, 3000)
             }
         } catch (error) {
-            toast.error(error.response.data.message, {autoClose: 2000})
+            handleError()
         }
     }
 
@@ -59,7 +62,7 @@ const GetOtp = ({state, loading, setLoading}) => {
                 <label className="font-bold mb-1 dir-rtl font-[iran-sans]">کد تایید:</label>
                 <div className='flex'>
                     {
-                        [1, 2, 3, 4, 5].map((num, index) => <input key={index} onKeyUp={handleKeyPress(index)} ref={(ref) => (inputRefs.current[index] = ref)} className="w-10 h-10 flex justify-center rounded py-1 px-3 my-1 mx-2 text-lg border-[2px] border-solid transition-all delay-200 ease-in focus:border-blue-500 outline-none" minLength="1" maxLength="1" onChange={change} name={num} value={data[num-1]} type="tel" />)
+                        [1, 2, 3, 4, 5].map((num, index) => <input key={index} onKeyUp={handleKeyPress(index)} ref={(ref) => (inputRefs.current[index] = ref)} className="w-10 h-10 flex justify-center rounded py-1 px-3 my-1 mx-2 text-lg border-[2px] border-solid transition-all delay-200 ease-in focus:border-blue-500 outline-none" minLength="1" maxLength="1" onChange={change} name={num} value={code[num-1]} type="tel" />)
                     }
                 </div>
                 <div className='flex w-full justify-center cursor-pointer'>{state.sendOTP && <Timer mobile={state.mobile} />}</div>

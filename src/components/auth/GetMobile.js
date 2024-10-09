@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import axios from 'axios';
+import { getOTP } from './services/auth.service';
 
 //styles
 import 'react-toastify/dist/ReactToastify.css';
-import Modal from '../public/components/Modal';
 
 const GetMobile = ({setState, loading, setLoading}) => {
     const [data, setData] = useState({mobile: ""});
@@ -17,11 +16,9 @@ const GetMobile = ({setState, loading, setLoading}) => {
     const clicked = async () =>{
         try {
             setLoading(true)
-            const res = await axios.post("auth/get-otp",{
-                mobile: data.mobile
-            });
-            console.log(res.data);
-            const { message, mobile, status } = res.data;
+            const res = await getOTP(data)
+            console.log(res);
+            const { message, mobile, status } = res;
             if(status == 200){
                 setLoading(false)
                 setTimeout(() => setState({sendOTP: true, mobile, message}), 500);
@@ -31,7 +28,6 @@ const GetMobile = ({setState, loading, setLoading}) => {
         } catch (error) {
             setLoading(false)
             setDisabled(false)
-            toast.error(error.response.data.message, {autoClose: 2000})
         }
     }
 
