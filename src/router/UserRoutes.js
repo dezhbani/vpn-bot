@@ -1,4 +1,5 @@
 import Home from '../components/user/home-section/Home';
+import Plans from '../components/user/plan-section/Plans';
 import Profile from '../components/user/profile-section/Profile';
 import { Route } from 'react-router-dom';
 
@@ -9,6 +10,7 @@ const UserRoutes = () => {
         <>
             <Route path='/home' element={<Home/>} />
             <Route path='/profile' element={<Profile/>} />
+            <Route path='/plans' element={<Plans/>} />
         </>
     );
 };

@@ -1,15 +1,24 @@
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
     content: [
       "./src/**/*.{js,jsx,ts,tsx}",
     ],
     theme: {
         extend: {
+          width: {
+            '76': '19rem',
+            '84': '21rem',
+            '88': '22rem',
+            '92': '23rem',
+            '100': '25rem',
+          },
           animation: {
             'spin-slow': 'spin 5s linear infinite',
           },
           colors: {
             'main-blue': '#0095FF',
+            'dark-blue': '#363853',
             'silver': 'silver'
           },
           fontFamily: {
