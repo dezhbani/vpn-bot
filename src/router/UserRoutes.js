@@ -1,3 +1,4 @@
+import Configs from '../components/user/config-section/Configs';
 import Home from '../components/user/home-section/Home';
 import Plans from '../components/user/plan-section/Plans';
 import Profile from '../components/user/profile-section/Profile';
@@ -11,6 +12,7 @@ const UserRoutes = () => {
             <Route path='/home' element={<Home/>} />
             <Route path='/profile' element={<Profile/>} />
             <Route path='/plans' element={<Plans/>} />
+            <Route path='/configs' element={<Configs/>} />
         </>
     );
 };
