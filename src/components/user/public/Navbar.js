@@ -15,7 +15,7 @@ const Navbar = () => {
                     <div className='p-2 m-2' onClick={handleOpenProfile}>
                         <img className='h-8' src={ProfileIcon} alt='Profile' />
                     </div>
-                    {openProfile && <Profile setOpenProfile={setOpenProfile} />}
+                {openProfile && <Profile setOpenProfile={setOpenProfile} />}
                     <div className='p-2 m-2'>
                         <img className='h-8' src={Notification} alt='Notification' />
                     </div>

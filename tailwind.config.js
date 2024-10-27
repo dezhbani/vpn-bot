@@ -15,6 +15,13 @@ module.exports = {
           },
           animation: {
             'spin-slow': 'spin 5s linear infinite',
+            'marquee': 'marquee 3000ms linear infinite'
+          },
+          keyframes: {
+            marquee: {
+              '0%': { transform: 'translateX(0%)' },
+              '100%': { transform: 'translateX(-100%)' },
+            },
           },
           colors: {
             'main-blue': '#0095FF',

@@ -85,6 +85,9 @@ const copyElement = (tag, length) => {
 const handleError = error => {
     toast.error(error.response.data.message || "مشکل در اتصال به سرور", {autoClose: 2000})
 }
+const handleMessage = data => {
+    toast.success(data.message, {autoClose: 3000})
+}
 const clculateData = config =>{
     const mass = (config / (1024 * 1024 * 1024)).toFixed(2) < 1? Math.floor(config / (1024 * 1024)) : (config / (1024 * 1024 * 1024)).toFixed(2)
     const massSymbol = (config / (1024 * 1024 * 1024)).toFixed(2) < 1 ? 'MB' : 'GB'
@@ -102,5 +105,6 @@ export {
     setTitle,
     copyElement,
     handleError,
-    clculateData
+    clculateData,
+    handleMessage
 }

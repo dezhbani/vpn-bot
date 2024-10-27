@@ -5,7 +5,7 @@ import ProfileIcon from '../assets/Profile-2.svg';
 import Modal from '../../public/components/Modal';
 import { Link } from 'react-router-dom';
 
-const ConfirmExitAccount = ({status, close}) => {
+const ConfirmExitAccount = ({ status, close }) => {
     const exitAccount = () => {
         localStorage.removeItem('accessToken')
         window.location.href = '/'
@@ -23,7 +23,7 @@ const ConfirmExitAccount = ({status, close}) => {
     )
 }
 
-const Profile = ({setOpenProfile}) => {
+const Profile = ({ setOpenProfile }) => {
     const [openConfirm, setOpenConfirm] = useState(false)
     const profileRef = useRef(null);
 
@@ -42,7 +42,7 @@ const Profile = ({setOpenProfile}) => {
             // Cleanup the event listener when component unmounts
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
+    });
     const handleOpenConfirm = () => {
         setOpenConfirm(true)
     }
@@ -54,13 +54,19 @@ const Profile = ({setOpenProfile}) => {
             <div className='bg-white -mx-16 flex flex-col absolute w-48 mt-20 py-4 px-6 rounded-xl shadow-[2px_4px_30px_0px_#00000010] dir-rtl font-b-kamran text-2xl z-10'>
                 <Link to='/profile'>
                     <div className='flex items-center'>
-                        <img className='h-6' src={ProfileIcon}/>
+                        <img className='h-6' alt='ProfileIcon' src={ProfileIcon} />
                         <span className='mx-2'>پروفایل</span>
                     </div>
                 </Link>
-                <div className='py-1 flex items-center'><img className='h-6' src={SettingIcon}/><span className='mx-2'>تنظیمات</span></div>
+                <div className='py-1 flex items-center'>
+                    <img className='h-6' alt='SettingIcon' src={SettingIcon} />
+                    <span className='mx-2'>تنظیمات</span>
+                </div>
                 <div className='border-main-blue opacity-60 border-t-2 my-2' />
-                <div className='py-1 flex items-center' onClick={handleOpenConfirm}><img className='h-6' src={ExitIcon}/><span className='mx-2'>خروج</span></div>
+                <div className='py-1 flex items-center' onClick={handleOpenConfirm}>
+                    <img className='h-6' alt='ExitIcon' src={ExitIcon} />
+                    <span className='mx-2'>خروج</span>
+                </div>
             </div>
         </div>
     );
