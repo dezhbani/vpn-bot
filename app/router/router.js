@@ -1,3 +1,4 @@
+const { UserConfigController } = require("../controllers/user/config.controller");
 const { verifyToken } = require("../middlewares/verifyAccessToken");
 const { AdminRoutes } = require("./admin/admin.routes");
 const { adminPaymentsRoutes } = require("./admin/payments");
@@ -12,6 +13,7 @@ router.use("/profile", verifyToken, adminProfileRoutes);
 router.use("/payment", adminPaymentsRoutes);
 router.use("/admin", verifyToken, AdminRoutes);
 router.use("/user", verifyToken, UserRoutes);
+router.get("/sub/:configID", UserConfigController.configSubscription);
 
 module.exports = {
     AllRoutes: router
