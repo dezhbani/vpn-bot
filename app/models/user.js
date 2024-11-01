@@ -12,8 +12,8 @@ const bill = new mongoose.Schema({
     up: {type: Boolean, default: true}
 })
 const UserSchema = new mongoose.Schema({
-    first_name: {type: String},
-    last_name: {type: String},
+    first_name: {type: String, default: ''},
+    last_name: {type: String, default: ''},
     full_name: {type: String, default: ''},
     mobile: {type: String},
     bills: {type: [bill], ref: 'plan', default: []},
