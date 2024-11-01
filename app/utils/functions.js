@@ -55,9 +55,6 @@ function deleteInvalidProperties(data = {}, blackListFields){
     })
     
 }
-function copyObject(object){
-    return JSON.parse(JSON.stringify(object))
-}
 const lastIndex = (array = []) => {
     const last = array.length - 1;
     return array[last]
@@ -207,7 +204,6 @@ const exportConfigDetails = config => {
 module.exports = {
     randomNumber,
     signAccessToken,
-    copyObject,
     configExpiryTime,
     randomString,
     copyObject,
