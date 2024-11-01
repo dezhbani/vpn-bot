@@ -28,6 +28,8 @@ const ConfigSection = ({ configs }) => {
             setPlan(result.plan);
             setLoading(false);  // End loading after the data is fetched (or failed)
         } catch (error) {
+            console.log();
+            
             toast.error(error, 3000);
             setData(null);  // Set to null in case of an error
         }

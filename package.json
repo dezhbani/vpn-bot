@@ -12,6 +12,7 @@
     "chart.js": "^4.4.4",
     "chroma-js": "^3.0.0",
     "farvardin": "^1.0.3",
+    "qrcode.react": "^4.1.0",
     "randomcolor": "^0.6.2",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",

@@ -3,6 +3,7 @@ import Sidebar from '../public/Sidebar';
 import Navbar from '../public/Navbar';
 import Tabs from '../../public/components/Tabs';
 import EditProfile from './EditProfile';
+import Wallet from './Wallet';
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState('Tab1');
@@ -13,7 +14,7 @@ const Profile = () => {
     };
     const tabData = [
         { label: 'پروفایل', content: <EditProfile /> },
-        { label: 'کیف پول', content: 'Content for Tab 2' },
+        { label: 'کیف پول', content: <Wallet /> },
       ];
     return (
         <div className='h-screen'>

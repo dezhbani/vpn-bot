@@ -30,7 +30,7 @@ function App() {
           }
           <Route path="/*" element={<NotFoundError />}/>
         </Routes>
-        <ToastContainer />
+        <ToastContainer className='dir-rtl' />
     </div>
   );
 }

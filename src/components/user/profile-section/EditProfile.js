@@ -45,6 +45,7 @@ const EditProfile = () => {
     }
 
     const confirmEdit = async () => {
+        setLoading(true)
         if (data.mobile !== user.mobile) {
             setEditMobile(true)
             const changeResult = await changeMobile({ mobile: data.mobile })
@@ -58,6 +59,7 @@ const EditProfile = () => {
             setTimeout(() => document.location.reload(), 4000)
         }
         setEditMode(false);
+        setLoading(false)
     }
     const confirmEditMobile = async () => {
         if (code.length == 0) toast.error('کد تایید را وارد کنید')
@@ -76,7 +78,7 @@ const EditProfile = () => {
 
     const openEditMode = () => {
         setEditMode(!editMode)
-        setEditMobile(!editMobile)
+        setEditMobile(false)
     }
 
     useEffect(() => {
@@ -100,6 +102,10 @@ const EditProfile = () => {
                 </div>
                 <div className='flex text-xl justify-center'>
                     <div className='flex flex-col items-center'>
+                        <div className='flex flex-col m-10'>
+                            <label className='text-xs text-gray-500'>نام و نام خانوادگی فارسی</label>
+                            <input className={`${editMode ? 'border-b-2 border-main-blue focus:border-red-500 transform transition duration-500' : 'opacity-50'} outline-none py-1 mt-1 px-2 dir-rtl`} value={data.full_name || ''} name='full_name' onChange={change} readOnly={!editMode} />
+                        </div>
                         {
                             editMobile ?
                                 <div className='flex flex-col justify-center w-fit mt-5'>
@@ -128,10 +134,6 @@ const EditProfile = () => {
                                     <input className={`${editMode ? 'border-b-2 border-main-blue focus:border-red-500 transform transition duration-500' : 'opacity-50'} outline-none py-1 mt-1 px-2 dir-ltr`} value={data.mobile || ''} name='mobile' onChange={change} readOnly={!editMode} />
                                 </div>
                         }
-                        <div className='flex flex-col m-10'>
-                            <label className='text-xs text-gray-500'>نام و نام خانوادگی فارسی</label>
-                            <input className={`${editMode ? 'border-b-2 border-main-blue focus:border-red-500 transform transition duration-500' : 'opacity-50'} outline-none py-1 mt-1 px-2 dir-rtl`} value={data.full_name || ''} name='full_name' onChange={change} readOnly={!editMode} />
-                        </div>
                     </div>
                     <div className='flex flex-col'>
                         <div className='flex flex-col m-10'>
