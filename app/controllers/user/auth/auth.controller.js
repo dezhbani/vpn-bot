@@ -4,6 +4,8 @@ const { checkOtpSchema, getOtpSchema } = require("../../../validations/user/auth
 const { userModel } = require("../../../models/user");
 const { Controllers } = require("../../controller");
 const { smsService } = require("../../../services/sms.service");
+const { completeُSignupSchema } = require("../../../validations/user/user.schema");
+const { StatusCodes } = require("http-status-codes");
 
 class userAuthControllers extends Controllers {
     async getOTP(req, res, next) {
@@ -28,17 +30,41 @@ class userAuthControllers extends Controllers {
         try {
             await checkOtpSchema.validateAsync(req.body);
             const { mobile, code } = req.body;
-            const user = await userModel.findOne({ mobile }, {bills: 0, chatID: 0, role: 0, configs: 0})
+            const user = await userModel.findOne({ mobile })
             if (!user) throw createHttpError.NotFound("کاربر یافت نشد");
             if (user.otp.code != code) throw createHttpError.Unauthorized("کد تایید صحیح نمیباشد");
             const now = Date.now();
             if (+user.otp.expireIn < +now) throw createHttpError.Unauthorized("کد تایید منقضی شده");
             const accessToken = await signAccessToken(user._id);
+            const userDetails = {
+                first_name: user.first_name,
+                last_name: user.last_name,
+                full_name: user.full_name,
+                mobile: user.mobile,
+                wallet: user.wallet,
+                role: user.role
+            }
             return res.status(200).json({
                 status: 200,
                 accessToken,
                 message: "با موفقیت وارد شدید",
-                user
+                user: userDetails
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+    async completeُSignup(req, res, next){
+        try {
+            const { _id } = req.user
+            console.log(req.body);
+            const { full_name, first_name, last_name } = await completeُSignupSchema.validateAsync(req.body);
+            
+            const saveUserDetails = await userModel.updateOne({_id}, {$set: {full_name, first_name, last_name}})
+            if(saveUserDetails.modifiedCount ==  0) throw createHttpError.InternalServerError("اطلاعات ثبت نشد")
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                message: "اطلاعات با موفقیت ثبت شد"
             })
         } catch (error) {
             next(error)
