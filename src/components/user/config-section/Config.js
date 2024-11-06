@@ -64,7 +64,7 @@ const Config = ({ config }) => {
                     <div className='relative flex justify-center dir-rtl' onMouseEnter={() => setHoverConfig(true)} onMouseLeave={() => setHoverConfig(false)}>
                         <img className='p-1 cursor-pointer' src={Copy} alt='Copy' onClick={() => handleCopy(config.config_content, "کانفیگ کپی شد")} />
                         {hoverConfig && (
-                            <span className='absolute right-10 bg-gray-100 p-3 rounded-lg shadow-lg text-md z-10'>
+                            <span className='absolute right-10 -bottom-8 bg-gray-100 p-3 rounded-lg shadow-lg text-md z-10'>
                                 <h1 className='pb-3 font-bold'>کانفیگ:</h1>
                                 <QRCode
                                     value={config.config_content}

@@ -25,8 +25,17 @@ const getConfigDetails = async configID => {
         handleError(error)
     }
 }
+const getConfigByID = async configID => {
+    try {
+        const result = await axios.get(`user/config/${configID}`, headers)
+        return result.data
+    } catch (error) {
+        handleError(error)
+    }
+}
 export {
     getConfigs,
     getConfigDetails,
-    getAllConfigs
+    getAllConfigs,
+    getConfigByID
 }

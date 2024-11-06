@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Tooltip.css'; // Import your CSS file for styling
 
-const Tooltip = ({ text, children }) => {
+const Tooltip = ({ text, children, className="" }) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
   const handleMouseEnter = () => {
@@ -15,7 +15,7 @@ const Tooltip = ({ text, children }) => {
   return (
     <div className="tooltip-container" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       {children}
-      {showTooltip && <div className="tooltip">{text}</div>}
+      {showTooltip && <div className={`tooltip ${className}`}>{text}</div>}
     </div>
   );
 };
