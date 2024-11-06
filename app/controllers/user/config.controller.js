@@ -6,7 +6,9 @@ const { default: axios } = require("axios");
 const { planModel } = require("../../models/plan");
 const { copyObject, deleteInvalidProperties } = require("../../utils/functions");
 const { generateConfig, generateSubLink } = require("../../utils/config.type");
+const { userModel } = require("../../models/user");
 const { V2RAY_API_URL, V2RAY_TOKEN } = process.env
+const fs = require('fs')
 
 class UserConfigController extends Controllers {
     async getConfigs(req, res, next) {
@@ -61,6 +63,35 @@ class UserConfigController extends Controllers {
                 status: StatusCodes.OK,
                 config: configDetails,
                 plan
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+    async getConfigByID(req, res, next) {
+        try {
+            const userID = req.user._id;
+            const { configID } = req.params;
+            if (!configID) throw createHttpError.BadRequest('کانفیگ وارد شده صحیح نمی باشد')
+            const config = await configModel.findOne({ userID, configID }, { configID: 1, planID: 1 })
+            const plan = await planModel.findOne({ _id: config.planID })
+            const user = await userModel.findOne({ _id: userID })
+            const filteredBills = user.bills
+                .filter(bill =>
+                    (
+                        bill.for.description === "تمدید کانفیگ" ||
+                        bill.for.description === "خرید کانفیگ"
+                    ) && bill.configID == configID
+                )
+                .sort((a, b) => b.buy_date - a.buy_date) // Sort by buy_date descending
+                .slice(0, 5)
+            const configDetails = await this.findConfigByID(config.configID)
+            configDetails.status = await this.checkConfigStatus(configDetails)
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                config: configDetails,
+                plan,
+                bills: filteredBills
             })
         } catch (error) {
             next(error)
