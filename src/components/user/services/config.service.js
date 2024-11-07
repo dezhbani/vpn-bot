@@ -1,6 +1,15 @@
 import axios from "axios"
-import { handleError, headers } from "../../public/function"
+import { handleError, handleMessage, headers } from "../../public/function"
 
+const buyConfig = async data => {
+    try {
+        const result = await axios.post('user/config/buy', data, headers)
+        handleMessage(result.data)
+        return result.data
+    } catch (error) {
+        handleError(error)
+    }
+}
 const getConfigs = async () => {
     try {
         const result = await axios.get('user/config/list', headers)
@@ -37,5 +46,6 @@ export {
     getConfigs,
     getConfigDetails,
     getAllConfigs,
-    getConfigByID
+    getConfigByID,
+    buyConfig
 }
