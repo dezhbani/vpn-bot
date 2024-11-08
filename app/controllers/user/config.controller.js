@@ -4,13 +4,57 @@ const { Controllers } = require("../controller");
 const { configModel } = require("../../models/config");
 const { default: axios } = require("axios");
 const { planModel } = require("../../models/plan");
-const { copyObject, deleteInvalidProperties } = require("../../utils/functions");
-const { generateConfig, generateSubLink } = require("../../utils/config.type");
+const { copyObject, deleteInvalidProperties, configExpiryTime } = require("../../utils/functions");
+const { generateConfig, generateSubLink, createVlessTcp } = require("../../utils/config.type");
 const { userModel } = require("../../models/user");
 const { V2RAY_API_URL, V2RAY_TOKEN } = process.env
-const fs = require('fs')
+const fs = require('fs');
+const { addConfigSchema } = require("../../validations/user/config.schema");
+const { checkUserPaymentType } = require("../../utils/paymet.functions");
 
 class UserConfigController extends Controllers {
+    async buyConfig(req, res, next) {
+        try {
+            const user = req.user;
+            const { planID } = await addConfigSchema.validateAsync(req.body);
+            const plan = await this.findPlanByID(planID);
+            if (user.wallet < plan.price) {
+                const paymentType = await checkUserPaymentType('خرید کانفیگ', (plan.price - user.wallet), user, null)
+                if (paymentType) return res.status(StatusCodes.OK).json(paymentType);
+            }
+            const lastConfigID = await this.getConfigID();
+            const fullName = `${user.first_name} ${user.last_name}`;
+            const { details, configContent: config_content, id } = await createVlessTcp(lastConfigID, plan, fullName)
+            const addConfig = await axios.post(`${V2RAY_API_URL}/xui/inbound/add`, details, {
+                withCredentials: true,
+                headers: {
+                    'Cookie': V2RAY_TOKEN
+                }
+            })
+            // update user
+            if (!addConfig.data.success) throw createHttpError.InternalServerError("کانفیگ ایجاد نشد")
+                
+            const configs = {
+                name: fullName,
+                config_content,
+                expiry_date: +configExpiryTime(plan.month), 
+                configID: id,
+                userID: user._id,
+                planID: plan._id
+            }
+            const createResult = await configModel.create(configs)
+            if (!createResult) throw createHttpError.InternalServerError('کانفیگ ثبت نشد')
+            // const saveResult = await userModel.updateOne({ mobile: user.mobile }, { $push: { bills } })
+            // if (saveResult.modifiedCount == 0) throw createHttpError("کانفیگ برای یوزر ذخیره نشد");
+            return res.status(StatusCodes.CREATED).json({
+                status: StatusCodes.CREATED,
+                message: "کانفیگ ایجاد شد",
+                configContent: config_content
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
     async getConfigs(req, res, next) {
         try {
             const userID = req.user._id;
@@ -152,6 +196,22 @@ class UserConfigController extends Controllers {
             enable: config.enable
         }
         return configDetail
+    }
+    async getConfigID() {
+        const configs = ((await axios.post(`${V2RAY_API_URL}/xui/inbound/list`, {}, {
+            withCredentials: true,
+            headers: {
+                'Cookie': V2RAY_TOKEN
+            }
+        })).data.obj)
+        const lastIndex = configs.length - 1
+        const lastConfigID = configs[lastIndex].id + 1
+        return lastConfigID
+    }
+    async findPlanByID(planID) {
+        const plan = await planModel.findById(planID);
+        if (!plan) throw createHttpError.NotFound("پلنی یافت نشد");
+        return plan
     }
 }
 

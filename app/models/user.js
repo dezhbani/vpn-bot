@@ -6,6 +6,7 @@ const forSchema = new mongoose.Schema({
 const bill = new mongoose.Schema({
     planID: {type: mongoose.Types.ObjectId, ref: 'plan', default: null},
     paymentID: {type: mongoose.Types.ObjectId, ref: 'payment', default: null},
+    configID: {type: String, ref: 'config', default: null},
     buy_date: {type: Number, default: new Date().getTime()},
     for: {type: forSchema, default: {}, required: true}, 
     price: {type: Number, default: null},

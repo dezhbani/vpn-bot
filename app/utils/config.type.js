@@ -86,7 +86,7 @@ const createVlessKcp = async (lastID, plan, fullName) => {
         tag: `inbound-${randomNumber()}`,
         sniffing
     };
-    const configContent = `vless://${id}@${domain}:${port}?type=kcp&security=none&headerType=none&seed=${password}#${name}`
+    const configContent = `vless://${id}@s1.delta-dev.top:${port}?type=kcp&security=none&headerType=none&seed=${password}#${name}`
     const obj = { details, configContent, id }
     return obj
 }
@@ -165,7 +165,7 @@ const createVlessTcp = async (lastID, plan, fullName) => {
         tag: `inbound-${randomNumber()}`,
         sniffing
     };
-    const configContent = `vless://${id}@${domain}:${port}?type=tcp&security=none&path=%2F&host=${Host[0]}&headerType=http#${name}`
+    const configContent = `vless://${id}@s1.delta-dev.top:${port}?type=tcp&security=none&path=%2F&host=${Host[0]}&headerType=http#${name}`
     // const configContent = `vless://${id}@${V2RAY_API_URL}:${port}?type=Tcp&security=none&headerType=http&seed=${password}#${name}`
     const obj = { details, configContent, id }
     return obj
@@ -228,8 +228,8 @@ const createVlessWs = async (lastID, plan, fullName) => {
         tag: `inbound-${randomNumber()}`,
         sniffing
     };
-    const configContent = `vless://${id}@${domain}:${port}?type=ws&security=none&path=%2F&host=${Host[0]}#${name}`
-    // const configContent = vless://b0dd04d6-1f17-45bc-9d71-9420ae234a3e@${domain}:43207?type=ws&security=none&path=%2F&host=speedtest.net#sadra%20ganbarnezhad
+    const configContent = `vless://${id}@s1.delta-dev.top:${port}?type=ws&security=none&path=%2F&host=${Host[0]}#${name}`
+    // const configContent = vless://b0dd04d6-1f17-45bc-9d71-9420ae234a3e@s1.delta-dev.top:43207?type=ws&security=none&path=%2F&host=speedtest.net#sadra%20ganbarnezhad
     const obj = { details, configContent, id }
     return obj
 }
