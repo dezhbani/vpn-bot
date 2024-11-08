@@ -57,6 +57,7 @@ class configController extends Controllers {
             }
             const bills = {
                 planID,
+                configID: id,
                 buy_date: new Date().getTime(),
                 for: {
                     description: 'خرید کانفیگ'
@@ -67,7 +68,7 @@ class configController extends Controllers {
             // update owner
             if(!addConfig.data.success) throw createHttpError.InternalServerError("کانفیگ ایجاد نشد")
             // update user 
-            const paymentType = await checkPaymentType('ثبت کانفیگ کاربر', percentOfPlan, owner._id, user._id)
+            const paymentType = await checkPaymentType('ثبت کانفیگ کاربر', percentOfPlan, owner._id, user._id, bills.configID)
             if(paymentType) return res.status(StatusCodes.OK).json(paymentType);
             const createResult = await configModel.create(configs)
             if(!createResult) throw createHttpError.InternalServerError('کانفیگ ثبت نشد')
@@ -254,6 +255,7 @@ class configController extends Controllers {
             const result = await this.updateConfig(configsData.id, configsData)
             const bills = {
                 planID: plan._id,
+                configID,
                 buy_date: new Date().getTime(),
                 for: {
                     description: 'تمدید کانفیگ'
@@ -263,6 +265,7 @@ class configController extends Controllers {
             }
             const ownerBills = {
                 planID: plan._id,
+                configID,
                 buy_date: new Date().getTime(),
                 for: {
                     description: 'تمدید کانفیگ کاربر',
