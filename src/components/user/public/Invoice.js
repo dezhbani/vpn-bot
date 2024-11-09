@@ -3,11 +3,11 @@ import { ProfileContext } from "../../context/UserProfileContext"
 import Modal from "../../public/components/Modal"
 import { addCommaToPrice } from "../../public/function"
 
-const Invoice = ({ plan, open, handleClose, repurchase=false, handleButton }) => {
+const Invoice = ({ plan, open, handleClose, repurchase=false, handleButton, loading }) => {
     const user = useContext(ProfileContext)
 
     return (
-        <Modal isOpen={open} onClose={handleClose}>
+        <Modal isOpen={open} loading={loading} onClose={handleClose}>
             <div className="w-96 flex flex-col m-3 font-iran-sans text-lg px-8 py-5 justify-between">
                 <div>
                     <div className="flex flex-row-reverse justify-between mb-8"><span>:پلن</span><span>{plan?.name}</span></div>

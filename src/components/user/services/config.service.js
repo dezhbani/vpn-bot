@@ -10,6 +10,15 @@ const buyConfig = async data => {
         handleError(error)
     }
 }
+const repurchaseConfig = async data => {
+    try {
+        const result = await axios.post('user/config/repurchase', data, headers)
+        handleMessage(result.data)
+        return result.data
+    } catch (error) {
+        handleError(error)
+    }
+}
 const getConfigs = async () => {
     try {
         const result = await axios.get('user/config/list', headers)
@@ -47,5 +56,6 @@ export {
     getConfigDetails,
     getAllConfigs,
     getConfigByID,
-    buyConfig
+    buyConfig,
+    repurchaseConfig
 }
