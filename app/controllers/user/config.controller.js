@@ -11,6 +11,7 @@ const { V2RAY_API_URL, V2RAY_TOKEN } = process.env
 const fs = require('fs');
 const { addConfigSchema } = require("../../validations/user/config.schema");
 const { checkUserPaymentType } = require("../../utils/paymet.functions");
+const { smsService } = require("../../services/sms.service");
 
 class UserConfigController extends Controllers {
     async buyConfig(req, res, next) {
@@ -18,13 +19,11 @@ class UserConfigController extends Controllers {
             const user = req.user;
             const { planID } = await addConfigSchema.validateAsync(req.body);
             const plan = await this.findPlanByID(planID);
-            if (user.wallet < plan.price) {
-                const paymentType = await checkUserPaymentType('خرید کانفیگ', (plan.price - user.wallet), user, null)
-                if (paymentType) return res.status(StatusCodes.OK).json(paymentType);
-            }
             const lastConfigID = await this.getConfigID();
             const fullName = `${user.first_name} ${user.last_name}`;
             const { details, configContent: config_content, id } = await createVlessTcp(lastConfigID, plan, fullName)
+            const paymentType = await checkUserPaymentType('خرید کانفیگ', plan, user, id)
+            if (paymentType) return res.status(StatusCodes.OK).json(paymentType);
             const addConfig = await axios.post(`${V2RAY_API_URL}/xui/inbound/add`, details, {
                 withCredentials: true,
                 headers: {
@@ -33,11 +32,11 @@ class UserConfigController extends Controllers {
             })
             // update user
             if (!addConfig.data.success) throw createHttpError.InternalServerError("کانفیگ ایجاد نشد")
-                
+
             const configs = {
                 name: fullName,
                 config_content,
-                expiry_date: +configExpiryTime(plan.month), 
+                expiry_date: +configExpiryTime(plan.month),
                 configID: id,
                 userID: user._id,
                 planID: plan._id
@@ -50,6 +49,38 @@ class UserConfigController extends Controllers {
                 status: StatusCodes.CREATED,
                 message: "کانفیگ ایجاد شد",
                 configContent: config_content
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
+    async repurchaseConfig(req, res, next) {
+        try {
+            console.log('ss');
+
+            const { full_name, mobile, wallet, _id: userID } = req.user
+            const { configID } = req.body;
+            const config = await configModel.findOne({ userID, configID })
+            if (!config) throw createHttpError.NotFound("کانفیگ یافت نشد، لطفا با پشتیبانی تماس بگیرید")
+            const plan = await planModel.findOne({ _id: config.planID })
+            if (!plan) throw createHttpError.NotFound("پلن مورد نظر وجود ندارد یا حذف شده، لطفا با پشتیبانی تماس بگیرید")
+            let configsData = await this.findConfigByID(configID, false)
+            if (!configsData) throw createHttpError.NotFound("کانفیگ یافت نشد، لطفا با پشتیبانی تماس بگیرید")
+            configsData.expiryTime = +configExpiryTime(plan.month)
+            configsData.up = 0
+            configsData.down = 0
+            configsData.enable = true
+            const paymentType = await checkUserPaymentType('تمدید کانفیگ', plan, req.user, config.configID)
+            if (paymentType) return res.status(StatusCodes.OK).json(paymentType);
+            console.log(configsData);
+
+            const result = await this.updateConfig(configsData.id, configsData)
+            const updateConfig = await configModel.updateOne({ configID }, { $set: { expiry_date: +configExpiryTime(plan.month), endData: false } })
+            if (result || updateConfig.modifiedCount == 0) throw createHttpError.InternalServerError("کانفیگ تمدید نشد")
+            // await smsService.repurchaseMessage(mobile, full_name)
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                message: "کانفیگ تمدید شد"
             })
         } catch (error) {
             next(error)
@@ -180,7 +211,7 @@ class UserConfigController extends Controllers {
         })
         return configsArray
     }
-    async findConfigByID(configID) {
+    async findConfigByID(configID, all = true) {
         const getConfigsResult = (await axios.post(`${V2RAY_API_URL}/xui/inbound/list`, {}, {
             withCredentials: true,
             headers: {
@@ -193,9 +224,19 @@ class UserConfigController extends Controllers {
             down: config.down,
             total: config.total,
             expiry: config.expiryTime,
-            enable: config.enable
+            enable: config.enable,
+            id: config.id
         }
-        return configDetail
+        return all ? configDetail : config
+    }
+    async updateConfig(configID, data) {
+        const configs = (await axios.post(`${V2RAY_API_URL}/xui/inbound/update/${configID}`, data, {
+            withCredentials: true,
+            headers: {
+                'Cookie': V2RAY_TOKEN
+            }
+        }))
+        return configs.data.obj.success
     }
     async getConfigID() {
         const configs = ((await axios.post(`${V2RAY_API_URL}/xui/inbound/list`, {}, {

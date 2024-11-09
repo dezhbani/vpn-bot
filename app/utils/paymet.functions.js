@@ -40,10 +40,11 @@ const checkPaymentType = async (description, price, ownerID, userID, configID) =
         return null
     }
 }
-const checkUserPaymentType = async (description, price, user, configID, planID = null) => {
+const checkUserPaymentType = async (description, {price, _id: planID}, user, configID) => {
     const { _id: userID, wallet } = user
     const bills = {
         configID,
+        planID,
         buy_date: new Date().getTime(),
         for: {
             description,
@@ -52,6 +53,8 @@ const checkUserPaymentType = async (description, price, user, configID, planID =
         price,
         up: wallet > price || null
     }
+    console.log(bills);
+    
     const billsResult = await userModel.updateOne({ _id: userID }, { $push: { bills } });
     let billID;
     if (billsResult.modifiedCount !== 0) {
@@ -61,17 +64,17 @@ const checkUserPaymentType = async (description, price, user, configID, planID =
     };
     if (wallet < price) {
         const createPayLink = await axios.post(`${BASE_URL}/payment/create`, {
-            amount: tomanToRial(price),
+            amount: tomanToRial(price - wallet),
             billID,
             description: "افزایش اعتبار",
             user,
             callback: `${REDIRECT_URL}/wallet/${billID}`
         })
         return createPayLink.data
-    } else if (wallet > price) {
+    } else if (wallet >= price) {
         let deposit = wallet - price
         deposit = deposit < 0 ? 0 : deposit
-        const updateWallet = await userModel.updateOne({ _id: userID }, { $set: { wallet: deposit } })
+        const updateWallet = await userModel.updateOne({ _id: userID }, { $set: { wallet: deposit,  } })
         if (updateWallet.modifiedCount == 0) throw createHttpError.InternalServerError("مشکلی پیش امد، لطفا به پشتیبانی اطلاع دهید")
         return null
     }
