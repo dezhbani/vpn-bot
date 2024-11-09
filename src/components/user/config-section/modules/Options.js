@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import SettingIcon from '../../assets/SettingBlue.svg';
 import Invoice from '../../public/Invoice';
 import { repurchaseConfig } from '../../services/config.service';
+import { Link } from 'react-router-dom';
 
 
 const Options = ({ plan, configID }) => {
@@ -20,6 +21,7 @@ const Options = ({ plan, configID }) => {
             setLoading(false)
         }
         console.log(result);
+        if (result.gatewayURL) document.location.href = result.gatewayURL
     }
     return (
         <>

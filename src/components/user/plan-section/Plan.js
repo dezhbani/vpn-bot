@@ -4,20 +4,27 @@ import TickIcon from '../assets/Tick.svg'
 import PriceIcon from '../assets/Price.svg'
 import Invoice from '../public/Invoice';
 import { buyConfig } from '../services/config.service';
+import { Link } from 'react-router-dom';
 
 const Plan = ({ plan }) => {
     const [openInvoice, setOpenInvoice] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     const handleClose = () => setOpenInvoice(false)
     const handleOpen = () => setOpenInvoice(true)
     const handleBuyConfig = async () => {
         console.log('dddddddddd');
+        setLoading(true)
         
         const result = await buyConfig({planID: plan._id})
+        if (result?.gatewayURL) document.location.href = result.gatewayURL
+        setLoading(false)
+        setOpenInvoice(false)
         console.log(result);
     }
     return (
         <>
-            <Invoice plan={plan} open={openInvoice} handleClose={handleClose} handleButton={handleBuyConfig} />
+            <Invoice plan={plan} open={openInvoice} loading={loading} handleClose={handleClose} handleButton={handleBuyConfig} />
             <div className="flex flex-col justify-around font-iran-sans bg-[#fff] dark:bg-red-500 shadow-[2px_4px_30px_0px_#00000010] rounded-2xl border-gray-300 hover:border-main-blue hover:border-2 border border-opacity-70 duration-100 w-92 max-h-[34rem] min-h-[34rem] m-5 p-10">
                 <div className="flex flex-col h-20">
                     {/* {
