@@ -2,6 +2,7 @@ const { UserProfileController } = require("../../controllers/user/profile.contro
 
 const router = require("express").Router();
 
+router.post("/increase-wallet", UserProfileController.increaseWallet);
 router.patch("/edit", UserProfileController.editProfileDetails);
 router.post("/change-mobile", UserProfileController.changeMobile);
 router.post("/check-otp", UserProfileController.checkOTP);

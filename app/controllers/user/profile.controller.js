@@ -5,6 +5,7 @@ const { deleteInvalidProperties, randomNumber, signAccessToken } = require("../.
 const { userModel } = require("../../models/user");
 const { smsService } = require("../../services/sms.service");
 const { getOtpSchema, checkOtpSchema } = require("../../validations/user/auth.schema");
+const { increaseWallet } = require("../../utils/paymet.functions");
 
 class UserProfileController extends Controllers {
     async editProfileDetails(req, res, next) {
@@ -19,6 +20,17 @@ class UserProfileController extends Controllers {
                 statusCode: StatusCodes.OK,
                 message: "پروفایلتان با موفقیت به روزرسانی شد"
             })
+        } catch (error) {
+            next(error)
+        }
+    }
+    async increaseWallet(req, res, next) {
+        try {
+            const user = req.user;
+            const { pay } = req.body;
+            if(!pay || pay == "") throw createHttpError.BadRequest("مبلغ نمیتواند خالی باشد")
+            const createPayLink = await increaseWallet(user, pay)
+            return res.status(StatusCodes.OK).json(createPayLink)
         } catch (error) {
             next(error)
         }
