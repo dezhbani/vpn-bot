@@ -36,7 +36,7 @@ const Config = ({ config }) => {
     }
     // const handleCopy = async 
     return (
-        <div className="flex items-center dir-ltr font-iran-sans bg-[#fff] dark:bg-red-500 shadow-[2px_4px_30px_0px_#00000010] rounded-2xl w-full min-h-20 my-2 px-5 [&>*]:p-4">
+        <div className="flex items-center dir-ltr font-iran-sans bg-[#fff] shadow-[2px_4px_30px_0px_#00000010] rounded-2xl w-full min-h-20 my-2 px-5 [&>*]:p-4">
             <div className='w-1/4'>{config.name}</div>
             <div className='w-1/4 flex justify-center items-center'>
                 <span className='text-xs dir-rtl pr-5 opacity-60 max-w-24 min-w-24'>
