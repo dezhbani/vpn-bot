@@ -1,6 +1,17 @@
 import axios from "axios"
 import { handleError, handleMessage, headers } from "../../public/function"
 
+const increaseWallet = async data => {
+    try {
+        const result = await axios.post('user/profile/increase-wallet', data, headers)
+        console.log(result);
+        
+        handleMessage(result.data)
+        return result.data
+    } catch (error) {
+        handleError(error)
+    }
+}
 const getProfile = async () => {
     try {
         const result = await axios.get('user/profile', headers)
@@ -39,5 +50,6 @@ export {
     getProfile,
     editProfile,
     changeMobile,
-    checkOTP
+    checkOTP,
+    increaseWallet
 }

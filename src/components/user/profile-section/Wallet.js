@@ -3,21 +3,28 @@ import { ProfileContext } from '../../context/UserProfileContext';
 import { addCommaToPrice } from '../../public/function';
 import PriceIcon from '../assets/Price.svg';
 import { toast } from 'react-toastify';
+import { increaseWallet } from '../services/profile.service';
+import Modal from '../../public/components/Modal';
 
 const Wallet = () => {
     const [wallet, setWallet] = useState(50000)
+    const [loading, setLoading] = useState(false)
     const change = e => {
         setWallet(+e.target.value)
     }
     const plus = () => setWallet(wallet + 1000)
     const minus = () => setWallet(wallet - 1000)
-    const pay = () => {
+    const pay = async () => {
         if (wallet < 50000) toast.error('حداقل افزایش اعتبار باید بیشتر از 50,000 تومان باشد')
+        setLoading(true)
+        await increaseWallet({ pay: wallet })
+        setLoading(false)
     }
     const user = useContext(ProfileContext);
 
     return (
         <div>
+            <Modal isOpen={loading} loading={loading} />
             <h1 className='w-full text-xl pt-6 pr-6 font-bold'>
                 <span className='mx-2 inline-block bg-main-blue rounded-full w-2.5 h-2.5' />
                 افزایش اعتبار
@@ -38,9 +45,9 @@ const Wallet = () => {
                         <span className='text-sm text-[#0050f9] w-fit bg-[#0050f9]/10 px-2 py-0.5 mx-1 rounded-full' onClick={() => setWallet(200000)}>200 هزار تومان</span>
                         <span className='text-sm text-[#0050f9] w-fit bg-[#0050f9]/10 px-2 py-0.5 mx-1 rounded-full' onClick={() => setWallet(500000)}>500 هزار تومان</span>
                     </div>
-                <div className='flex flex-col justify-center my-5 w-full'>
-                    <button className='flex w-full justify-center bg-main-blue text-white px-6 py-1 my-4 rounded-lg' onClick={pay}>پرداخت</button>
-                </div>
+                    <div className='flex flex-col justify-center my-5 w-full'>
+                        <button className='flex w-full justify-center bg-main-blue text-white px-6 py-1 my-4 rounded-lg' onClick={pay}>پرداخت</button>
+                    </div>
                 </div>
             </div>
         </div>
