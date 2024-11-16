@@ -17,7 +17,8 @@ const Wallet = () => {
     const pay = async () => {
         if (wallet < 50000) toast.error('حداقل افزایش اعتبار باید بیشتر از 50,000 تومان باشد')
         setLoading(true)
-        await increaseWallet({ pay: wallet })
+        const result = await increaseWallet({ pay: wallet })
+        window.open(result.gatewayURL, "_blank")
         setLoading(false)
     }
     const user = useContext(ProfileContext);
