@@ -1,5 +1,6 @@
-const { paymentController } = require("../../controllers/admin/payment/payment.controller");
+const { paymentController } = require("../../controllers/public/payment.controller");
 const { verifyToken } = require("../../middlewares/verifyAccessToken");
+
 const router = require("express").Router();
 
 router.post("/create", paymentController.createTransaction);
@@ -7,5 +8,5 @@ router.post("/verify/:authority", verifyToken, paymentController.verifyTransacti
 router.get("/verify/wallet/:billID/:authority", verifyToken, paymentController.verifyWalletTransaction);
 
 module.exports = {
-    adminPaymentsRoutes: router
+    paymentsRoutes: router
 }

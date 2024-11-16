@@ -9,9 +9,11 @@ const { startTelegramBot } = require('../bot/commands/start');
 const { AllRoutes } = require('./router/router');
 const createHttpError = require('http-errors');
 const cron = require('node-cron');
+const fs = require('fs');
 const { checkEndTime } = require('./controllers/admin/cron/checkConfigEndTime');
 const { checkEndData } = require('./controllers/admin/cron/checkEndData');
 const { getV2rayCookie } = require('./utils/functions');
+const { configController } = require('./controllers/admin/config.controller');
 // const key = fs.readFileSync("/etc/letsencrypt/live/api.delta-dev.top/privkey.pem");
 // const cert = fs.readFileSync("/etc/letsencrypt/live/api.delta-dev.top/fullchain.pem");
 module.exports = class Application{
@@ -25,9 +27,9 @@ module.exports = class Application{
         this.connectToDB();
         this.createServer();
         this.createRoutes();
-        // this.setCookie();
+        this.setCookie();
         // this.checkConfig();
-        this.startBot();
+        // this.startBot();
         this.errorHandling();
     }
     configApplication(){
@@ -67,7 +69,7 @@ module.exports = class Application{
     }
     async setCookie(){
         // cron.schedule('0 3 * * 3', () => {
-            getV2rayCookie()
+            // getV2rayCookie()
             // updateConfig(38, data)
             // console.log(process.env);
 
