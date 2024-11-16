@@ -81,6 +81,36 @@ class UserConfigController extends Controllers {
             next(error)
         }
     }
+    async changeStatus(req, res, next) {
+        try {
+            const { configID } = req.body
+            const userID = req.user._id
+            const config = await configModel.findOne({ configID, userID })
+            if (!config) throw createHttpError.NotFound("کانفیگ مورد نظر وجود ندارد")
+            let configsData = await this.findConfigByID(configID, true)
+        console.log(configsData);
+        
+        if (!configsData) throw createHttpError.NotFound("کانفیگ مورد نظر وجود ندارد")
+            configsData.enable = !configsData.enable;
+        console.log(configsData.enable);
+            const result = await this.updateConfig(configsData.id, configsData)
+            if (result) throw createHttpError.InternalServerError("مشکلی در تغییر وضعیت کانفیگ به وجود آمد")
+            // update config
+            const updateResult = await configModel.updateOne({ configID }, { $set: { status: configsData.enable } })
+            if (updateResult.modifiedCount == 0) {
+                configsData.enable = !configsData.enable;
+                await this.updateConfig(configsData.id, configsData)
+                throw createHttpError.InternalServerError("مشکلی در تغییر وضعیت کانفیگ به وجود آمد")
+            }
+            return res.status(StatusCodes.OK).json({
+                status: StatusCodes.OK,
+                message: configsData.enable ? 'کانفیگ فعال شد' : 'کانفیگ غیر فعال شد',
+                configStatus: configsData.enable
+            })
+        } catch (error) {
+            next(error)
+        }
+    }
     async getConfigs(req, res, next) {
         try {
             const userID = req.user._id;
@@ -126,7 +156,7 @@ class UserConfigController extends Controllers {
             if (!configID) throw createHttpError.BadRequest('کانفیگ وارد شده صحیح نمی باشد')
             const config = await configModel.findOne({ userID, configID }, { configID: 1, planID: 1 })
             const plan = await planModel.findOne({ _id: config.planID })
-            const configDetails = await this.findConfigByID(config.configID)
+            const configDetails = await this.findConfigByID(config.configID, false)
             // configDetails.status = 'expired'
             configDetails.status = await this.checkConfigStatus(configDetails)
             return res.status(StatusCodes.OK).json({
@@ -151,7 +181,6 @@ class UserConfigController extends Controllers {
                 .sort((a, b) => b.buy_date - a.buy_date) // Sort by buy_date descending
                 .slice(0, 5)
             const configDetails = await this.findConfigByID(config.configID)
-            configDetails.status = await this.checkConfigStatus(configDetails)
             return res.status(StatusCodes.OK).json({
                 status: StatusCodes.OK,
                 config: configDetails,
@@ -217,7 +246,7 @@ class UserConfigController extends Controllers {
             enable: config.enable,
             id: config.id
         }
-        return all ? configDetail : config
+        return all ? config : configDetail
     }
     async updateConfig(configID, data) {
         const configs = (await axios.post(`${V2RAY_API_URL}/xui/inbound/update/${configID}`, data, {
