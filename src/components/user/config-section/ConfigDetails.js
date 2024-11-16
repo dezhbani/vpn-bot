@@ -33,7 +33,7 @@ const ConfigDetails = () => {
                 !loading &&
                 <div className='flex flex-col z-20 dir-ltr w-4/5 mx-5 mt-32 rounded-xl font-iran-sans'>
                     <div className='flex flex-row-reverse justify-between w-full h-fit bg-white shadow-[2px_4px_30px_0px_#00000010] mb-4 rounded-xl p-2'>
-                        <Options plan={data?.plan} configID={configID} />
+                        <Options plan={data?.plan} configID={configID} config={data?.config} />
                     </div>
                     <div className='flex'>
                         <div className='w-3/5 mr-3'>

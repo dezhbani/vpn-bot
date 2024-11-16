@@ -10,7 +10,6 @@ const getUserProfile = async () => {
     } catch (error) {
         // return error.response?.data
         toast.error(error.response?.data.message || "مشکل در اتصال به سرور", {autoClose: 2000})
-        console.log(error.response.status);
         
         return error.response
     }
