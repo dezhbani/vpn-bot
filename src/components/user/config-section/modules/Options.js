@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Modal from '../../../public/components/Modal';
 
 
-const Options = ({ plan, configID, config }) => {
+const Options = ({ plan, configID, config, setReload, reload }) => {
     // const [openSetting, setOpenSetting] = useState(false)
 
     const [openInvoice, setOpenInvoice] = useState(false);
@@ -20,8 +20,9 @@ const Options = ({ plan, configID, config }) => {
         if (result) {
             setOpenInvoice(false)
             setLoading(false)
+            setReload(!reload)
         }
-        if (result.gatewayURL) document.location.href = result.gatewayURL
+        if (result?.gatewayURL) document.location.href = result.gatewayURL
     }
     const changeStatus = async () => {
         setLoading(true)

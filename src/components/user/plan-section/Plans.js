@@ -19,7 +19,7 @@ const Plans = () => {
     return (
         <>
             <Sidebar />
-            <Navbar />
+            {/* <Navbar /> */}
             <div className='flex z-20 dir-rtl w-4/5 mt-28 flex-wrap'>
                 {
                     plans?.map(plan => <Plan key={plan._id} plan={plan} />)

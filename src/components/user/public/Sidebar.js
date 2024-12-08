@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import chroma from 'chroma-js';
 import randomColor from 'randomcolor';
 import HomeIcon from '../assets/Home.svg';
@@ -11,11 +11,17 @@ import Modal from '../../public/components/Modal';
 import { ProfileContext } from '../../context/UserProfileContext';
 import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
+import menuIcon from '../assets/Menu.svg'
+import closeMenuIcon from '../assets/Close.svg'
 
 const Sidebar = () => {
     const [selectedItem, setSelectedItem] = useState('home');
+    const [menu, setMenu] = useState(false);
     const user = useContext(ProfileContext)
-    
+    const SidebarRef = useRef(null);
+
+
+    const handleMenu = () => setMenu(!menu)
     const randomBg = () => {
         const randomNumber = Math.floor((Math.random() * 10));
         const randomIndex = randomColor({ luminosity: 'bright', count: 10 })[randomNumber];
@@ -23,13 +29,26 @@ const Sidebar = () => {
     };
     const validateHexColor = (hex) => {
         const hexRegex = /^#([A-Fa-f0-9]{3}){1,2}([A-Fa-f0-9]{2})?$/;
-        if(hexRegex.test(hex)) return hex
+        if (hexRegex.test(hex)) return hex
         return '#0095ff'
     }
     useEffect(() => {
         setSelectedItem(window.location.pathname.split('/')[1])
     }, [])
+    const handleClickOutside = (event) => {
+        if (SidebarRef.current && !SidebarRef.current.contains(event.target)) {
+            setMenu(false);
+        }
+    };
 
+    useEffect(() => {
+        // Add event listener to detect clicks outside
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            // Cleanup the event listener when component unmounts
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    });
     const backgroundColor = randomBg();
     const bg = localStorage.getItem('bg') || backgroundColor;
     if (!localStorage.getItem('bg')) localStorage.setItem('bg', backgroundColor);
@@ -46,55 +65,70 @@ const Sidebar = () => {
     const handleItemClick = (item) => {
         setSelectedItem(item);
     };
+    const ItemStyle = menu ? "pr-2 font-[b-kamran] text-2xl" : "hidden font-[b-kamran] text-2xl sm:flex"
 
     return (
         <>
             {/* <Navbar /> */}
-            <Modal isOpen={!user} loading={!user}/>
-            <div className='w-full flex'>
-                <div className={`${true ? 'w-1/2' : 'w-[4.5rem]'} z-50 m-8 rounded-xl shadow-[2px_4px_30px_0px_#00000010] h-[92%] bg-white  dir-rtl fixed right-0 float-right sm:w-1/4 lg:w-1/6 xl:w-[15%]`}>
-                    <div className='py-2 pr-2 flex flex-col'>
-                        <section className='profile flex items-center float-right dir-rtl my-5'>
-                            <div style={{ backgroundColor: validateHexColor(bg), color: textColor }} className="p-4 rounded-full w-fit mx-2">{profileImg()}</div>
-                            <p className=' font-[iran-sans] font-bold text-xl'>{user?.full_name}</p>
+            <Modal isOpen={!user} loading={!user} />
+            <div ref={SidebarRef} className='w-full flex'>
+                <div className={`${menu ? 'w-1/2' : 'w-[4.5rem]'} z-50 my-4 mr-4 lg:m-8 rounded-xl shadow-[2px_4px_30px_0px_#00000010] h-[95%] lg:h-[92%] bg-white dir-rtl fixed right-0 float-right sm:w-1/4 lg:w-1/6 xl:w-[15%]`}>
+                    <div className='flex flex-col'>
+                        <section className={`menu flex items-center justify-center mt-4 mb-2 sm:hidden`}>
+                            <button className='w-8 h-8' onClick={handleMenu}>
+                                {
+                                    menu ?
+                                        <img className='-rotate-90 transition-transform duration-200' src={closeMenuIcon} alt='close menu' />
+                                        : <img className='-rotate-180 transition-transform duration-200' src={menuIcon} alt='menu' />
+                                }
+                            </button>
                         </section>
-                        <section className='my-4'>
+                        <section className={`profile flex ${!menu ? 'justify-center': 'mr-3'} items-center w-full float-right dir-rtl my-2 sm:my-5`}>
+                            <div style={{ backgroundColor: validateHexColor(bg), color: textColor }} className="flex justify-center items-center rounded-full w-12 h-12">{profileImg()}</div>
+                            {
+                                menu?
+                                <p className='font-[iran-sans] font-bold text-xl mr-2'>{user?.full_name}</p>
+                                :<p className='font-[iran-sans] font-bold text-xl mr-2 max-sm:hidden'>{user?.full_name}</p>
+                            }
+                        </section>
+                        <section className='pr-2'>
                             <ul>
                                 <Link to='/home'>
                                     <li className={`py-2 px-2 mr-1 my-2 flex items-center relative hover:text-main-blue   ${selectedItem === 'home' && 'text-main-blue'}`} onClick={() => handleItemClick('home')}>
-                                            {selectedItem === 'home' && <img src={SelectedIcon} alt="Selected" className='absolute left-0' />}
-                                            <img src={HomeIcon} alt="Home" className='ml-2' />
-                                            <p className='pr-2 font-[b-kamran] text-2xl'>خانه</p>
+                                        {selectedItem === 'home' && <img src={SelectedIcon} alt="Selected" className='absolute left-0' />}
+                                        <img src={HomeIcon} alt="Home" className='ml-2' />
+                                        <p className={ItemStyle}>خانه</p>
                                     </li>
                                 </Link>
                                 <Link to='/plans'>
                                     <li className={`py-2 px-2 mr-1 my-2 flex items-center relative hover:text-main-blue   ${selectedItem === 'plans' && 'text-main-blue'}`} onClick={() => handleItemClick('plans')}>
                                         {selectedItem === 'plans' && <img src={SelectedIcon} alt="Selected" className='absolute left-0' />}
                                         <img src={PlansIcon} alt="Plans" className='ml-2' />
-                                        <p className='pr-2 font-[b-kamran] text-2xl'>پلن ها</p>
+                                        <p className={ItemStyle}>پلن ها</p>
                                     </li>
                                 </Link>
                                 <Link to='/configs'>
                                     <li className={`py-2 px-2 mr-1 my-2 flex items-center relative hover:text-main-blue   ${selectedItem === 'configs' && 'text-main-blue'}`} onClick={() => handleItemClick('configs')}>
                                         {selectedItem === 'configs' && <img src={SelectedIcon} alt="Selected" className='absolute left-0' />}
                                         <img src={ConfigsIcon} alt="Configs" className='ml-2' />
-                                        <p className='pr-2 font-[b-kamran] text-2xl'>کانفیگ ها</p>
+                                        <p className={ItemStyle}>کانفیگ ها</p>
                                     </li>
                                 </Link>
                                 <li className={`py-2 px-2 mr-1 my-2 flex items-center relative hover:text-main-blue ${selectedItem === 'bills' && 'text-main-blue'}`} onClick={() => handleItemClick('bills')}>
                                     {selectedItem === 'bills' && <img src={SelectedIcon} alt="Selected" className='absolute left-0' />}
                                     <img src={BillsIcon} alt="Bills" className='ml-2' />
-                                    <p className='pr-2 font-[b-kamran] text-2xl'>فاکتورها</p>
+                                    <p className={ItemStyle}>فاکتورها</p>
                                 </li>
                                 <li className={`py-2 px-2 mr-1 my-2 flex items-center relative hover:text-main-blue   ${selectedItem === 'support' && 'text-main-blue'}`} onClick={() => handleItemClick('support')}>
                                     {selectedItem === 'support' && <img src={SelectedIcon} alt="Selected" className='absolute left-0' />}
                                     <img src={SupportIcon} alt="Support" className='ml-2' />
-                                    <p className='pr-2 font-[b-kamran] text-2xl'>پشتیبانی</p>
+                                    <p className={ItemStyle}>پشتیبانی</p>
                                 </li>
                             </ul>
                         </section>
                     </div>
                 </div>
+                <Navbar menu={menu} />
             </div>
         </>
     );

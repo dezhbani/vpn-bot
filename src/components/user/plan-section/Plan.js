@@ -25,7 +25,7 @@ const Plan = ({ plan }) => {
     return (
         <>
             <Invoice plan={plan} open={openInvoice} loading={loading} handleClose={handleClose} handleButton={handleBuyConfig} />
-            <div className="flex flex-col justify-around font-iran-sans bg-[#fff] shadow-[2px_4px_30px_0px_#00000010] rounded-2xl border-gray-300 hover:border-main-blue hover:border-2 border border-opacity-70 duration-100 w-92 max-h-[34rem] min-h-[34rem] m-5 p-10">
+            <div className="flex flex-col justify-around font-iran-sans bg-[#fff] shadow-[2px_4px_30px_0px_#00000010] rounded-2xl border-gray-300 hover:border-main-blue hover:border-2 border border-opacity-70 duration-100 w-92 max-h-[34rem] min-h-[34rem] m-5 max-sm:mr-5 max-sm:ml-3 max-sm:my-5 p-10">
                 <div className="flex flex-col h-20">
                     {/* {
                     click && <p className="flex text-sm text-main-blue w-fit bg-main-blue/10 px-2 py-1 rounded-full">محبوب ترین</p>

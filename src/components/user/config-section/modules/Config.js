@@ -17,7 +17,7 @@ const Config = ({ config }) => {
                         <div className="flex flex-row-reverse justify-between my-7"><span className='flex flex-row-reverse'>:دانلود</span><span>{clculateData(config?.down)}</span></div>
                         <div className="flex flex-row-reverse justify-between my-7"><span>:حجم کل</span><span>{clculateData(config?.total)}</span></div>
                         <div className="flex flex-row-reverse justify-between my-7"><span>:حجم باقی مانده</span><span>{clculateData(config?.total - (config?.up + config?.down))}</span></div>
-                        <div className="flex flex-row-reverse justify-between mt-7"><span>:تاریخ انقضا</span><span>{timestampToTime(config?.expiry)}</span></div>
+                        <div className="flex flex-row-reverse justify-between mt-7"><span>:تاریخ انقضا</span><span>{timestampToTime(config?.expiryTime)}</span></div>
                     </div>
                 </div>
             </div>

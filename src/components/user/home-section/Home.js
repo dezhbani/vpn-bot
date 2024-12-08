@@ -25,14 +25,14 @@ const Home = () => {
 
     return (
         <div className='scroll-auto'>
-            <Modal isOpen={loading} loading={loading} />
-            <Navbar />
+            {/* <Modal isOpen={loading} loading={loading} /> */}
+            {/* <Navbar /> */}
             <Sidebar />
-            {/* <div className='h-full z-10'> */}
-                {
+            <div className='h-full w-full z-10'>
+                {/* {
                     Array.isArray(configs) && configs.length > 0 && <Configs configs={configs} />
-                }
-            {/* </div> */}
+                } */}
+            </div>
         </div>
     );
 };

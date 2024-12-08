@@ -17,6 +17,7 @@ const repurchaseConfig = async data => {
         return result.data
     } catch (error) {
         handleError(error)
+        return error
     }
 }
 const changeConfigStatus = async data => {
