@@ -42,7 +42,10 @@ const getAllConfigs = async () => {
         const result = await axios.get('user/config/all', headers)
         return result.data
     } catch (error) {
-        handleError(error)
+        // handleError(error)
+        console.log(error.response.data);
+        
+        return error.response.data
     }
 }
 const getConfigDetails = async configID => {

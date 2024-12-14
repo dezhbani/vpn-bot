@@ -72,7 +72,7 @@ const Sidebar = () => {
             {/* <Navbar /> */}
             <Modal isOpen={!user} loading={!user} />
             <div ref={SidebarRef} className='w-full flex'>
-                <div className={`${menu ? 'w-1/2' : 'w-[4.5rem]'} z-50 my-4 mr-4 lg:m-8 rounded-xl shadow-[2px_4px_30px_0px_#00000010] h-[95%] lg:h-[92%] bg-white dir-rtl fixed right-0 float-right sm:w-1/4 lg:w-1/6 xl:w-[15%]`}>
+                <div className={`${menu ? 'w-1/2' : 'w-16'} z-50 my-4 mr-4 lg:m-8 rounded-xl shadow-[2px_4px_30px_0px_#00000010] h-[95%] lg:h-[92%] bg-white dir-rtl fixed right-0 float-right sm:w-1/4 lg:w-1/6 xl:w-[15%]`}>
                     <div className='flex flex-col'>
                         <section className={`menu flex items-center justify-center mt-4 mb-2 sm:hidden`}>
                             <button className='w-8 h-8' onClick={handleMenu}>
@@ -83,7 +83,7 @@ const Sidebar = () => {
                                 }
                             </button>
                         </section>
-                        <section className={`profile flex ${!menu ? 'justify-center': 'mr-3'} items-center w-full float-right dir-rtl my-2 sm:my-5`}>
+                        <section className={`profile flex ${!menu ? 'max-sm:justify-center': 'mr-3'} sm:mr-3 items-center w-full float-right dir-rtl my-2 sm:my-5`}>
                             <div style={{ backgroundColor: validateHexColor(bg), color: textColor }} className="flex justify-center items-center rounded-full w-12 h-12">{profileImg()}</div>
                             {
                                 menu?
