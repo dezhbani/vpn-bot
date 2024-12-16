@@ -14,7 +14,7 @@ const PlanGuide = () => {
 };
 const Plan = ({ plan }) => {
     return (
-        <>
+        <div className='min-w-[650px]'>
             <PlanGuide />
             <div className='dir-rtl flex mt-7'>
                 <div className='w-1/5 flex justify-center'>{plan?.name}</div>
@@ -23,7 +23,7 @@ const Plan = ({ plan }) => {
                 <div className='w-1/5 flex justify-center'>{plan?.month == 1 ? 'یک ماهه' : `${plan?.month} ماهه`}</div>
                 <div className='w-1/5 flex justify-center'>{addCommaToPrice(plan?.price)} تومان</div>
             </div>
-        </>
+        </div>
     );
 };
 

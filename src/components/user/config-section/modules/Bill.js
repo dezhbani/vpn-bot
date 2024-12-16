@@ -6,7 +6,7 @@ const Bill = ({ bill }) => {
     console.log(bill);
 
     return (
-        <div className='flex w-full justify-between items-center p-2 my-4'>
+        <div className='flex w-full dir-ltr justify-between items-center p-2 my-4 min-w-[650px]'>
             <div className='w-1/4 '>{timestampToTime(bill.buy_date, true)}</div>
             <div className='w-1/4 dir-rtl  flex justify-center'>{addCommaToPrice(bill.price)} تومان</div>
             <div className='w-1/4 flex justify-center'>
@@ -14,7 +14,7 @@ const Bill = ({ bill }) => {
                     {bill.up == null ? 'نامشخص' : (bill.up ? 'برداشت' : 'واریز')}
                 </span>
             </div>
-            <div className='w-1/5 dir-rtl'>{bill.for.description}</div>
+            <div className='w-1/4 dir-rtl'>{bill.for.description}</div>
         </div>
     );
 };

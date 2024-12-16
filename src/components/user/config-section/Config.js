@@ -37,7 +37,7 @@ const Config = ({ config }) => {
     // const handleCopy = async 
     return (
         <div className="flex flex-col h-fit md:flex-row items-center justify-center flex-wrap dir-ltr font-iran-sans bg-white shadow-[2px_4px_30px_0px_#00000010] rounded-2xl w-full min-h-20 my-4 p-6 space-y-4">
-            <div className='max-lg:w-full lg:w-1/4 text-base font-semibold text-gray-700 text-center md:text-left'>
+            <div className='max-lg:w-full lg:w-1/4 text-base font-semibold text-gray-700 text-center lg:text-left'>
                 {config.name}
             </div>
             <div className='max-lg:w-full lg:w-1/4 flex justify-center items-center text-center md:text-left'>
