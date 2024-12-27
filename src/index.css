@@ -49,12 +49,6 @@
       opacity: 0;
     }
   }
-  .bg-main-blue {
-    background-color: #0095FF;
-  }
-  .text-main-blue {
-    color: #0095FF;
-  }
   .animate-blink {
     animation: blink 500ms step-start infinite;
   }
@@ -62,22 +56,7 @@
     text-align: center;
   }
   
-  .container {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-end;
-    height: 300px;
-    margin-top: 50px;
-  }
-  
-  .peg {
-    width: 150px;
-    height: 200px;
-    border: 2px solid black;
-    position: relative;
-  }
-  
-  .disk {
-    border-radius: 5px;
-  }
+::-webkit-scrollbar {
+    width: 0;
+}
   

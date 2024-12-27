@@ -20,7 +20,7 @@ const Plans = () => {
         <>
             <Sidebar />
             {/* <Navbar /> */}
-            <div className='flex z-20 dir-rtl w-4/5 mt-28 flex-wrap'>
+            <div className='flex z-20 dir-rtl w-[calc(100%-7rem)] sm:w-[calc(75%-3.5rem)] lg:w-[calc(80%-2rem)] xl:w-4/5 mt-28 flex-wrap'>
                 {
                     plans?.map(plan => <Plan key={plan._id} plan={plan} />)
                 }

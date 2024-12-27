@@ -8,6 +8,3 @@
     overflow-y: scroll;
     /* direction: rtl ; */
 }
-::-webkit-scrollbar {
-    width: 0px;
-}

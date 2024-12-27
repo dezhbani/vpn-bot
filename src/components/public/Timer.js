@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-const Timer = ({mobile}) => {
+const Timer = ({ mobile }) => {
   const [minutes, setMinutes] = useState(2);
   const [seconds, setSeconds] = useState(0);
   const [resend, setResend] = useState(false);
@@ -38,28 +38,26 @@ const Timer = ({mobile}) => {
       setSeconds(0);
       setResend(true);
     } catch (error) {
-        toast.error(error.response.data.message, {autoClose: 2000})
+      toast.error(error.response.data.message, { autoClose: 2000 })
     }
   };
 
   return (
-    <div className="container mt-3 dir-rtl">
-      <div className="card">
-        <div className="text-blue-500 font-bold text-sm font-[iran-sans] ">
-          {seconds > 0 || minutes > 0 ? (
-            <p>
-              {minutes < 10 ? `0${minutes}` : minutes}:
-              {seconds < 10 ? `0${seconds}` : seconds}
-            </p>
-          ) : (
-            <p 
+    <div className="mt-8 dir-rtl">
+      <div className="text-main-blue font-bold text-sm font-[iran-sans] ">
+        {seconds > 0 || minutes > 0 ? (
+          <p>
+            {minutes < 10 ? `0${minutes}` : minutes}:
+            {seconds < 10 ? `0${seconds}` : seconds}
+          </p>
+        ) : (
+          <p
             disabled={seconds > 0 || minutes > 0}
             style={{
-              color: seconds > 0 || minutes > 0 ? "#DFE3E8" : "#1a73e8",
+              color: seconds > 0 || minutes > 0 ? "#DFE3E8" : "#0095ff",
             }}
             onClick={resendOTP}>کد رو نگرفتی؟</p>
-          )}
-        </div>
+        )}
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ const Home = () => {
     const getConfigDetails = async () => {
         const configsResponse = await getConfigs();
         if (configsResponse?.configs === null) setConfigs(null); // Set configs state to null if response is null
-        else setConfigs(configsResponse.configs || []); // Set the array if it's not null, otherwise set empty array
+        else setConfigs(configsResponse?.configs || []); // Set the array if it's not null, otherwise set empty array
     };
 
     useEffect(() => {

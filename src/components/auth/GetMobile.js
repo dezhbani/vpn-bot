@@ -5,23 +5,23 @@ import { getOTP } from './services/auth.service';
 //styles
 import 'react-toastify/dist/ReactToastify.css';
 
-const GetMobile = ({setState, loading, setLoading}) => {
-    const [data, setData] = useState({mobile: ""});
+const GetMobile = ({ setState, loading, setLoading }) => {
+    const [data, setData] = useState({ mobile: "" });
     const [disabled, setDisabled] = useState(false);
 
-    const change = event =>{
-        setData({[event.target.name]: event.target.value});
+    const change = event => {
+        setData({ [event.target.name]: event.target.value });
     }
 
-    const clicked = async () =>{
+    const clicked = async () => {
         try {
             setLoading(true)
             const res = await getOTP(data)
             console.log(res);
             const { message, mobile, status } = res;
-            if(status == 200){
+            if (status == 200) {
                 setLoading(false)
-                setTimeout(() => setState({sendOTP: true, mobile, message}), 500);
+                setTimeout(() => setState({ sendOTP: true, mobile, message }), 500);
                 toast.success(message)
                 setDisabled(true)
             }
@@ -32,16 +32,18 @@ const GetMobile = ({setState, loading, setLoading}) => {
     }
 
     return (
-        <>
-            <h2 className='text-blue-500 font-extrabold text-lg font-[iran-sans] '>ورود / ثبت نام</h2>
-            <div className='flex flex-col my-7'>
-                <label className='font-bold mb-1 dir-rtl font-[iran-sans]'>شماره تلفن:</label>
-                <input className='w-[250px] h-10 rounded py-1 px-2 my-1 mx-2 border-[2px] border-[silver] border-solid transition-all delay-200 ease-in focus:border-blue-500 outline-none ' type="tel" placeholder="مثال: 09123456789" value={data.mobile} onChange={change} name='mobile'  />
+        <div className='w-full p-7 md:p-14 font-[iran-sans] dir-rtl'>
+            <h2 className='text-black opacity-60 font-extrabold text-2xl font-iran-sans flex justify-center '>ورود/ثبت نام</h2>
+            <div className='flex flex-col mt-14 mb-7'>
+                <label className='font-bold text-base mb-1'>شماره موبایل:</label>
+                <input className='w-[250px] lg:min-w-[300px] h-10 rounded py-1 px-2 my-2 border-2 border-[silver] border-solid transition-all delay-100 ease-in placeholder: dir-rtl focus:border-main-blue outline-none ' type="tel" placeholder="مثال: 09123456789" value={data.mobile} onChange={change} name='mobile' />
             </div>
-            <div className='flex justify-center items-center mt-12'>
-                <button disabled={disabled} className={disabled?'font-[iran-sans] bg-blue-200 py-2 px-14 text-white rounded text-base': 'font-[iran-sans] bg-blue-500 py-2 px-14 text-white rounded text-base transition-all delay-100 ease-in hover:bg-blue-400'} onClick={clicked} type="submit">تایید</button>
+            <div className="flex py-3">
+                <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-2xl h-10 px-4 flex-1 bg-[#359EFF] text-[#FFFFFF] text-sm font-semibold leading-normal tracking-[0.015em]" onClick={clicked}>
+                    <span className="truncate">ارسال کد تایید</span>
+                </button>
             </div>
-        </>
+        </div>
     );
 };
 
