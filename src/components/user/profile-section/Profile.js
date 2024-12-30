@@ -19,8 +19,7 @@ const Profile = () => {
     return (
         <div className='h-screen'>
             <Sidebar />
-            <Navbar />
-            <div className='flex min-h-[78%] z-20 dir-ltr bg-white w-4/5 shadow-[2px_4px_30px_0px_#00000010] mx-5 mt-32 rounded-xl'>
+            <div className='flex z-20 min-h-[78%] dir-ltr w-[calc(100%-7rem)] sm:w-[calc(75%-3.5rem)] lg:w-[calc(80%-2rem)] xl:w-4/5 ml-4 mr-6 mt-28 mb-4 lg:mt-32 rounded-xl flex-wrap font-iran-sans'>
                 <Tabs tabs={tabData} />
             </div>
 
