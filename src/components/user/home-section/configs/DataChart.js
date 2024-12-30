@@ -5,7 +5,6 @@ const DataChart = ({data}) => {
     
     const usage = data?.up + data?.down
     const percentage = Math.floor((usage / data?.total) * 100)
-    // console.log();
     
     const radius = 50;
     const circumference = 2 * Math.PI * radius;
@@ -30,7 +29,7 @@ const DataChart = ({data}) => {
                 cy="60"
                 r={radius}
                 stroke="#0095FF"
-                strokeWidth="8"
+                strokeWidth="7"
                 fill="transparent"
                 strokeDasharray={circumference}
                 strokeDashoffset={circumference - progress || 0}
@@ -41,10 +40,12 @@ const DataChart = ({data}) => {
                 y="60"
                 textAnchor="middle"
                 dy=".3em"
-                className="text-xl text-blue font-bold"
+                className="text-base font-bold"
                 transform="rotate(90, 60, 60)"  
                 >
-                {percentage}%
+                {
+                    data.total > 0? `${percentage}%`: "نامحدود"
+                }
             </text>
             </svg>
         </div>
