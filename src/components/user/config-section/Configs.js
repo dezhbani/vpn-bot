@@ -28,7 +28,7 @@ const Configs = () => {
             <Modal isOpen={loading} loading={loading} />
             {
                 !loading &&
-                <div className='flex z-20 dir-ltr h-[78%] w-[calc(100%-7rem)] sm:w-[calc(75%-3.5rem)] lg:w-[calc(80%-2rem)] xl:w-4/5 ml-4 mr-6 mt-28 mb-4 lg:mt-32 rounded-xl flex-wrap font-iran-sans'>
+                <div className={`flex ${!configs.length && "h-[78%]"} z-20 dir-ltr w-[calc(100%-7rem)] sm:w-[calc(75%-3.5rem)] lg:w-[calc(80%-2rem)] xl:w-4/5 ml-4 mr-6 mt-28 mb-4 lg:mt-32 rounded-xl flex-wrap font-iran-sans`}>
                     {
                         configs.length ?
                             configs?.map(config => <Config key={config._id} config={config} />)

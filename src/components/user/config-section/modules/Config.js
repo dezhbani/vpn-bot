@@ -15,8 +15,16 @@ const Config = ({ config }) => {
                     <div>
                         <div className="flex flex-row-reverse justify-between mb-5 sm:mb-7"><span className='flex flex-row-reverse'>:آپلود</span><span>{clculateData(config?.up)}</span></div>
                         <div className="flex flex-row-reverse justify-between my-5 sm:my-7"><span className='flex flex-row-reverse'>:دانلود</span><span>{clculateData(config?.down)}</span></div>
-                        <div className="flex flex-row-reverse justify-between my-5 sm:my-7"><span>:حجم کل</span><span>{clculateData(config?.total)}</span></div>
-                        <div className="flex flex-row-reverse justify-between my-5 sm:my-7"><span>:حجم باقی مانده</span><span>{clculateData(config?.total - (config?.up + config?.down))}</span></div>
+                        <div className="flex flex-row-reverse justify-between my-5 sm:my-7"><span>:حجم کل</span><span>{config?.total == 0 ? "نامحدود" : clculateData(config?.total)}</span></div>
+                        {
+                            config?.total == 0 ?
+                                <div className="flex flex-row-reverse justify-between my-5 sm:my-7">
+                                    <span>:حجم مصرف شده</span><span>{clculateData(config?.up + config?.down)}</span>
+                                </div>
+                                : <div className="flex flex-row-reverse justify-between my-5 sm:my-7">
+                                    <span>:حجم باقی مانده</span><span>{clculateData((config?.total - (config?.up + config?.down)))}</span>
+                                </div>
+                        }
                         <div className="flex flex-row-reverse justify-between mt-5 sm:mt-7"><span>:تاریخ انقضا</span><span>{timestampToTime(config?.expiryTime)}</span></div>
                     </div>
                 </div>
