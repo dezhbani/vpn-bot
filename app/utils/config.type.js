@@ -289,6 +289,8 @@ const createVmess = () => {
 }
 
 function generateConfig(data) {
+    console.log(data);
+    
     const { protocol, settings, streamSettings, port, remark } = data;
 
     // تبدیل settings و streamSettings از حالت رشته‌ای به JSON
@@ -300,13 +302,14 @@ function generateConfig(data) {
     const networkType = parsedStreamSettings.network || "";
     const security = parsedStreamSettings.security || "";
     const host = parsedStreamSettings.tcpSettings?.header?.request?.headers?.Host?.[0] || "";
+    const headerType = parsedStreamSettings.tcpSettings?.header?.type || "";
     const path = parsedStreamSettings.tcpSettings?.header?.request?.path?.[0] || "/";
 
     // ساخت کانفیگ بر اساس نوع پروتکل
     let configString;
     switch (protocol) {
         case "vless":
-            configString = `vless://${clientId}@${domain}:${port}?security=${security}&type=${networkType}&path=${path}&host=${host}#${remark}`;
+            configString = `vless://${clientId}@${domain}:${port}?security=${security}&type=${networkType}&headerType=${headerType}&path=${path}&host=${host}#${remark}`;
             break;
 
         case "vmess":
