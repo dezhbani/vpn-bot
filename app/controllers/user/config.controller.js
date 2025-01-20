@@ -4,7 +4,7 @@ const { Controllers } = require("../controller");
 const { configModel } = require("../../models/config");
 const { default: axios } = require("axios");
 const { planModel } = require("../../models/plan");
-const { copyObject, deleteInvalidProperties, configExpiryTime, covertGBtoBite } = require("../../utils/functions");
+const { copyObject, deleteInvalidProperties, configExpiryTime, covertGBtoBite, GbToBit } = require("../../utils/functions");
 const { generateConfig, generateSubLink, createVlessTcp } = require("../../utils/config.type");
 const { userModel } = require("../../models/user");
 const { V2RAY_API_URL, V2RAY_TOKEN } = process.env
@@ -82,6 +82,40 @@ class UserConfigController extends Controllers {
                 status: StatusCodes.OK,
                 message: "کانفیگ تمدید شد"
             })
+        } catch (error) {
+            next(error)
+        }
+    }
+    async upgradeConfig(req, res, next) {
+        try {
+            const userID = req.user._id
+            const { configID, planID } = req.body
+            const config = await configModel.findOne({ configID })
+            if (!config) throw createHttpError.NotFound("کانفیگ یافت نشد")
+            const plan = await planModel.findById(planID)
+            if (!plan) throw createHttpError.NotFound("پلن موردنظر یافت نشد")
+            if (config.planID == planID) throw createHttpError.BadRequest("پلن انتخابی برای ارتقا، با پلن فعلی یکی میباشد")
+            await this.checkUpperPlan(config.planID, planID)
+            const user = await userModel.findOne({ _id: userID })
+            if (!user) throw createHttpError.NotFound("کاربر یافت نشد")
+            const oldPlan = await planModel.findOne({ _id: config.planID })
+            if (!oldPlan) throw createHttpError.NotFound("پلن مورد نظر وجود ندارد یا حذف شده، لطفا با پشتیبانی تماس بگیرید")
+            const paymentType = await checkUserPaymentType('ارتقا کانفیگ', plan, user, config.configID)
+            if (paymentType) return res.status(StatusCodes.OK).json(paymentType);
+            const data = {
+                total: covertGBtoBite(plan.data_size)
+            }
+            // update config details (upgrade config)
+            const result = await configService.updateConfig(data, configID)
+            if (!result.success) throw createHttpError.InternalServerError("مشکلی در ارتقا کانفیگ رخ داد")
+
+            const updateConfigResult = await configModel.updateOne({ configID }, { $set: { endData: false, planID } })
+            if (updateConfigResult.modifiedCount == 0) throw createHttpError.InternalServerError("مشکلی در ارتقا کانفیگ به وجود امد")
+
+            return res.status(StatusCodes.OK).json({
+                message: "کانفیگ کاربر ارتقا یافت"
+            })
+
         } catch (error) {
             next(error)
         }
@@ -204,7 +238,7 @@ class UserConfigController extends Controllers {
         const now = new Date().getTime()
         let configStatus = 'unknown'
         if (configDetails.expiry < now) configStatus = 'expired'
-        else if (configDetails.total > 0 && ((configDetails.up + configDetails.down) >= configDetails.total)) configStatus = 'end-data' 
+        else if (configDetails.total > 0 && ((configDetails.up + configDetails.down) >= configDetails.total)) configStatus = 'end-data'
         else if (!configDetails.enable) configStatus = 'inactive'
         else if (configDetails.enable) configStatus = 'active'
         return configStatus
@@ -227,17 +261,16 @@ class UserConfigController extends Controllers {
 
         }
     }
-    // async findConfigByID(configID, all = false) {
-    //     const configDetail = {
-    //         up: config.up,
-    //         down: config.down,
-    //         total: config.total,
-    //         expiry: config.expiryTime,
-    //         enable: config.enable,
-    //         id: config.id
-    //     }
-    //     return all ? config : configDetail
-    // }
+    async checkUpperPlan(currentPlan, newPlan){
+        try {
+            const current = await planModel.findById(currentPlan)
+            const upgradedPlan = await planModel.findById(newPlan)
+            if ((upgradedPlan.price - current.price) < 0) throw createHttpError.Forbidden("پلن کانفیگ فقط قابل ارتقا به پلن های بالاتر است")
+            return null
+        } catch (error) {
+            throw error
+        }
+    }
     async updateConfig(data, configID) {
         const configs = await configService.updateConfig(data, configID)
         console.log(configs.data.obj.success);

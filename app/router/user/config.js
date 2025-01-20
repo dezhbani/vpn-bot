@@ -9,6 +9,7 @@ router.get("/list", UserConfigController.getConfigs);
 router.get("/all", UserConfigController.getAllConfigs);
 router.get("/details/:configID", UserConfigController.getConfigDetailsByID);
 router.get("/:configID", UserConfigController.getConfigByID);
+router.post("/upgrade", UserConfigController.upgradeConfig);
 
 module.exports = {
     userConfigRoutes: router
