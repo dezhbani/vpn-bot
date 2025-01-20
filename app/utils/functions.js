@@ -207,8 +207,8 @@ const getV2rayCookie = async () => {
         username: V2RAY_USERNAME,
         password: V2RAY_PASSWORD
     });
-    process.env['V2RAY_TOKEN'] = loginResponse.headers['set-cookie'][0].split(';')[0];
-    console.log(process.env['V2RAY_TOKEN']);
+    console.log(loginResponse.headers['set-cookie'][0]);
+    return loginResponse.headers['set-cookie'][0].split(';')[0];
 }
 const getStartAndEndOfMonthTimestamps = () => {
     const currentDate = new Date();

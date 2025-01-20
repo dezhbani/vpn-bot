@@ -16,6 +16,7 @@ const { getV2rayCookie, copyObject } = require('./utils/functions');
 const { configController } = require('./controllers/admin/config.controller');
 const { smsService } = require('./services/sms.service');
 const { configService } = require('./services/config.service');
+const cache = require('./utils/cache');
 // const key = fs.readFileSync("/etc/letsencrypt/live/api.delta-dev.top/privkey.pem");
 // const cert = fs.readFileSync("/etc/letsencrypt/live/api.delta-dev.top/fullchain.pem");
 module.exports = class Application{
@@ -70,11 +71,22 @@ module.exports = class Application{
         this.#app.use(AllRoutes)
     }
     async setCookie(){
-        // cron.schedule('0 3 * * 3', () => {
-            // getV2rayCookie()
+        const setToken = async () => {
+            const token = await configService.loginPanel()
+            
+            const cacheResult = cache.set("token", token)
+            const cacheR = cache.get("token")
+            console.log(cacheR);
+            if (!cacheResult) throw createHttpError.InternalServerError("خطایی در دریافت توکن رخ داد")
+        }
+        setToken()
+        cron.schedule('* * 9 20 * *', () => {
+            setToken()
+
             // updateConfig(38, data)
             // console.log(process.env);
             // configController.replaceAllConfigs()
+        })
     }
     startBot(){
         // startTelegramBot()

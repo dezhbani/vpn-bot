@@ -2,12 +2,16 @@ const { default: axios } = require("axios");
 const { Controllers } = require("../controllers/controller");
 const createHttpError = require("http-errors");
 const { copyObject, stringifyProperties } = require("../utils/functions");
-const { V2RAY_API_URL, V2RAY_TOKEN, V2RAY_USERNAME, V2RAY_PASSWORD } = process.env
+const { V2RAY_API_URL, V2RAY_USERNAME, V2RAY_PASSWORD } = process.env
 
-const cookie = {
-    withCredentials: true,
-    headers: {
-        'Cookie': V2RAY_TOKEN
+const cache = require("../utils/cache");
+const cookie = () => {
+    const V2RAY_TOKEN = cache.get("token")
+    return {
+        withCredentials: true,
+        headers: {
+            'Cookie': V2RAY_TOKEN
+        }
     }
 }
 class configService extends Controllers {
@@ -22,7 +26,7 @@ class configService extends Controllers {
     }
     async getConfigs() {
         try {
-            const configs = (await axios.get(`${V2RAY_API_URL}/panel/api/inbounds/list`, cookie)).data.obj
+            const configs = (await axios.get(`${V2RAY_API_URL}/panel/api/inbounds/list`, cookie())).data.obj
             return configs
         } catch (error) {
             throw error
@@ -39,7 +43,7 @@ class configService extends Controllers {
     }
     async addConfig(data, defaultData = true, customeData) {
         try {
-            let addResult = (await axios.post(`${V2RAY_API_URL}/panel/api/inbounds/add`, data, cookie)).data
+            let addResult = (await axios.post(`${V2RAY_API_URL}/panel/api/inbounds/add`, data, cookie())).data
             console.log(addResult);
             
 
@@ -62,7 +66,7 @@ class configService extends Controllers {
     }
     async editConfig(data, defaultData = true, customeData) {
         try {
-            let addResult = (await axios.post(`${V2RAY_API_URL}/panel/api/inbounds/update/${data.id}`, data, cookie)).data
+            let addResult = (await axios.post(`${V2RAY_API_URL}/panel/api/inbounds/update/${data.id}`, data, cookie())).data
             console.log(addResult);
             
             // if (defaultData) addResult = (await axios.post(`${V2RAY_API_URL}/panel/api/inbounds/update/${data.id}`, data, cookie)).data
