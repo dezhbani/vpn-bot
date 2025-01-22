@@ -3,7 +3,7 @@ import { ProfileContext } from "../../context/UserProfileContext"
 import Modal from "../../public/components/Modal"
 import { addCommaToPrice } from "../../public/function"
 
-const Invoice = ({ plan, open, handleClose, repurchase=false, handleButton, loading }) => {
+const Invoice = ({ plan, open, handleClose, repurchase=false, handleButton, loading, children}) => {
     const user = useContext(ProfileContext)
 
     return (

@@ -15,7 +15,6 @@ const Configs = () => {
         setConfigs(result?.configs || result)
         setLoading(false)
     }
-    console.log(window.innerHeight);
     
     useEffect(() => {
         getConfigList()

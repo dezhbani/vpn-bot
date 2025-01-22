@@ -56,10 +56,10 @@ const EditProfile = () => {
         const editResult = await editProfile(data)
         console.log(editResult);
         
-        // if ((data.mobile == user.mobile) && editResult) {
-        //     setTimeout(() => toast.info('...تازه سازی صفحه', 3000), 2000)
-        //     setTimeout(() => document.location.reload(), 4000)
-        // }
+        if ((data.mobile == user.mobile) && editResult) {
+            setTimeout(() => toast.info('...تازه سازی صفحه', 3000), 2000)
+            setTimeout(() => document.location.reload(), 4000)
+        }
         setEditMode(false);
         setLoading(false)
     }
