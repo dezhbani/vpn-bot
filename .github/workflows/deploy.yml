@@ -14,11 +14,20 @@ jobs:
 
       - name: Set up SSH key
         run: |
-          mkdir -p ~/.ssh  # ایجاد پوشه .ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa  # نوشتن کلید SSH در id_rsa
+          # ایجاد پوشه .ssh
+          mkdir -p ~/.ssh
+          # نمایش محتوای کلید برای عیب‌یابی (فقط برای تست)
+          echo "${{ secrets.SSH_PRIVATE_KEY }}"
+          # ذخیره کلید SSH در id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa  # تنظیم مجوزهای فایل
-          ssh-keyscan 87.248.150.99 >> ~/.ssh/known_hosts  # اضافه کردن سرور به known_hosts
+          # اضافه کردن سرور به known_hosts
+          ssh-keyscan 87.248.150.99 >> ~/.ssh/known_hosts
+          # بررسی صحت فایل id_rsa و دسترسی‌ها
+          ls -l ~/.ssh
+          cat ~/.ssh/id_rsa
 
       - name: Test SSH connection
         run: |
-          ssh -o StrictHostKeyChecking=no -T app@87.248.150.99 "echo 'SSH connection successful!'"
+          # تست اتصال SSH
+          ssh -o StrictHostKeyChecking=no -T user@87.248.150.99 "echo 'SSH connection successful!'"
