@@ -14,10 +14,11 @@ jobs:
 
       - name: Set up SSH key
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan your-server-ip >> ~/.ssh/known_hosts
-          
+          mkdir -p ~/.ssh  # ایجاد پوشه .ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa  # نوشتن کلید SSH در id_rsa
+          chmod 600 ~/.ssh/id_rsa  # تنظیم مجوزهای فایل
+          ssh-keyscan your-server-ip >> ~/.ssh/known_hosts  # اضافه کردن سرور به known_hosts
+
       - name: Test SSH connection
         run: |
-          ssh -o StrictHostKeyChecking=no -T app@s1.delta-dev.top "echo 'SSH connection successful!'" 
+          ssh -o StrictHostKeyChecking=no -T user@your-server-ip "echo 'SSH connection successful!'"
