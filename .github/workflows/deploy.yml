@@ -1,0 +1,24 @@
+name: Test SSH Connection
+
+on: 
+  push:
+    branches:
+      - main  # یا هر شاخه‌ای که می‌خواهید
+
+jobs:
+  ssh-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan your-server-ip >> ~/.ssh/known_hosts
+          
+      - name: Test SSH connection
+        run: |
+          ssh -o StrictHostKeyChecking=no -T app@s1.delta-dev.top "echo 'SSH connection successful!'" 
