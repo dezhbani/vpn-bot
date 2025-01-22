@@ -23,4 +23,4 @@ jobs:
 
       - name: Test SSH connection
         run: |
-          ssh -o StrictHostKeyChecking=no -T user@87.248.150.99 "echo 'SSH connection successful!'"
+          ssh -o StrictHostKeyChecking=no -T app@87.248.150.99 "echo 'SSH connection successful!'"
