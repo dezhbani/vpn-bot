@@ -9,15 +9,60 @@ jobs:
   ssh-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
       - name: Set up SSH key
         run: |
           # ایجاد پوشه .ssh
           mkdir -p ~/.ssh
           # نمایش محتوای کلید برای عیب‌یابی (فقط برای تست)
-          echo "${{ secrets.SSH_PRIVATE_KEY }}"
+          echo "-----BEGIN OPENSSH PRIVATE KEY-----
+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
+-----END OPENSSH PRIVATE KEY-----"
           # ذخیره کلید SSH در id_rsa
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa  # تنظیم مجوزهای فایل
