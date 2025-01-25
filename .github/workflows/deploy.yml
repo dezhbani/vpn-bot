@@ -8,17 +8,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # گام 1: تنظیمات SSH
+    # Step 1: Setup SSH
     - name: Setup SSH
       run: |
         mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -H <SERVER_IP> >> ~/.ssh/known_hosts
+        ssh-keyscan -p 9011 -H 87.248.150.99 >> ~/.ssh/known_hosts
         ls -la ~/.ssh
         cat ~/.ssh/id_rsa || echo "Failed to read private key"
 
-    # گام 2: تست اتصال به سرور
+    # Step 2: Test SSH connection
     - name: Test SSH connection
       run: |
-        ssh -o StrictHostKeyChecking=no <USER>@<SERVER_IP> "echo 'SSH connection successful!'"
+        ssh -p 9011 -o StrictHostKeyChecking=no <USER>@87.248.150.99 "echo 'SSH connection successful!'"
