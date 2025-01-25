@@ -21,4 +21,4 @@ jobs:
     # Step 2: Test SSH connection
     - name: Test SSH connection
       run: |
-        ssh -p 9011 -o StrictHostKeyChecking=no <USER>@87.248.150.99 "echo 'SSH connection successful!'"
+        ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "echo 'SSH connection successful!'"
