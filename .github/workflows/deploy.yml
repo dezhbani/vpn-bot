@@ -1,20 +1,24 @@
-name: Deploy to Server
+name: Test SSH Connection
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
-  deploy:
+  test-ssh:
     runs-on: ubuntu-latest
 
     steps:
-    # گام 1: کلون کردن کد مخزن
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    # گام 2: ایجاد پوشه SSH و تنظیم کلید خصوصی
+    # گام 1: تنظیمات SSH
     - name: Setup SSH
       run: |
-           echo "${{ secrets.SSH_PRIVATE_KEY }}" || echo "SSH_PRIVATE_KEY is missing!"
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H <SERVER_IP> >> ~/.ssh/known_hosts
+        ls -la ~/.ssh
+        cat ~/.ssh/id_rsa || echo "Failed to read private key"
+
+    # گام 2: تست اتصال به سرور
+    - name: Test SSH connection
+      run: |
+        ssh -o StrictHostKeyChecking=no <USER>@<SERVER_IP> "echo 'SSH connection successful!'"
