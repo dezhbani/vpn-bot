@@ -1,4 +1,4 @@
-name: Test SSH Connection
+name: Deploy to Server
 
 on:
   push:
@@ -6,12 +6,15 @@ on:
       - main
 
 jobs:
-  ssh-test:
+  deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
 
-      - name: Debugging SSH Setup
-        run: |
+    steps:
+    # گام 1: کلون کردن کد مخزن
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # گام 2: ایجاد پوشه SSH و تنظیم کلید خصوصی
+    - name: Setup SSH
+      run: |
            echo "${{ secrets.SSH_PRIVATE_KEY }}" || echo "SSH_PRIVATE_KEY is missing!"
