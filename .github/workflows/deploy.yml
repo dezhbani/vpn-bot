@@ -9,7 +9,9 @@ jobs:
   ssh-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Check if SSH key exists
-      run: |
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" || echo "SSH_PRIVATE_KEY is missing!"
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
+      - name: Debugging SSH Setup
+        run: |
+           echo "${{ secrets.SSH_PRIVATE_KEY }}" || echo "SSH_PRIVATE_KEY is missing!"
