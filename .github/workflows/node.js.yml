@@ -17,7 +17,7 @@ jobs:
     # 2. تأیید نسخه‌های نصب شده
     - name: connect server
       run: |
-        ssh -p 9011 app@87.248.150.99
+        ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99
         
     # 3. تأیید نسخه‌های نصب شده
     - name: Verify Node.js and npm versions
