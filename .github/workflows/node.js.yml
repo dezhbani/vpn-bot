@@ -10,26 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. چک کردن کدهای مخزن
+    # 1. Check Repository
     - name: Checkout Code
       uses: actions/checkout@v3
       
-    # Step 1: Setup SSH
     - name: Setup SSH
       run: |
         mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -p 9011 -H 87.248.150.99 >> ~/.ssh/known_hosts
-        ls -la ~/.ssh
-        cat ~/.ssh/id_rsa || echo "Failed to read private key"
 
-    # Step 2: Test SSH connection
-    - name: Test SSH connection
-      run: |
-        ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "echo 'SSH connection successful!'"
-        
-    # 3. تأیید نسخه‌های نصب شده
+    # 2. تأیید نسخه‌های نصب شده
     - name: Verify Node.js and npm versions
       run: |
         node -v
