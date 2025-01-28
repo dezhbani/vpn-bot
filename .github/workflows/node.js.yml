@@ -3,7 +3,7 @@ name: Full Deployment Workflow
 on:
   push:
     branches:
-      - frontend-production # Branch for production deployment
+      - frontend # Branch for production deployment
 
 jobs:
   build-and-deploy:
@@ -14,39 +14,46 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # 2. Set up Node.js
+      # 2. List Files (for debugging)
+      - name: List Files
+        run: ls -R
+
+      # 3. Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20' # Match Node.js version with your local machine
 
-      # 4. Install Dependencies
+      # 4. Navigate to Project Directory (update if needed)
+      - name: Change Directory
+        run: cd frontend # Change this to the correct subdirectory (vpn-bot or frontend)
+
+      # 5. Install Dependencies
       - name: Install Dependencies
         run: |
-          cd ./vpn-bot
           if [ -f package-lock.json ]; then
             npm ci
           else
             npm install --legacy-peer-deps
           fi
 
-      # 5. Add Missing Babel Dependency (Optional, if needed)
+      # 6. Add Missing Babel Dependency (Optional, if needed)
       - name: Add Missing Dependencies
         run: npm install @babel/plugin-proposal-private-property-in-object --save-dev
 
-      # 6. Build the React App
+      # 7. Build the React App
       - name: Build React App
         run: |
           NODE_OPTIONS="--max_old_space_size=4096" npm run build
 
-      # 7. Upload the Build Artifacts
+      # 8. Upload the Build Artifacts
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: build
           path: ./build
 
-      # 8. Setup SSH
+      # 9. Setup SSH
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -54,7 +61,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p 9011 -H 87.248.150.99 >> ~/.ssh/known_hosts
 
-      # 9. Deploy Build to Server
+      # 10. Deploy Build to Server
       - name: Deploy Build to Server
         run: |
           ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
@@ -64,7 +71,7 @@ jobs:
           "
           scp -P 9011 -r ./build/* app@87.248.150.99:/home/app/delta/build/
 
-      # 10. Serve Application with pm2
+      # 11. Serve Application with pm2
       - name: Serve Application with pm2
         run: |
           ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
