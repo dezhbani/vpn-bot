@@ -1,4 +1,4 @@
-name: Advanced Deploy Workflow
+name: Advanced Deploy Workflow Without Root
 
 on:
   push:
@@ -22,26 +22,28 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -p 9011 -H 87.248.150.99 >> ~/.ssh/known_hosts
 
-    # 3. Check and Install Node.js and npm
-    - name: Verify and Install Node.js and npm
+    # 3. Install Node.js and npm using nvm
+    - name: Install Node.js and npm
       run: |
         ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 << 'EOF'
-        # Check for Node.js
-        NODE_VERSION=$(node -v 2>/dev/null || echo "none")
-        if [[ "$NODE_VERSION" != "v20.11.1" ]]; then
-          echo "Node.js not found or version incorrect. Installing Node.js 20.11.1..."
-          curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-          sudo apt-get install -y nodejs
+        # Install NVM if not already installed
+        if [ ! -d "$HOME/.nvm" ]; then
+          echo "NVM not found. Installing..."
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
         else
-          echo "Node.js version $NODE_VERSION is already installed."
+          echo "NVM already installed."
         fi
 
-        # Check for npm
-        NPM_VERSION=$(npm -v 2>/dev/null || echo "none")
-        if [[ "$NPM_VERSION" != "10.2.4" ]]; then
-          echo "npm not found or version incorrect. Installing npm 10.2.4..."
-          sudo npm install -g npm@10.2.4
-        else
-          echo "npm version $NPM_VERSION is already installed."
-        fi
+        # Load NVM and install Node.js
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+
+        # Install specific version of Node.js
+        nvm install 20.11.1
+        nvm use 20.11.1
+
+        # Check installed versions
+        echo "Node.js version: $(node -v)"
+        echo "npm version: $(npm -v)"
         EOF
