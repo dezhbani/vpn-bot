@@ -24,8 +24,6 @@ jobs:
     # 2. تأیید نسخه‌های نصب شده
     - name: Verify Node.js and npm versions
       run: |
-        ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99
-        node -v
-        npm -v
+        ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "node -v && npm -v"
         
 
