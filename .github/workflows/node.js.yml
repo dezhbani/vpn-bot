@@ -3,65 +3,40 @@ name: Full Deployment Workflow
 on:
   push:
     branches:
-      - frontend-production # برنچ مخصوص دیپلوی
+      - frontend-production # Branch for production deployment
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Check Repository
+      # 1. Checkout Code
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # 2. Install Node.js using nvm
-      # - name: Install Node.js with nvm
-      #   run: |
-      #     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
-      #     export NVM_DIR="$HOME/.nvm"
-      #     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-      #     nvm install 20.11.1
-      #     nvm use 20.11.1
-      #     nvm alias default 20.11.1
-      - name: Checkout frontend branch
-        uses: actions/checkout@v3
-        with:
-          ref: frontend  # شاخه 'frontend' را چک‌اوت می‌کند
+      # 2. Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
-      # 2. List files to check directory contents
-      - name: List files in the repository directory
-        run: ls -la /home/runner/work/vpn-bot/vpn-bot
-        
-      # 3. Build the React App
-      - name: Install and Build
+          node-version: '20' # Match Node.js version with your local machine
+
+      # 3. Install Dependencies
+      - name: Install Dependencies
+        run: npm ci
+
+      # 5. Build the React App
+      - name: Build React App
         run: |
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-          cd /home/runner/work/vpn-bot/vpn-bot
-          
-          # Update dependencies
-          npm install --legacy-peer-deps
-          npx update-browserslist-db@latest --force
-          npm audit fix --force
+          NODE_OPTIONS="--max_old_space_size=4096" npm run build
 
-          # Add missing babel dependency
-          npm install @babel/plugin-proposal-private-property-in-object --save-dev
-
-          # Build the app
-          npm run build
-
-
-      # 4. Upload the Build Artifacts
+      # 6. Upload the Build Artifacts
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: build
           path: ./build
 
-      # 5. Setup SSH
+      # 7. Setup SSH
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -69,7 +44,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p 9011 -H 87.248.150.99 >> ~/.ssh/known_hosts
 
-      # 6. Download Build Artifacts and Deploy
+      # 8. Deploy Build to Server
       - name: Deploy Build to Server
         run: |
           ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
@@ -79,7 +54,7 @@ jobs:
           "
           scp -P 9011 -r ./build/* app@87.248.150.99:/home/app/delta/build/
 
-      # 7. Install pm2 Globally and Serve the Application
+      # 9. Serve Application with pm2
       - name: Serve Application with pm2
         run: |
           ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
