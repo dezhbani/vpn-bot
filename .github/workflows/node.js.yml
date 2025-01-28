@@ -1,49 +1,69 @@
-name: Advanced Deploy Workflow Without Root
+name: Full Deployment Workflow
 
 on:
   push:
     branches:
-      - frontend-production
+      - frontend-production # برنچ مخصوص دیپلوی
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Check out the repository
-    - name: Checkout Code
-      uses: actions/checkout@v3
+      # 1. Check Repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-    # 2. Setup SSH
-    - name: Setup SSH
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -p 9011 -H 87.248.150.99 >> ~/.ssh/known_hosts
+      # 2. Setup SSH
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p 9011 -H 87.248.150.99 >> ~/.ssh/known_hosts
 
-    # 3. Install Node.js and npm using nvm
-    - name: Install Node.js and npm
-      run: |
-        ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 << 'EOF'
-        # Install NVM if not already installed
-        if [ ! -d "$HOME/.nvm" ]; then
-          echo "NVM not found. Installing..."
-          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
-        else
-          echo "NVM already installed."
-        fi
+      # 3. Verify and Install Node.js & npm if required
+      - name: Ensure Node.js and npm Versions
+        run: |
+          ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
+          if ! command -v node &>/dev/null || [ \$(node -v | cut -d. -f1 | tr -d 'v') -lt 20 ]; then
+              curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && sudo apt-get install -y nodejs
+          fi
+          if ! command -v npm &>/dev/null || [ \$(npm -v | cut -d. -f1) -lt 10 ]; then
+              sudo npm install -g npm@10.2.4
+          fi
+          "
 
-        # Load NVM and install Node.js
-        export NVM_DIR="$HOME/.nvm"
-        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+      # 4. Build the React App
+      - name: Build React App
+        run: |
+          ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
+          cd /home/app &&
+          rm -rf project &&
+          git clone https://github.com/your-org/your-repo.git project &&
+          cd project &&
+          npm install &&
+          npm run build
+          "
 
-        # Install specific version of Node.js
-        nvm install 20.11.1
-        nvm use 20.11.1
+      # 5. Copy Build to Delta Directory
+      - name: Deploy Build
+        run: |
+          ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
+          mkdir -p /home/app/delta &&
+          cp -r /home/app/project/build/* /home/app/delta
+          "
 
-        # Check installed versions
-        echo "Node.js version: $(node -v)"
-        echo "npm version: $(npm -v)"
-        EOF
+      # 6. Install pm2 Globally and Serve the Application
+      - name: Serve Application with pm2
+        run: |
+          ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
+          if ! command -v pm2 &>/dev/null; then
+              npm install -g pm2
+          fi
+          if ! command -v serve &>/dev/null; then
+              npm install -g serve
+          fi
+          pm2 delete delta-app || true &&
+          pm2 start serve --name delta-app -- -s /home/app/delta -l 3000
+          "
