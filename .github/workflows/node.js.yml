@@ -43,7 +43,7 @@ jobs:
           cd /home/app &&
           rm -rf project &&
           git clone --branch frontend --single-branch https://github.com/dezhbani/vpn-bot.git frontend &&
-          cd project &&
+          cd delta &&
           npm install &&
           npm run build
           "
@@ -53,7 +53,7 @@ jobs:
         run: |
           ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
           mkdir -p /home/app/delta &&
-          cp -r /home/app/project/build/* /home/app/delta
+          cp -r /home/app/delta/build/* /home/app/delta
           "
 
       # 6. Install pm2 Globally and Serve the Application
