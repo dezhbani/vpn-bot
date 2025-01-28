@@ -29,7 +29,7 @@ jobs:
         run: |
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-          cd /home/runner/work/{repository-name}/{repository-name} # مسیر رپوزیتوری شما
+          cd /home/runner/work/vpn-bot/vpn-bot # مسیر رپوزیتوری شما
           npm install
           npm run build
 
