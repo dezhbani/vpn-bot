@@ -23,9 +23,15 @@ jobs:
       #     nvm install 20.11.1
       #     nvm use 20.11.1
       #     nvm alias default 20.11.1
-      - name: List directory contents
-        run: ls /home/runner/work/vpn-bot/vpn-bot
+      - name: Checkout frontend branch
+        uses: actions/checkout@v3
+        with:
+          ref: frontend  # شاخه 'frontend' را چک‌اوت می‌کند
 
+      # 2. List files to check directory contents
+      - name: List files in the repository directory
+        run: ls -la /home/runner/work/vpn-bot
+        
       # 3. Build the React App
       - name: Build React App
         run: |
