@@ -33,13 +33,21 @@ jobs:
         run: ls -la /home/runner/work/vpn-bot/vpn-bot
         
       # 3. Build the React App
-      - name: Build React App
+      - name: Install and Build
         run: |
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-          cd /home/runner/work/vpn-bot/vpn-bot  # مسیر به دایرکتوری اصلی
-          npm install
-          npx update-browserslist-db@latest
+          cd /home/runner/work/vpn-bot/vpn-bot
+          
+          # Update dependencies
+          npm install --legacy-peer-deps
+          npx update-browserslist-db@latest --force
+          npm audit fix --force
+
+          # Add missing babel dependency
+          npm install @babel/plugin-proposal-private-property-in-object --save-dev
+
+          # Build the app
           npm run build
 
 
