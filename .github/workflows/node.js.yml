@@ -22,7 +22,16 @@ jobs:
 
       # 3. Install Dependencies
       - name: Install Dependencies
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install --legacy-peer-deps
+          fi
+
+      # 4. Add Missing Babel Dependency (Optional, if needed)
+      - name: Add Missing Dependencies
+        run: npm install @babel/plugin-proposal-private-property-in-object --save-dev
 
       # 5. Build the React App
       - name: Build React App
