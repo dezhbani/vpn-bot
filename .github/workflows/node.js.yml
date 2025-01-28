@@ -20,7 +20,11 @@ jobs:
         with:
           node-version: '20' # Match Node.js version with your local machine
 
-      # 3. Install Dependencies
+      # 3. Navigate to Project Directory
+      - name: Change Directory
+        run: cd frontend # Change this to the correct subdirectory, if applicable
+
+      # 4. Install Dependencies
       - name: Install Dependencies
         run: |
           if [ -f package-lock.json ]; then
@@ -29,23 +33,23 @@ jobs:
             npm install --legacy-peer-deps
           fi
 
-      # 4. Add Missing Babel Dependency (Optional, if needed)
+      # 5. Add Missing Babel Dependency (Optional, if needed)
       - name: Add Missing Dependencies
         run: npm install @babel/plugin-proposal-private-property-in-object --save-dev
 
-      # 5. Build the React App
+      # 6. Build the React App
       - name: Build React App
         run: |
           NODE_OPTIONS="--max_old_space_size=4096" npm run build
 
-      # 6. Upload the Build Artifacts
+      # 7. Upload the Build Artifacts
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: build
           path: ./build
 
-      # 7. Setup SSH
+      # 8. Setup SSH
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -53,7 +57,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p 9011 -H 87.248.150.99 >> ~/.ssh/known_hosts
 
-      # 8. Deploy Build to Server
+      # 9. Deploy Build to Server
       - name: Deploy Build to Server
         run: |
           ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
@@ -63,7 +67,7 @@ jobs:
           "
           scp -P 9011 -r ./build/* app@87.248.150.99:/home/app/delta/build/
 
-      # 9. Serve Application with pm2
+      # 10. Serve Application with pm2
       - name: Serve Application with pm2
         run: |
           ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
