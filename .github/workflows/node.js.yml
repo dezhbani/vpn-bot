@@ -39,6 +39,7 @@ jobs:
           [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
           cd /home/runner/work/vpn-bot/vpn-bot  # مسیر به دایرکتوری اصلی
           npm install
+          npx update-browserslist-db@latest
           npm run build
 
 
