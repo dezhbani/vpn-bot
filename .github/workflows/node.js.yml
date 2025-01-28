@@ -40,6 +40,7 @@ jobs:
           ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
           export NVM_DIR=\"\$HOME/.nvm\" &&
           [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\" &&
+          mkdir -p /home/app/delta &&
           cd /home/app/delta &&
           rm -rf frontend &&
           git clone --branch frontend --single-branch https://github.com/dezhbani/vpn-bot.git frontend &&
