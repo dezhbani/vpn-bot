@@ -2,9 +2,7 @@ import { useContext } from "react";
 import { ProfileContext } from "../components/context/UserProfileContext";
 import UserRoutes from "./UserRoutes";
 import AdminRoutes from "./AdminRoutes";
-import { Navigate, Route } from "react-router-dom";
-import Modal from "../components/public/components/Modal";
-import CompleteProfile from "../components/auth/CompleteProfile";
+import { Navigate } from "react-router-dom";
 import CompleteSignupRoutes from "./CompleteSignupRoutes";
 
 const AllRoutes = () => {

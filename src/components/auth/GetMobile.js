@@ -5,7 +5,7 @@ import { getOTP } from './services/auth.service';
 //styles
 import 'react-toastify/dist/ReactToastify.css';
 
-const GetMobile = ({ setState, loading, setLoading }) => {
+const GetMobile = ({ setState, setLoading }) => {
     const [data, setData] = useState({ mobile: "" });
     const [disabled, setDisabled] = useState(false);
 

@@ -2,9 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from '../public/Sidebar';
 import { changeConfigsStatus, getConfigsByDay, getConfigsList } from '../services/config.service';
 import Config from './Config';
-import Modal from '../../public/components/Modal';
-import Skeleton from 'react-loading-skeleton';
-import { copyElement } from '../../public/function';
 import NoConfigs from './NoConfigs';
 const Table = ({configs, changeStatus, setLoading}) => {
     return (

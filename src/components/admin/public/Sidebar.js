@@ -1,18 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import plans from '../assets/plans.svg'
 import users from '../assets/user.svg'
 import userProfile from '../assets/profile.png'
 import configs from '../assets/configs.svg'
 import payments from '../assets/payment.svg'
 import home from '../assets/home.svg'
-import wallet from '../assets/Wallet.svg'
 import menuIcon from '../assets/Menu.svg'
 import closeMenuIcon from '../assets/Close.svg'
 //Styles
 import { Link } from 'react-router-dom';
 import { ProfileContext } from '../../context/UserProfileContext';
-import Loading from './Loading';
-import { addCommaToPrice } from '../../public/function';
 import UpdateWallet from '../payment-section/UpdateWallet';
 import Modal from '../../public/components/Modal';
 

@@ -1,7 +1,6 @@
 import React from 'react'
 
 const DataChart = ({data}) => {
-    console.log(data);
     
     const usage = data?.up + data?.down
     const percentage = Math.floor((usage / data?.total) * 100)

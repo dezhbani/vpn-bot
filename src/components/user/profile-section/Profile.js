@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
 import Sidebar from '../public/Sidebar';
-import Navbar from '../public/Navbar';
 import Tabs from '../../public/components/Tabs';
 import EditProfile from './EditProfile';
 import Wallet from './Wallet';
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState('Tab1');
-
-    // Define a function to handle tab changes
-    const handleTabChange = (tab) => {
-        setActiveTab(tab);
-    };
     const tabData = [
         { label: 'پروفایل', content: <EditProfile /> },
         { label: 'کیف پول', content: <Wallet /> },

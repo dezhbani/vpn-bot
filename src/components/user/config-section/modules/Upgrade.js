@@ -12,7 +12,6 @@ const Upgrade = ({ setOpenUpgrade, openUpgrade, configID, setReload, reload }) =
     const [openInvoice, setOpenInvoice] = useState(false);
 
     const handleClose = () => setOpenUpgrade(false);
-    const handleBack = () => setSelectedPlan({});
     const handleCloseInvoice = () => {
         setSelectedPlan(null)
         handleClose()

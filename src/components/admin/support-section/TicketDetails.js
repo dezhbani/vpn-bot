@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams, useRoutes } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getTicketByID } from '../../services/support.service';
 import Sidebar from '../public/Sidebar';
 import styles from './TicketDetails.module.css';
@@ -7,7 +7,6 @@ import GoBack from '../public/GoBack';
 import 'react-quill/dist/quill.snow.css';
 import userProfile from '../assets/profile.png'
 import { ProfileContext } from '../../context/UserProfileContext';
-import RresponderProfile from './RresponderProfile';
 
 const TicketDetails = () => {
     const { _id } = useContext(ProfileContext)

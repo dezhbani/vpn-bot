@@ -3,7 +3,7 @@ import styles from './Tickets.module.css';
 import Sidebar from '../public/Sidebar';
 
 const Tickets = () => {
-    const [tickets, setTickets] = useState([]);
+    // const [tickets, setTickets] = useState([]);
     // const getList = async () => setTickets(await getTickets())
     // useEffect(() =>{
     //     getList()

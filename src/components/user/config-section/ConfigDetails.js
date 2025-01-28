@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getConfigByID } from '../services/config.service';
-import Navbar from '../public/Navbar';
 import Sidebar from '../public/Sidebar';
 import Bill from './modules/Bill';
 import Plan from './modules/Plan';

@@ -1,4 +1,3 @@
-// import { Box, Modal } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import styles from './Receipt.module.css'
 import { getBillDetails } from '../services/users.service';

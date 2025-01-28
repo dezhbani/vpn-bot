@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { addConfig } from '../services/config.service';
 import Modal from '../../public/components/Modal';
 import tick from '../assets/tick.svg';
-import wallet from '../assets/Wallet.svg';
 
 const BuyConfig = ({plan, setOpen, open}) => {
     const [loading, setLoading] = useState(false)

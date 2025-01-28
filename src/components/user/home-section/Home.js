@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../public/Sidebar';
-import Configs from './configs/ConfigSection';
 import { getConfigs } from '../services/config.service';
-import Modal from '../../public/components/Modal';
-import Navbar from '../public/Navbar';
 
 const Home = () => {
     const [configs, setConfigs] = useState(null); // Initialize with null

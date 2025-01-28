@@ -1,12 +1,10 @@
 import React from 'react';
 import styles from './NewTicket.module.css';
 import Sidebar from '../public/Sidebar';
-import backArrow from '../assets/Arrow_right_long.svg';
 
 import { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Link } from 'react-router-dom';
 import { createTicket } from '../../services/support.service';
 import GoBack from '../public/GoBack';
 

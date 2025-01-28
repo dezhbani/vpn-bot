@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import styles from './Bills.module.css';
 import Sidebar from '../public/Sidebar';
 import { getBills } from '../services/profile.service';
 import Bill from './Bill';

@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import GetMobile from './GetMobile';
 import GetOtp from './GetOtp';
 import 'react-toastify/dist/ReactToastify.css';
 import { Navigate } from 'react-router-dom';
 import Modal from '../public/components/Modal';
 import SelectPanel from './SelectPanel';
-import { getUserProfile } from '../admin/services/profile.service';
 import { ProfileContext } from '../context/UserProfileContext';
 
 const Auth = () => {

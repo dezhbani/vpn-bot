@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getPlans } from '../services/plan.service';
 import Sidebar from '../public/Sidebar';
-import Navbar from '../public/Navbar';
 import Plan from './Plan';
 
 const Plans = () => {

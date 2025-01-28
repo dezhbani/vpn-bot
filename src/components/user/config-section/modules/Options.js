@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import SettingIcon from '../../assets/SettingBlue.svg';
 import Invoice from '../../public/Invoice';
 import { changeConfigStatus, repurchaseConfig } from '../../services/config.service';
-import { Link } from 'react-router-dom';
 import Modal from '../../../public/components/Modal';
 import Upgrade from './Upgrade';
 

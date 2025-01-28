@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../public/Sidebar';
-import Navbar from '../public/Navbar';
 import Config from './Config';
 import { getAllConfigs } from '../services/config.service';
 import Modal from '../../public/components/Modal';

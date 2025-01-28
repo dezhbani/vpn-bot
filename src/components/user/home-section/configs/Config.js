@@ -1,12 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { getConfigDetails } from '../../services/config.service';
+import React from 'react';
 import DataChart from './DataChart';
-import Modal from '../../../public/components/Modal';
-import Loading from '../../../public/components/Loading';
-import { toast } from 'react-toastify';
-import { clculateData, timestampToTime } from '../../../public/function';
-import DownloadIcon from '../../assets/Download.svg';
-import UploadIcon from '../../assets/Upload.svg';
 import ClockIcon from '../../assets/Clock.svg';
 
 const Config = ({ data }) => {

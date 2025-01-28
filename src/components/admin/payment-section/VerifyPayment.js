@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '../../public/function';
 import { verifyTransaction, verifyWalletTransaction } from '../services/payment.service';
@@ -11,7 +11,6 @@ const VerifyPayment = ({wallet = false}) => {
     const { billID, configID } = useParams();
     const authority = query.get('Authority');
     const verify = async () => setTransaction(await verifyTransaction(billID, configID, authority));
-    console.log(transaction);
     const verifyWallet = async () => {
         setTransaction(await verifyWalletTransaction(billID, authority))
     };

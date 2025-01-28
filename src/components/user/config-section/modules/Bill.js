@@ -1,9 +1,7 @@
 import React from 'react';
 import { addCommaToPrice, timestampToTime } from '../../../public/function';
-import Tooltip from '../../../public/components/Tooltip';
 
 const Bill = ({ bill }) => {
-    console.log(bill);
 
     return (
         <div className='flex w-full dir-ltr justify-between items-center p-2 my-4 min-w-[650px]'>

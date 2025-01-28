@@ -1,6 +1,5 @@
 import axios from "axios"
-import { handleError, headers } from "../../public/function"
-import { toast } from "react-toastify"
+import { handleError } from "../../public/function"
 
 const getOTP = async data => {
     try {
