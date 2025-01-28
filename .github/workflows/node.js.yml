@@ -30,14 +30,14 @@ jobs:
 
       # 2. List files to check directory contents
       - name: List files in the repository directory
-        run: ls -la /home/runner/work/vpn-bot
+        run: ls -la /home/runner/work/vpn-bot/vpn-bot
         
       # 3. Build the React App
       - name: Build React App
         run: |
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-          cd /home/runner/work/vpn-bot  # مسیر به دایرکتوری اصلی
+          cd /home/runner/work/vpn-bot/vpn-bot  # مسیر به دایرکتوری اصلی
           npm install
           npm run build
 
