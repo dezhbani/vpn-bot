@@ -64,6 +64,6 @@ jobs:
           if ! command -v serve &>/dev/null; then
               npm install -g serve
           fi
-          pm2 delete delta-app || true &&
-          pm2 start serve --name delta-app -- -s /home/app/delta -l 3000
+          pm2 delete react-app || true &&
+          pm2 start serve --name react-app -- -s /home/app/delta -l 3000
           "
