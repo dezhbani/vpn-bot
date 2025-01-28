@@ -42,7 +42,7 @@ jobs:
           [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\" &&
           cd /home/app &&
           rm -rf project &&
-          git clone --branch <branch-name> --single-branch https://github.com/dezhbani/vpn-bot.git frontend &&
+          git clone --branch frontend --single-branch https://github.com/dezhbani/vpn-bot.git frontend &&
           cd project &&
           npm install &&
           npm run build
