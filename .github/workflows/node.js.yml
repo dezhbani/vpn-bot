@@ -23,6 +23,7 @@ jobs:
       # 4. Install Dependencies
       - name: Install Dependencies
         run: |
+          cd ./vpn-bot
           if [ -f package-lock.json ]; then
             npm ci
           else
