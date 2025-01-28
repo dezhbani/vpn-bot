@@ -24,7 +24,7 @@ jobs:
       #     nvm use 20.11.1
       #     nvm alias default 20.11.1
       - name: List directory contents
-        run: ls /home/runner/work && ls /home/runner/work/vpn-bot
+        run: ls /home/runner/work && ls /home/runner/work/vpn-bot/vpn-bot
 
       # 3. Build the React App
       - name: Build React App
