@@ -22,22 +22,24 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p 9011 -H 87.248.150.99 >> ~/.ssh/known_hosts
 
-      # 3. Verify and Install Node.js & npm if required
-      - name: Ensure Node.js and npm Versions
+      # 3. Install Node.js using nvm
+      - name: Install Node.js with nvm
         run: |
           ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
-          if ! command -v node &>/dev/null || [ \$(node -v | cut -d. -f1 | tr -d 'v') -lt 20 ]; then
-              curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs
-          fi
-          if ! command -v npm &>/dev/null || [ \$(npm -v | cut -d. -f1) -lt 10 ]; then
-              npm install -g npm@10.2.4
-          fi
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash &&
+          export NVM_DIR=\"\$HOME/.nvm\" &&
+          [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\" &&
+          nvm install 20.11.1 &&
+          nvm use 20.11.1 &&
+          nvm alias default 20.11.1
           "
 
       # 4. Build the React App
       - name: Build React App
         run: |
           ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
+          export NVM_DIR=\"\$HOME/.nvm\" &&
+          [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\" &&
           cd /home/app &&
           rm -rf project &&
           git clone https://github.com/your-org/your-repo.git project &&
@@ -58,12 +60,9 @@ jobs:
       - name: Serve Application with pm2
         run: |
           ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
-          if ! command -v pm2 &>/dev/null; then
-              npm install -g pm2
-          fi
-          if ! command -v serve &>/dev/null; then
-              npm install -g serve
-          fi
+          export NVM_DIR=\"\$HOME/.nvm\" &&
+          [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\" &&
+          npm install -g pm2 serve &&
           pm2 delete react-app || true &&
           pm2 start serve --name react-app -- -s /home/app/delta -l 3000
           "
