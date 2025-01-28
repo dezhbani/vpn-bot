@@ -20,10 +20,6 @@ jobs:
         with:
           node-version: '20' # Match Node.js version with your local machine
 
-      # 3. Navigate to Project Directory
-      - name: Change Directory
-        run: cd frontend # Change this to the correct subdirectory, if applicable
-
       # 4. Install Dependencies
       - name: Install Dependencies
         run: |
