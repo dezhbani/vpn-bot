@@ -17,7 +17,7 @@ const Bill = ({bill}) => {
             case false:
                 return <div className="w-28 h-fit my-3 mx-7 text-green-700 border-2 flex justify-center items-center border-solid border-green-700 p-1 rounded-md">واریز</div>
             default:
-                return <div className={styles.down}>نامشخص</div>
+                return <div className="w-28 h-fit my-3 mx-7 text-gray-500 border-2 flex justify-center items-center border-solid border-gray-500 p-1 rounded-md">نامشخص</div>
         }
     }
     const date = AD2solarDate(bill.buy_date)
