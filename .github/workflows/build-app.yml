@@ -24,33 +24,25 @@ jobs:
       - name: Build Project
         run: CI=false npm run build
 
-      - name: Check build folder contents
-        run: ls -alh build
-
-      - name: Check git status before commit
-        run: git status
-
-      - name: Check if there are changes to commit
-        run: git diff --exit-code || echo "There are changes"
-
       - name: Deploy to Build Branch
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           
-          # ایجاد شاخه جدید و پاکسازی آن
+          # ایجاد شاخه جدید به نام build
           git checkout --orphan build
+          
+          # حذف همه فایل‌ها از پوشه پروژه (برای پاک کردن فضای کاری)
           git rm -rf .
           
-          # انتقال فایل‌ها و بررسی آن‌ها
-          mv build/* .
-          ls -alh  # بررسی محتوای پوشه پس از انتقال
+          # انتقال پوشه build به ریشه پروژه
+          mv build ./build
 
-          # اضافه کردن تغییرات به گیت
-          git add -A
+          # اضافه کردن پوشه build به مخزن
+          git add build
           
-          # اگر هیچ تغییری وجود نداشت، یک commit خالی ایجاد می‌کنیم
-          git commit -m "Deploy new build" || git commit --allow-empty -m "Empty commit to trigger push"
+          # انجام commit و ارسال تغییرات
+          git commit -m "Deploy build folder"
           
           # ارسال تغییرات به شاخه build
           git push --set-upstream origin build --force
