@@ -35,10 +35,10 @@ jobs:
           # حذف همه فایل‌ها از پوشه پروژه (برای پاک کردن فضای کاری)
           git rm -rf .
           
-          # انتقال پوشه build به ریشه پروژه
-          mv build ./build
-
-          # اضافه کردن پوشه build به مخزن
+          # انتقال پوشه build به شاخه build
+          cp -r build ./build  # پوشه build را کپی می‌کنیم به شاخه build
+          
+          # اضافه کردن پوشه build به مخزن گیت
           git add build
           
           # انجام commit و ارسال تغییرات
