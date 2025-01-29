@@ -43,8 +43,8 @@ jobs:
           # Add the server's host key to known_hosts to avoid SSH prompts
           ssh-keyscan -H 87.248.150.99 >> ~/.ssh/known_hosts
 
-          # SCP the build folder to the server
-          scp -r ./build/* app@87.248.150.99:/home/app/delta/
+          # SCP the build folder to the server (with verbose output for debugging)
+          scp -v -P 9011 -r ./build/* app@87.248.150.99:/home/app/delta/
 
       # 6. Install pm2 Globally and Serve the Application
       - name: Serve Application with pm2
