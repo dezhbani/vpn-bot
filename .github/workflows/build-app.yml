@@ -29,20 +29,20 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           
-          # ایجاد شاخه جدید به نام build
+          # ایجاد شاخه جدید به نام client-build
           git checkout --orphan client-build
           
           # حذف همه فایل‌ها از پوشه پروژه (برای پاک کردن فضای کاری)
           git rm -rf .
           
-          # انتقال پوشه build به شاخه build
-          cp -r build ./build  # پوشه build را کپی می‌کنیم به شاخه build
+          # انتقال محتوای پوشه build به شاخه client-build
+          mv build/* ./  # این دستور تمام فایل‌های داخل build را به ریشه پروژه منتقل می‌کند
           
-          # اضافه کردن پوشه build به مخزن گیت
-          git add build
+          # اضافه کردن تغییرات به مخزن گیت
+          git add -A
           
           # انجام commit و ارسال تغییرات
           git commit -m "Deploy build folder"
           
-          # ارسال تغییرات به شاخه build
-          git push --set-upstream origin build --force
+          # ارسال تغییرات به شاخه client-build
+          git push --set-upstream origin client-build --force
