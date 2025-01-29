@@ -36,7 +36,16 @@ jobs:
         run: |
           # SCP the build folder to the server (with verbose output for debugging)
           scp -v -P 9011 -r ./build/* app@87.248.150.99:/home/app/delta/build
-
+      - name: Install Node.js with nvm
+        run: |
+          ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash &&
+          export NVM_DIR=\"\$HOME/.nvm\" &&
+          [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\" &&
+          nvm install 20.11.1 &&
+          nvm use 20.11.1 &&
+          nvm alias default 20.11.1
+          "
       - name: Install pm2 and Serve Application
         run: |
           # SSH into the server and install pm2 & serve if necessary, then start the application with pm2
