@@ -1,0 +1,36 @@
+name: Build App
+
+on:
+  push:
+    branches:
+      - frontend-production
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Deploy to Build Branch
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git checkout --orphan build
+          git rm -rf .
+          mv build/* .
+          git add .
+          git commit -m "Deploy new build"
+          git push --force origin build
