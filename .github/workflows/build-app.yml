@@ -24,6 +24,15 @@ jobs:
       - name: Build Project
         run: CI=false npm run build
 
+      - name: Check build folder contents
+        run: ls -alh build
+
+      - name: Check git status
+        run: git status
+
+      - name: Check if there are changes to commit
+        run: git diff --exit-code || echo "There are changes"
+
       - name: Deploy to Build Branch
         run: |
           git config --global user.name "github-actions"
@@ -33,4 +42,4 @@ jobs:
           mv build/* .
           git add .
           git commit -m "Deploy new build"
-          git push --force origin build
+          git push --set-upstream origin build --force
