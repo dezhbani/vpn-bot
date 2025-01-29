@@ -1,83 +1,36 @@
-name: Full Deployment Workflow
+name: Build App
 
 on:
   push:
     branches:
-      - frontend # Branch for production deployment
+      - frontend-production
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout Code
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # 2. List Files (for debugging)
-      - name: List Files
-        run: ls -R
-
-      # 3. Set up Node.js
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20' # Match Node.js version with your local machine
+          node-version: 20
 
-      # 4. Navigate to Project Directory (update if needed)
-      - name: Change Directory
-        run: cd frontend # Change this to the correct subdirectory (vpn-bot or frontend)
-
-      # 5. Install Dependencies
       - name: Install Dependencies
+        run: npm install
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Deploy to Build Branch
         run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install --legacy-peer-deps
-          fi
-
-      # 6. Add Missing Babel Dependency (Optional, if needed)
-      - name: Add Missing Dependencies
-        run: npm install @babel/plugin-proposal-private-property-in-object --save-dev
-
-      # 7. Build the React App
-      - name: Build React App
-        run: |
-          NODE_OPTIONS="--max_old_space_size=4096" npm run build
-
-      # 8. Upload the Build Artifacts
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: build
-          path: ./build
-
-      # 9. Setup SSH
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -p 9011 -H 87.248.150.99 >> ~/.ssh/known_hosts
-
-      # 10. Deploy Build to Server
-      - name: Deploy Build to Server
-        run: |
-          ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
-          mkdir -p /home/app/delta &&
-          rm -rf /home/app/delta/build &&
-          mkdir -p /home/app/delta/build
-          "
-          scp -P 9011 -r ./build/* app@87.248.150.99:/home/app/delta/build/
-
-      # 11. Serve Application with pm2
-      - name: Serve Application with pm2
-        run: |
-          ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
-          export NVM_DIR=\"\$HOME/.nvm\" &&
-          [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\" &&
-          npm install -g pm2 serve &&
-          pm2 delete delta-app || true &&
-          pm2 start serve --name delta-app -- -s /home/app/delta/build -l 3000
-          "
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git checkout --orphan build
+          git rm -rf .
+          mv build/* .
+          git add .
+          git commit -m "Deploy new build"
+          git push --force origin build
