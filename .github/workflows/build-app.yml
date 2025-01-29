@@ -44,7 +44,7 @@ jobs:
             # Check if npm and pm2 are installed, otherwise install them
             export PATH=\$PATH:/usr/local/bin:/usr/bin:/bin
             
-            echo "log npm & node version" > node -v && npm -v
+            npm -v
 
             # Check if npm is installed
             if ! command -v npm &>/dev/null; then
