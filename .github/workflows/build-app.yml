@@ -30,7 +30,7 @@ jobs:
           git config --global user.email "github-actions@github.com"
           
           # ایجاد شاخه جدید به نام build
-          git checkout --orphan build
+          git checkout --orphan client-build
           
           # حذف همه فایل‌ها از پوشه پروژه (برای پاک کردن فضای کاری)
           git rm -rf .
