@@ -35,6 +35,7 @@ jobs:
         run: |
           ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
           mkdir -p /home/app/delta &&
+          mkdir -p /home/app/delta/build &&
           cp -r /home/app/delta/build/* /home/app/delta
           "
 
