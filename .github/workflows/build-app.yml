@@ -41,19 +41,31 @@ jobs:
         run: |
           # SSH into the server and install Node.js, npm, pm2 & serve if necessary
           ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
-            # Add Node.js and npm path if necessary
+            # Check if npm and pm2 are installed, otherwise install them
             export PATH=\$PATH:/usr/local/bin:/usr/bin:/bin
+            
+            echo "log npm & node version" > node -v && npm -v
+
+            # Check if npm is installed
+            if ! command -v npm &>/dev/null; then
+              echo 'npm not found, installing...'
+              curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+              sudo apt-get install -y nodejs
+            fi
 
             # Install pm2 if not installed
             if ! command -v pm2 &>/dev/null; then
+              echo 'pm2 not found, installing...'
               npm install -g pm2
             fi
 
             # Install serve if not installed
             if ! command -v serve &>/dev/null; then
+              echo 'serve not found, installing...'
               npm install -g serve
             fi
-
+            export NVM_DIR=\"\$HOME/.nvm\" &&
+            [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\" &&
             # Start the application with pm2
             pm2 delete react-app || true
             pm2 start serve --name react-app -- -s /home/app/delta -l 3000
