@@ -1,6 +1,5 @@
 import React from 'react';
 import emptyBox from '../assets/empty-box.png';
-import Add from '../assets/Add.svg';
 import { Link } from 'react-router-dom';
 
 const NoConfigs = () => {
@@ -14,7 +13,7 @@ const NoConfigs = () => {
                     <div className='flex justify-center mt-4'>
                         <div className='w-fit text-sm font-bold'>
                             <div className='flex justify-center'>هیچ کانفیگی ثبت نکردید</div>
-                            <Link to='/dashboard/plans'><button className='bg-blue-400 text-white flex p-2 rounded-md mt-5'>همین الان فروشت رو شروع کن<img className='pr-1 font-extrabold' src={Add}/></button></Link>
+                            <Link to='/dashboard/plans'><button className='bg-blue-400 text-white flex p-2 rounded-md mt-5'>همین الان فروشت رو شروع کن</button></Link>
                         </div>
                     </div>
                 </div>
