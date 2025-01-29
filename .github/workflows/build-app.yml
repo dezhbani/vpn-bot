@@ -24,25 +24,23 @@ jobs:
       - name: Build Project
         run: CI=false npm run build
 
-      - name: Deploy to Build Branch
+      - name: Deploy Build
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          
-          # ایجاد شاخه جدید به نام client-build
-          git checkout --orphan client-build
-          
-          # حذف همه فایل‌ها از پوشه پروژه (برای پاک کردن فضای کاری)
-          git rm -rf .
-          
-          # انتقال محتوای پوشه build به شاخه client-build
-          mv build/* ./  # این دستور تمام فایل‌های داخل build را به ریشه پروژه منتقل می‌کند
-          
-          # اضافه کردن تغییرات به مخزن گیت
-          git add -A
-          
-          # انجام commit و ارسال تغییرات
-          git commit -m "Deploy build folder"
-          
-          # ارسال تغییرات به شاخه client-build
-          git push --set-upstream origin client-build --force
+          ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
+          mkdir -p /home/app/delta &&
+          cp -r /home/app/project/build/* /home/app/delta
+          "
+
+      # 6. Install pm2 Globally and Serve the Application
+      - name: Serve Application with pm2
+        run: |
+          ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
+          if ! command -v pm2 &>/dev/null; then
+              npm install -g pm2
+          fi
+          if ! command -v serve &>/dev/null; then
+              npm install -g serve
+          fi
+          pm2 delete react-app || true &&
+          pm2 start serve --name react-app -- -s /home/app/delta -l 3000
+          "
