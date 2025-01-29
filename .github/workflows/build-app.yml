@@ -23,6 +23,13 @@ jobs:
 
       - name: Build Project
         run: CI=false npm run build
+        
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p 9011 -H 87.248.150.99 >> ~/.ssh/known_hosts
 
       - name: Deploy Build
         run: |
