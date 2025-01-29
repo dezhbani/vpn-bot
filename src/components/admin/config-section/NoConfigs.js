@@ -1,6 +1,6 @@
 import React from 'react';
 import emptyBox from '../assets/empty-box.png';
-import Add from '../assets/add.svg';
+import Add from '../assets/Add.svg';
 import { Link } from 'react-router-dom';
 
 const NoConfigs = () => {
