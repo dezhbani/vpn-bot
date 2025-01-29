@@ -35,27 +35,26 @@ jobs:
       - name: Deploy build to server
         run: |
           # SCP the build folder to the server (with verbose output for debugging)
-          scp -v -P 9011 -r ./build/* app@87.248.150.99:/home/app/delta/build
-      - name: Install Node.js with nvm
+          scp -v -P 9011 -r ./build/* app@87.248.150.99:/home/app/delta/
+
+      - name: Install Node.js, pm2, and Serve Application
         run: |
+          # SSH into the server and install Node.js, npm, pm2 & serve if necessary
           ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
-          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash &&
-          export NVM_DIR=\"\$HOME/.nvm\" &&
-          [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\" &&
-          nvm install 20.11.1 &&
-          nvm use 20.11.1 &&
-          nvm alias default 20.11.1
-          "
-      - name: Install pm2 and Serve Application
-        run: |
-          # SSH into the server and install pm2 & serve if necessary, then start the application with pm2
-          ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
+            # Add Node.js and npm path if necessary
+            export PATH=\$PATH:/usr/local/bin:/usr/bin:/bin
+
+            # Install pm2 if not installed
             if ! command -v pm2 &>/dev/null; then
-                npm install -g pm2
+              npm install -g pm2
             fi
+
+            # Install serve if not installed
             if ! command -v serve &>/dev/null; then
-                npm install -g serve
+              npm install -g serve
             fi
-            pm2 delete react-app || true &&
+
+            # Start the application with pm2
+            pm2 delete react-app || true
             pm2 start serve --name react-app -- -s /home/app/delta -l 3000
           "
