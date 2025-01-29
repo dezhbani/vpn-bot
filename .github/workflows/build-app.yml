@@ -31,13 +31,20 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -p 9011 -H 87.248.150.99 >> ~/.ssh/known_hosts
 
-      - name: Deploy Build
+      - name: Deploy build to server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          ssh -p 9011 -o StrictHostKeyChecking=no app@87.248.150.99 "
-          mkdir -p /home/app/delta &&
-          mkdir -p /home/app/delta/build &&
-          cp -r /home/app/delta/build/* /home/app/delta
-          "
+          # Create the SSH directory and save the private key to a file
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          # Add the server's host key to known_hosts to avoid SSH prompts
+          ssh-keyscan -H 87.248.150.99 >> ~/.ssh/known_hosts
+
+          # SCP the build folder to the server
+          scp -r ./build/* app@87.248.150.99:/home/app/delta/
 
       # 6. Install pm2 Globally and Serve the Application
       - name: Serve Application with pm2
