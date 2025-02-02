@@ -3,17 +3,14 @@ const { planModel } = require("../../models/plan");
 const { StatusCodes } = require("http-status-codes");
 const { deleteConfigSchema, addConfigSchema } = require("../../validations/admin/config.shema");
 const { Controllers } = require("../controller");
-const { percentOfNumber, configExpiryTime, copyObject, upgradeConfig, covertGBtoBite, GbToBit } = require("../../utils/functions");
-const { V2RAY_API_URL, V2RAY_TOKEN } = process.env
+const { percentOfNumber, configExpiryTime, copyObject, covertGBtoBite, GbToBit } = require("../../utils/functions");
 const { default: axios } = require('axios');
 const { userModel } = require("../../models/user");
 const { createVlessTcp } = require("../../utils/config.type");
 const { smsService } = require("../../services/sms.service");
 const { configModel } = require("../../models/config");
 const { checkPaymentType } = require("../../utils/paymet.functions");
-const fs = require("fs");
 const { configService } = require("../../services/config.service");
-const { token } = require("morgan");
 
 class configController extends Controllers {
   async buyConfig(req, res, next) {

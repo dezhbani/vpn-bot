@@ -10,7 +10,7 @@ class planController extends Controllers {
     async addPlan(req, res, next){
         try {
             const planBody = await addPlanSchema.validateAsync(req.body);
-            const { name, price, user_count, data_size, pay_link, count, month } = planBody
+            const { name, price, user_count, data_size, month } = planBody
             const result = await planModel.create({ name, price, user_count, data_size, pay_link, count, month });
             if(!result) throw createHttpError.InternalServerError("پلن ساخته نشد")
             return res.status(StatusCodes.CREATED).json({
