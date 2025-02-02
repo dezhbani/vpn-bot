@@ -1,7 +1,6 @@
 const { default: axios } = require("axios");
 const { Controllers } = require("../controllers/controller");
 const createHttpError = require("http-errors");
-const { copyObject, stringifyProperties } = require("../utils/functions");
 const { V2RAY_API_URL, V2RAY_USERNAME, V2RAY_PASSWORD } = process.env
 
 const cache = require("../utils/cache");
@@ -41,45 +40,17 @@ class configService extends Controllers {
             return error
         }
     }
-    async addConfig(data, defaultData = true, customeData) {
+    async addConfig(data) {
         try {
             let addResult = (await axios.post(`${V2RAY_API_URL}/panel/api/inbounds/add`, data, cookie())).data
-            console.log(addResult);
-            
-
-            // let addResult
-            // if (defaultData) addResult = (await axios.post(`${V2RAY_API_URL}/panel/api/inbounds/add`, data, cookie)).data
-            // else {
-            //     const { url, token } = customeData
-            //     const cookie = {
-            //         withCredentials: true,
-            //         headers: {
-            //             'Cookie': token
-            //         }
-            //     }
-            //     addResult = (await axios.post(`${url}/panel/api/inbounds/add`, data, cookie)).data
-            // }
             return addResult
         } catch (error) {
             throw error
         }
     }
-    async editConfig(data, defaultData = true, customeData) {
+    async editConfig(data) {
         try {
             let addResult = (await axios.post(`${V2RAY_API_URL}/panel/api/inbounds/update/${data.id}`, data, cookie())).data
-            console.log(addResult);
-            
-            // if (defaultData) addResult = (await axios.post(`${V2RAY_API_URL}/panel/api/inbounds/update/${data.id}`, data, cookie)).data
-            // else {
-            //     const { url, token } = customeData
-            //     const cookie = {
-            //         withCredentials: true,
-            //         headers: {
-            //             'Cookie': token
-            //         }
-            //     }
-            //     addResult = (await axios.post(`${url}/panel/api/inbounds/update/${data.id}`, data, cookie)).data
-            // }
             return addResult
         } catch (error) {
             throw error

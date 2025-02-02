@@ -54,7 +54,7 @@ const createVlessKcp = async (lastID, plan, fullName) => {
         clients: [
             {
                 id,
-                flow: 'xtls-rprx-direct',
+                flow: '',
                 email,
                 limitIp: plan.user_count,
                 totalGB: 0,
@@ -93,7 +93,7 @@ const createVlessKcp = async (lastID, plan, fullName) => {
 const createVlessTcp = async (lastID, plan, fullName) => {
     const expiryTime = +configExpiryTime(plan.month);
     const id = uuidv4();
-    const email = `${randomString()}@x-ui-english.dev`;;
+    const email = `${randomString()}`;;
     const port = randomNumber();
     const name = fullName.replace(/\s/g, '%20')
     const dataSize = (+plan.data_size) * 1024 * 1024 * 1024
@@ -128,7 +128,7 @@ const createVlessTcp = async (lastID, plan, fullName) => {
         clients: [
             {
                 id,
-                flow: 'xtls-rprx-direct',
+                flow: '',
                 email,
                 limitIp: plan.user_count,
                 totalGB: 0,
@@ -191,7 +191,7 @@ const createVlessWs = async (lastID, plan, fullName) => {
         clients: [
             {
                 id,
-                flow: 'xtls-rprx-direct',
+                flow: '',
                 email,
                 limitIp: plan.user_count,
                 totalGB: 0,
@@ -253,7 +253,7 @@ const createVmess = () => {
         clients: [
             {
                 id,
-                flow: 'xtls-rprx-direct',
+                flow: '',
                 email,
                 limitIp: +userCount,
                 totalGB: +plan.total,
