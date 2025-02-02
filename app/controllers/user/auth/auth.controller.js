@@ -23,7 +23,7 @@ class userAuthControllers extends Controllers {
                 mobile
             });
         } catch (error) {
-            next(createHttpError.BadRequest(error.message));
+            next(error);
         }
     }
     async checkOTP(req, res, next) {
