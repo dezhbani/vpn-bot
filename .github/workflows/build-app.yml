@@ -48,14 +48,14 @@ jobs:
             
             npm -v
 
-            # Check if npm is installed
-            if ! command -v npm &>/dev/null; then
-              echo 'npm not found, installing...'
-              curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-              sudo apt-get install -y nodejs
-            fi
+            # # Check if npm is installed
+            # if ! command -v npm &>/dev/null; then
+            #   echo 'npm not found, installing...'
+            #   curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+            #   sudo apt-get install -y nodejs
+            # fi
             
             # Start the application with pm2
-            pm2 delete react-app || true
-            pm2 start serve --name react-app -- -s /home/app/delta -l 3000
+            pm2 delete delta-app || true
+            pm2 serve --name delta-app -s delta
           "
