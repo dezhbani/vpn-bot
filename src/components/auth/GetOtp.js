@@ -2,12 +2,11 @@ import React, { useState, useRef } from 'react';
 import { toast } from 'react-toastify';
 import Timer from '../public/Timer';
 import { checkOTP } from './services/auth.service';
-import { handleError } from '../public/function';
 
 //style
 import 'react-toastify/dist/ReactToastify.css';
 
-const GetOtp = ({ state, setLoading, setData }) => {
+const GetOtp = ({ state, setLoading }) => {
     const [code, setCode] = useState([]);
     const inputRefs = useRef([]);
     const handleKeyPress = index => e => {
@@ -31,29 +30,25 @@ const GetOtp = ({ state, setLoading, setData }) => {
     }
 
     const send = async () => {
-        try {
-            setLoading(true)
-            const mergedCode = code.join('')
-            const res = await checkOTP({
-                mobile: state.mobile,
-                code: mergedCode
-            })
-            const { message, status, accessToken } = res;
-            if (status == 200) {
-                setData(res)
-                toast.success(message)
-                localStorage.setItem("accessToken", accessToken)
-                let panelUrl
-                if ((res.status !== 401) && !res.user.first_name || !res.user.last_name || !res.user.full_name) panelUrl = '/complete-signup'
-                else if (res.user.role == 'customer') panelUrl = '/home'
-                else if (['owner', 'admin'].includes(res.user.role)) panelUrl = '/dashboard'
-                panelUrl && setTimeout(() => {
-                    window.location.href = panelUrl
-                    setLoading(false)
-                }, 3000)
-            }
-        } catch (error) {
-            handleError()
+        setLoading(true)
+        const mergedCode = code.join('')
+        const res = await checkOTP({
+            mobile: state.mobile,
+            code: mergedCode
+        })
+        const { message, status, accessToken } = res;
+        if (status == 200) {
+            // setData(res)
+            toast.success(message)
+            localStorage.setItem("accessToken", accessToken)
+            let panelUrl
+            if ((res.status !== 401) && !res.user.first_name || !res.user.last_name || !res.user.full_name) panelUrl = '/complete-signup'
+            else if (res.user.role == 'customer') panelUrl = '/home'
+            else if (['owner', 'admin'].includes(res.user.role)) panelUrl = '/dashboard'
+            panelUrl && setTimeout(() => {
+                window.location.href = panelUrl
+                setLoading(false)
+            }, 3000)
         }
     }
 
