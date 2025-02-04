@@ -36,19 +36,29 @@ const GetOtp = ({ state, setLoading }) => {
             mobile: state.mobile,
             code: mergedCode
         })
-        const { message, status, accessToken } = res;
-        if (status == 200) {
-            // setData(res)
+        if (res?.status == 200) {
+            const { message, accessToken, user } = res;
             toast.success(message)
             localStorage.setItem("accessToken", accessToken)
+            const adminRoles = ['admin', 'owner']
+            const userRoles = ['customer']
+            const UserRole = user?.role || ''
+            const splitedRoles = UserRole.split(',')
+
+            const isUser = splitedRoles.some(role => userRoles.includes(role));
+            const isAdmin = splitedRoles.some(role => adminRoles.includes(role));
+            
             let panelUrl
-            if ((res.status !== 401) && !res.user.first_name || !res.user.last_name || !res.user.full_name) panelUrl = '/complete-signup'
-            else if (res.user.role == 'customer') panelUrl = '/home'
-            else if (['owner', 'admin'].includes(res.user.role)) panelUrl = '/dashboard'
+            if ((res.status !== 401) && !user.first_name || !user.last_name || !user.full_name) panelUrl = '/complete-signup'
+            else if (isUser && isAdmin) setTimeout(() => window.location.reload(), 3000)
+            else if (isAdmin) panelUrl = '/dashboard'
+            else panelUrl = '/home'
             panelUrl && setTimeout(() => {
                 window.location.href = panelUrl
                 setLoading(false)
             }, 3000)
+        } else {
+            setLoading(false)
         }
     }
 
@@ -62,7 +72,7 @@ const GetOtp = ({ state, setLoading }) => {
                     {
                         [1, 2, 3, 4, 5].map((num, index) => <input key={index} onKeyUp={handleKeyPress(index)} ref={(ref) => (inputRefs.current[index] = ref)}
                             className="w-10 h-10 lg:w-12 lg:h-12 flex justify-center rounded text-center my-1 mx-2 bg-[#f9fbff] text-lg border-[2px] border-solid transition-all delay-200 ease-in focus:border-main-blue outline-none"
-                            minLength="1" maxLength="1" onChange={change} name={num} value={code[num - 1]} type="tel" />)
+                            minLength="1" maxLength="1" autoComplete='off' onChange={change} name={num} value={code[num - 1]} type="tel" />)
                     }
                 </div>
                 <div className='flex w-full justify-center cursor-pointer'>{state.sendOTP && <Timer mobile={state.mobile} />}</div>

@@ -16,8 +16,6 @@ const Auth = () => {
     // const [ data ] = useState({})
     const UserRole = data?.role || ''
     const splitedRoles = UserRole.split(',')  
-    console.log(data);
-    
 
     // const UserProfile = async () => {
     //     const result = await getUserProfile()
