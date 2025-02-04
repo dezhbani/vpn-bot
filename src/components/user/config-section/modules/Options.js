@@ -50,7 +50,7 @@ const Options = ({ plan, configID, config, setReload, reload }) => {
                             onChange={changeStatus}
                         />
                         <div
-                            class="relative w-16 h-7 sm:w-20 sm:h-9 bg-main-blue peer-checked:bg-main-blue/10 rounded-full after:absolute after:content-[''] after:w-5 after:h-5 sm:after:w-7 sm:after:h-7 after:bg-white peer-checked:after:bg-zinc-900 after:rounded-full after:top-[4px] sm:after:top-[5px] after:left-[4px] sm:after:left-[5px] peer-checked:after:left-[calc(100%-28px)] sm:peer-checked:after:left-[calc(100%-34px)] shadow-sm duration-300 after:duration-300 after:shadow-md"
+                            class="relative w-16 h-7 sm:w-20 sm:h-9 bg-main-blue peer-checked:bg-main-blue/10 rounded-full after:absolute after:content-[''] after:w-5 after:h-5 sm:after:w-7 sm:after:h-7 after:bg-white after:rounded-full after:top-[4px] sm:after:top-[5px] after:left-[4px] sm:after:left-[5px] peer-checked:after:left-[calc(100%-28px)] sm:peer-checked:after:left-[calc(100%-34px)] shadow-sm duration-300 after:duration-300 after:shadow-md"
                         ></div>
                         <svg
                             class="fill-black opacity-60 peer-checked:opacity-70 peer-checked:fill-white peer-checked:hidden absolute w-5 h-5 sm:w-6 sm:h-6 right-2"
