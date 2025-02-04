@@ -1,10 +1,15 @@
 import React from 'react';
-import LoadingIcon from '../../user/assets/Loading.svg';
+import { jellyTriangle } from 'ldrs'
 
+jellyTriangle.register()
 const Loading = () => {
     return (
         <div className='h-full w-full flex items-center justify-center'>
-            <img className='h-14 animate-spin-slow' src={LoadingIcon} alt='loading'/>
+            <l-jelly-triangle
+                size="45"
+                speed="1.8"
+                color="#0095ff"
+            ></l-jelly-triangle>
         </div>
     );
 };
