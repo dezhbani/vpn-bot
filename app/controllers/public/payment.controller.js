@@ -2,11 +2,9 @@ const createHttpError = require("http-errors");
 const { StatusCodes } = require("http-status-codes");
 const { Controllers } = require("../controller");
 const { default: axios } = require("axios");
-const { invoiceNumberGenerator, lastIndex, rialToToman, createConfig, tomanToRial, upgradeConfig } = require("../../utils/functions");
-const moment = require("moment-jalali");
+const { invoiceNumberGenerator, lastIndex, rialToToman, tomanToRial } = require("../../utils/functions");
 const { PaymentModel } = require("../../models/payment");
 const { userModel } = require("../../models/user");
-const { configModel } = require("../../models/config");
 const { ZARINPAL_MERCHANT_ID, REDIRECT_URL, BASE_URL } = process.env;
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
@@ -27,17 +25,12 @@ class paymentController extends Controllers {
             }
             const RequestResult = await axios.post(zarinpal_request_url, zapripal_options)
                 .then(result => result.data)
-                .catch(err => {
-                    return res.status(err.data.status).json({
-                        message: err.data.message
-                    })
-                })
             const { authority, code } = RequestResult.data;
             await PaymentModel.create({
                 invoiceNumber: invoiceNumberGenerator(),
                 paymentDate: new Date().getTime(),
                 amount,
-                user: user._id,
+                user: user.userID,
                 description,
                 authority,
                 verify: false
@@ -51,7 +44,7 @@ class paymentController extends Controllers {
             }
             throw createHttpError.BadRequest("اتصال به درگاه پرداخت انجام نشد")
         } catch (error) {
-            next(error)
+            next(createHttpError.ServiceUnavailable("سرویس در دسترس نمیباشد"))
         }
     }
     async verifyWalletTransaction(req, res, next) {
@@ -59,8 +52,6 @@ class paymentController extends Controllers {
             const { billID, authority } = req.params;
             const verifyURL = "https://api.zarinpal.com/pg/v4/payment/verify.json";
             const payment = await PaymentModel.findOne({ authority });
-            console.log(payment);
-            
             if (!payment) throw createHttpError.NotFound("تراکنش در انتظار پرداخت یافت نشد")
             const verifyBody = JSON.stringify({
                 authority,
@@ -75,7 +66,6 @@ class paymentController extends Controllers {
                 body: verifyBody
             }).then(result => result.json())
             const bills = (await userModel.findById(payment.user)).bills;
-            
             await PaymentModel.populate(bills, { path: "paymentID" })
             if (!bills) throw createHttpError.NotFound("تراکنشی یافت نشد")
             const bill = bills.find(bill => bill._id == billID);

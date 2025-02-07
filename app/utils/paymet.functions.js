@@ -40,31 +40,38 @@ const checkPaymentType = async (description, price, ownerID, userID, configID) =
         return null
     }
 }
-const increaseWallet = async (user, price, configID=null) => {
-    const userID = user._id
-    const bills = {
-        configID,
-        buy_date: new Date().getTime(),
-        for: {
+const increaseWallet = async (user, price, configID = null) => {
+    try {
+        const userID = user._id
+        const bills = {
+            configID,
+            buy_date: new Date().getTime(),
+            for: {
+                description: "افزایش اعتبار",
+                user: userID
+            },
+            price,
+            up: null
+        }
+        const billsResult = await userModel.updateOne({ _id: userID }, { $push: { bills } });
+        if (billsResult.modifiedCount == 0) throw createHttpError.InternalServerError("خطای داخلی سرور")
+        const allBills = (await userModel.findById(userID)).bills;
+        const lastBill = lastIndex(allBills);
+        const billID = lastBill._id;
+        const createPayLink = await axios.post(`${BASE_URL}/payment/create`, {
+            amount: tomanToRial(price),
+            billID,
             description: "افزایش اعتبار",
-            user: userID
-        },
-        price,
-        up: null
+            user: {
+                userID,
+                mobile: user.mobile
+            },
+            callback: `${REDIRECT_URL}/wallet/${billID}`
+        })
+        return createPayLink.data
+    } catch (error) {
+        throw error.response.data
     }
-    const billsResult = await userModel.updateOne({ _id: userID }, { $push: { bills } });
-    if (billsResult.modifiedCount == 0) throw createHttpError.InternalServerError("خطای داخلی سرور")
-    const allBills = (await userModel.findById(userID)).bills;
-    const lastBill = lastIndex(allBills);
-    const billID = lastBill._id;
-    const createPayLink = await axios.post(`${BASE_URL}/payment/create`, {
-        amount: tomanToRial(price),
-        billID,
-        description: "افزایش اعتبار",
-        user,
-        callback: `${REDIRECT_URL}/wallet/${billID}`
-    })
-    return createPayLink.data
 }
 const checkUserPaymentType = async (description, { price, _id: planID }, user, configID) => {
     const { _id: userID, wallet } = user
