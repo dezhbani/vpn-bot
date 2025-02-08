@@ -7,18 +7,27 @@ import { increaseWallet } from '../services/profile.service';
 import Modal from '../../public/components/Modal';
 
 const Wallet = () => {
-    const [wallet, setWallet] = useState(50000)
-    const [loading, setLoading] = useState(false)
-    const change = e => {
-        setWallet(+e.target.value)
-    }
-    const plus = () => setWallet(wallet + 1000)
-    const minus = () => setWallet(wallet - 1000)
+    const [wallet, setWallet] = useState("50000"); 
+    const [loading, setLoading] = useState(false);
+    const removeCommas = (value) => {
+        return value.replace(/,/g, ""); 
+    };
+    const change = (e) => {
+        const inputValue = e.target.value;
+        const numericValue = removeCommas(inputValue);
+        if (/^\d*$/.test(numericValue) || numericValue === "") {
+            setWallet(numericValue); 
+        }
+    };
+    const getDisplayValue = () => {
+        return addCommaToPrice(wallet);
+    };
+
     const pay = async () => {
         if (wallet < 50000) toast.error('حداقل افزایش اعتبار باید بیشتر از 50,000 تومان باشد')
         setLoading(true)
         const result = await increaseWallet({ pay: wallet })
-        window.open(result.gatewayURL, "_blank")
+        if(result) window.open(result.gatewayURL, "_blank")
         setLoading(false)
     }
     const user = useContext(ProfileContext);
@@ -36,15 +45,13 @@ const Wallet = () => {
                     <img className='mx-2 h-8' src={PriceIcon} alt='PriceIcon' />
                 </div>
                 <div className='flex flex-col'>
-                    <div className='flex w-fit max-h-10 items-center my-9'>
-                        <button className='flex mx-3 px-4 h-10 w-10 justify-center font-bold transform transition duration-300 items-center bg-gray-200 hover:bg-main-blue rounded-lg' onClick={plus}>+</button>
-                        <input className={`text-center border-2 h-10 w-full sm:w-52 border-gray-400 rounded-md transform transition duration-500 outline-none py-1 px-2 dir-ltr focus:${wallet < 50000 ? 'border-red-500' : 'border-main-blue'}`} value={wallet} onChange={change} />
-                        <button className='flex mx-3 px-4 h-10 w-10 justify-center font-bold transform transition duration-300 items-center bg-gray-200 hover:bg-main-blue rounded-lg' onClick={minus}>-</button>
+                    <div className='flex w-full max-h-10 items-center my-9'>
+                        <input type='text' className={`text-center border-2 h-10 w-full border-gray-400 rounded-md transform transition duration-500 outline-none py-1 px-2 dir-ltr focus:${wallet < 50000 ? 'border-red-500' : 'border-main-blue'}`} value={getDisplayValue()} onChange={change} />
                     </div>
-                    <div className='text-sm overflow-x-auto min-w-full'>
-                        <span className='text-sm text-[#0050f9] w-fit bg-[#0050f9]/10 px-2 py-0.5 mx-1 rounded-full' onClick={() => setWallet(100000)}>100 هزار تومان</span>
-                        <span className='text-sm text-[#0050f9] w-fit bg-[#0050f9]/10 px-2 py-0.5 mx-1 rounded-full' onClick={() => setWallet(200000)}>200 هزار تومان</span>
-                        <span className='text-sm text-[#0050f9] w-fit bg-[#0050f9]/10 px-2 py-0.5 mx-1 rounded-full' onClick={() => setWallet(500000)}>500 هزار تومان</span>
+                    <div className='text-sm overflow-x-auto min-w-full flex flex-wrap'>
+                        <span className='text-sm text-[#0050f9] w-fit bg-[#0050f9]/10 px-2 py-0.5 m-1 rounded-full' onClick={() => setWallet("100000")}>100 هزار تومان</span>
+                        <span className='text-sm text-[#0050f9] w-fit bg-[#0050f9]/10 px-2 py-0.5 m-1 rounded-full' onClick={() => setWallet("200000")}>200 هزار تومان</span>
+                        <span className='text-sm text-[#0050f9] w-fit bg-[#0050f9]/10 px-2 py-0.5 m-1 rounded-full' onClick={() => setWallet("500000")}>500 هزار تومان</span>
                     </div>
                     <div className='flex flex-col justify-center my-5 w-full'>
                         <button className='flex w-full justify-center bg-main-blue text-white px-6 py-1 my-4 rounded-lg' onClick={pay}>پرداخت</button>
