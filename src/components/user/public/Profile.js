@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import ExitIcon from '../assets/Exit.svg';
 import SettingIcon from '../assets/Setting.svg';
 import ProfileIcon from '../assets/Profile-2.svg';
+import Danger from '../assets/danger.webp';
 import Modal from '../../public/components/Modal';
 import { Link } from 'react-router-dom';
 
@@ -12,11 +13,14 @@ const ConfirmExitAccount = ({ status, close }) => {
     }
     return (
         <Modal isOpen={status}>
-            <div className='p-20 font-b-kamran text-2xl'>
-                <p className='text-3xl'>آیا می‌خواهید از حساب‌ کاربری خود خارج شوید؟</p>
-                <div className='mt-8 w-full  flex items-center'>
+            <div className='p-5 sm:p-10 dir-rtl font-b-kamran text-2xl'>
+                <div className='w-full flex justify-center my-12'>
+                    <img className='w-40' src={Danger} alt='danger' />
+                </div>
+                <p className='text-2xl sm:text-3xl mb-2'>آیا می‌خواهید از حساب‌ کاربری خود خارج شوید؟</p>
+                <div className='mt-10 w-full flex items-center'>
                     <button onClick={exitAccount} className='bg-red-500 flex items-center justify-center rounded-md py-1 mx-3 text-white w-1/2'>خروج</button>
-                    <button onClick={close} className='bg-gray-200 flex items-center justify-center rounded-md py-1 mx-3 text-black w-1/2'>منصرف شدم</button>
+                    <button onClick={close} className='bg-gray-200 flex items-center justify-center rounded-md py-1 mx-3 text-black w-1/2'>بازگشت</button>
                 </div>
             </div>
         </Modal>
