@@ -1,7 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 const domain = 's1.delta-dev.top'
-// const subLinkDomain = 'http://s1.delta-dev.top'
-const subLinkDomain = 'http://localhost'
+const subLinkDomain = 'https://api.delta-dev.top'
 
 const randomHost = () => {
     const Host = ['google.com', 'speedtest.net']
