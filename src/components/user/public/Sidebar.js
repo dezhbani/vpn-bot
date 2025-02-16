@@ -118,7 +118,7 @@ const Sidebar = () => {
                                     <li className={`py-2 px-2 mr-1 my-2 flex items-center relative hover:text-main-blue ${selectedItem === 'bills' && 'text-main-blue'}`} onClick={() => handleItemClick('bills')}>
                                         {selectedItem === 'bills' && <img src={SelectedIcon} alt="Selected" className='absolute left-0' />}
                                         <img src={BillsIcon} alt="Bills" className='ml-2' />
-                                        <p className={ItemStyle}>فاکتورها</p>
+                                        <p className={ItemStyle}>تراکنش ها</p>
                                     </li>
                                 </Link>
                                 <li className={`py-2 px-2 mr-1 my-2 flex items-center relative hover:text-main-blue   ${selectedItem === 'support' && 'text-main-blue'}`} onClick={() => handleItemClick('support')}>
