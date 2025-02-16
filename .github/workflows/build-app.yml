@@ -46,6 +46,6 @@ jobs:
             # fi
             
             # Start the application with pm2
-            # pm2 delete delta-app || true
+            pm2 delete delta-app || true
             pm2 serve delta 3000 --name delta-app --spa
           "
