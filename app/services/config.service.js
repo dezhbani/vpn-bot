@@ -20,7 +20,7 @@ class configService extends Controllers {
             password: V2RAY_PASSWORD
         }
         const result = await axios.post(`${V2RAY_API_URL}/login`, data)
-        const cookie = result.headers["set-cookie"][1].split(';')[0];
+        const cookie = result.headers["set-cookie"][0].split(';')[0];
         return cookie
     }
     async getConfigs() {
