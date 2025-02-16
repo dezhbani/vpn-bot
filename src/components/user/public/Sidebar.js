@@ -83,12 +83,12 @@ const Sidebar = () => {
                                 }
                             </button>
                         </section>
-                        <section className={`profile flex ${!menu ? 'max-sm:justify-center': 'mr-3'} sm:mr-3 items-center w-full float-right dir-rtl my-2 sm:my-5`}>
+                        <section className={`profile flex ${!menu ? 'max-sm:justify-center' : 'mr-3'} sm:mr-3 items-center w-full float-right dir-rtl my-2 sm:my-5`}>
                             <div style={{ backgroundColor: validateHexColor(bg), color: textColor }} className="flex justify-center items-center rounded-full w-12 h-12">{profileImg()}</div>
                             {
-                                menu?
-                                <p className='font-[iran-sans] font-bold text-xl mr-2'>{user?.full_name}</p>
-                                :<p className='font-[iran-sans] font-bold text-xl mr-2 max-sm:hidden'>{user?.full_name}</p>
+                                menu ?
+                                    <p className='font-[iran-sans] font-bold text-xl mr-2'>{user?.full_name}</p>
+                                    : <p className='font-[iran-sans] font-bold text-xl mr-2 max-sm:hidden'>{user?.full_name}</p>
                             }
                         </section>
                         <section className='pr-2'>
@@ -114,11 +114,13 @@ const Sidebar = () => {
                                         <p className={ItemStyle}>کانفیگ ها</p>
                                     </li>
                                 </Link>
-                                <li className={`py-2 px-2 mr-1 my-2 flex items-center relative hover:text-main-blue ${selectedItem === 'bills' && 'text-main-blue'}`} onClick={() => handleItemClick('bills')}>
-                                    {selectedItem === 'bills' && <img src={SelectedIcon} alt="Selected" className='absolute left-0' />}
-                                    <img src={BillsIcon} alt="Bills" className='ml-2' />
-                                    <p className={ItemStyle}>فاکتورها</p>
-                                </li>
+                                <Link to='/bills'>
+                                    <li className={`py-2 px-2 mr-1 my-2 flex items-center relative hover:text-main-blue ${selectedItem === 'bills' && 'text-main-blue'}`} onClick={() => handleItemClick('bills')}>
+                                        {selectedItem === 'bills' && <img src={SelectedIcon} alt="Selected" className='absolute left-0' />}
+                                        <img src={BillsIcon} alt="Bills" className='ml-2' />
+                                        <p className={ItemStyle}>فاکتورها</p>
+                                    </li>
+                                </Link>
                                 <li className={`py-2 px-2 mr-1 my-2 flex items-center relative hover:text-main-blue   ${selectedItem === 'support' && 'text-main-blue'}`} onClick={() => handleItemClick('support')}>
                                     {selectedItem === 'support' && <img src={SelectedIcon} alt="Selected" className='absolute left-0' />}
                                     <img src={SupportIcon} alt="Support" className='ml-2' />
