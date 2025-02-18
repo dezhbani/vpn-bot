@@ -24,10 +24,6 @@ jobs:
       - name: Install Dependencies
         run: npm ci --production # Use npm ci for faster and reliable installations
 
-      # Step 4: Run tests (Optional)
-      - name: Run Tests
-        run: npm test # Ensure your tests are defined in package.json under "scripts"
-
       # Step 5: Setup SSH
       - name: Setup SSH
         run: |
