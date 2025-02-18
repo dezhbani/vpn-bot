@@ -48,6 +48,14 @@ class configService extends Controllers {
             throw error
         }
     }
+    async deleteConfig(ID) {
+        try {
+            let deleteResult = (await axios.post(`${V2RAY_API_URL}/panel/api/inbounds/del/${ID}`, {}, cookie())).data
+            return deleteResult
+        } catch (error) {
+            throw error
+        }
+    }
     async editConfig(data) {
         try {
             let addResult = (await axios.post(`${V2RAY_API_URL}/panel/api/inbounds/update/${data.id}`, data, cookie())).data

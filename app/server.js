@@ -19,11 +19,11 @@ const { configService } = require('./services/config.service');
 const cache = require('./utils/cache');
 // const key = fs.readFileSync("/etc/letsencrypt/live/api.delta-dev.top/privkey.pem");
 // const cert = fs.readFileSync("/etc/letsencrypt/live/api.delta-dev.top/fullchain.pem");
-module.exports = class Application{
+module.exports = class Application {
     #app = express();
     #DB_URL;
     #PORT;
-    constructor(PORT, DB_URL){
+    constructor(PORT, DB_URL) {
         this.#PORT = PORT;
         this.#DB_URL = DB_URL;
         this.configApplication();
@@ -35,31 +35,31 @@ module.exports = class Application{
         // this.startBot();
         this.errorHandling();
     }
-    configApplication(){
+    configApplication() {
         this.#app.use(cors())
         this.#app.use(morgan("dev"));
         this.#app.use(express.json());
-        this.#app.use(express.urlencoded({extended: true}));
-        this.#app.use(express.static(path.join(__dirname, "..", "public"))); 
+        this.#app.use(express.urlencoded({ extended: true }));
+        this.#app.use(express.static(path.join(__dirname, "..", "public")));
     }
-    createServer(){
+    createServer() {
         const server = http.createServer(this.#app)
         // const server = https.createServer({ key, cert }, app);
         server.listen(this.#PORT, () => {
             console.log(`run => http://localhost:${this.#PORT}`);
         })
     }
-    connectToDB(){
+    connectToDB() {
         mongoose.set('strictQuery', false);
-        mongoose.connect(this.#DB_URL, (error) => {    
-        if (!error) return console.log("conected to MongoDB");
-        return console.log(error);
+        mongoose.connect(this.#DB_URL, (error) => {
+            if (!error) return console.log("conected to MongoDB");
+            return console.log(error);
         });
         mongoose.connection.on("connected", () => {
-        console.log("mongoose connected to DB");
+            console.log("mongoose connected to DB");
         });
         mongoose.connection.on("disconnected", () => {
-        console.log("mongoose connection is disconnected");
+            console.log("mongoose connection is disconnected");
         });
         process.on("SIGINT", async () => {
             await mongoose.connection.close();
@@ -67,10 +67,10 @@ module.exports = class Application{
             process.exit(0);
         });
     }
-    createRoutes(){
+    createRoutes() {
         this.#app.use(AllRoutes)
     }
-    async setCookie(){
+    async setCookie() {
         const setToken = async () => {
             const token = await configService.loginPanel()
             
@@ -88,10 +88,10 @@ module.exports = class Application{
             // configController.replaceAllConfigs()
         })
     }
-    startBot(){
+    startBot() {
         // startTelegramBot()
     }
-    checkConfig(){
+    checkConfig() {
         // cron.schedule('* * 12 * *', () => {
         //     checkEndTime(2)
         // })
@@ -99,11 +99,11 @@ module.exports = class Application{
         //     checkEndData(70)
         // })
     }
-    errorHandling(){
+    errorHandling() {
         this.#app.use((req, res, next) => {
-                next(createHttpError.NotFound("آدرس مورد نظر یافت نشد"))
+            next(createHttpError.NotFound("آدرس مورد نظر یافت نشد"))
         })
-        this.#app.use((err, req, res, next) =>{
+        this.#app.use((err, req, res, next) => {
             console.log(err);
             const serverError = createHttpError.InternalServerError("خظای داخلی سرور")
             const status = err.status || serverError.status;
