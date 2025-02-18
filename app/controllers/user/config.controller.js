@@ -202,8 +202,8 @@ class UserConfigController extends Controllers {
         try {
             const userID = req.user._id;
             const { configID } = req.params;
-            if (!configID) throw createHttpError.BadRequest('کانفیگ وارد شده صحیح نمی باشد')
             const config = await configModel.findOne({ userID, configID }, { configID: 1, planID: 1 })
+            if (!configID || !config) throw createHttpError.BadRequest('کانفیگ موردنظر وجود ندارد')
             const plan = await planModel.findOne({ _id: config.planID })
             const user = await userModel.findOne({ _id: userID })
             const filteredBills = user.bills
