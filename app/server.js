@@ -3,7 +3,8 @@ const cors = require("cors");
 require("dotenv").config();
 const morgan = require('morgan');
 const path = require('path');
-const http = require("http");
+// const http = require("http");
+const https = require("https");
 const { default: mongoose } = require("mongoose");
 const { startTelegramBot } = require('../bot/commands/start');
 const { AllRoutes } = require('./router/router');
@@ -12,9 +13,6 @@ const cron = require('node-cron');
 const fs = require('fs');
 const { checkEndTime } = require('./controllers/admin/cron/checkConfigEndTime');
 const { checkEndData } = require('./controllers/admin/cron/checkEndData');
-const { getV2rayCookie, copyObject } = require('./utils/functions');
-const { configController } = require('./controllers/admin/config.controller');
-const { smsService } = require('./services/sms.service');
 const { configService } = require('./services/config.service');
 const cache = require('./utils/cache');
 // const key = fs.readFileSync("/etc/letsencrypt/live/api.delta-dev.top/privkey.pem");
@@ -43,8 +41,8 @@ module.exports = class Application {
         this.#app.use(express.static(path.join(__dirname, "..", "public")));
     }
     createServer() {
-        const server = http.createServer(this.#app)
-        // const server = https.createServer({ key, cert }, app);
+        // const server = http.createServer(this.#app)
+        const server = https.createServer({ key, cert }, app);
         server.listen(this.#PORT, () => {
             console.log(`run => http://localhost:${this.#PORT}`);
         })
