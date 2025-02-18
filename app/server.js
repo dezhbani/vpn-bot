@@ -15,8 +15,8 @@ const { checkEndTime } = require('./controllers/admin/cron/checkConfigEndTime');
 const { checkEndData } = require('./controllers/admin/cron/checkEndData');
 const { configService } = require('./services/config.service');
 const cache = require('./utils/cache');
-// const key = fs.readFileSync("/etc/letsencrypt/live/api.delta-dev.top/privkey.pem");
-// const cert = fs.readFileSync("/etc/letsencrypt/live/api.delta-dev.top/fullchain.pem");
+const key = fs.readFileSync("/etc/letsencrypt/live/api.delta-dev.top/privkey.pem");
+const cert = fs.readFileSync("/etc/letsencrypt/live/api.delta-dev.top/fullchain.pem");
 module.exports = class Application {
     #app = express();
     #DB_URL;
