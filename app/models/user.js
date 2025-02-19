@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
         expireIn: 0
     }},
     chatID: {type: String},
-    wallet: {type: Number, default: 0},
+    wallet: {type: Number, default: 10000},
     by: {type: mongoose.Types.ObjectId, ref: 'users', default: this._id},
     role: {type: String, default: 'customer'},
     percent: {type: Number}
