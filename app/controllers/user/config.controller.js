@@ -56,12 +56,9 @@ class UserConfigController extends Controllers {
             const config = await configModel.findOne({ userID, configID })
             const configData = await configService.getConfig(configID)
 
-            console.log(config, 'time:', new Date(configData.expiry_date).getFullYear());
-
             if (!config || !configData) throw createHttpError.NotFound("کانفیگ یافت نشد، لطفا با پشتیبانی تماس بگیرید")
             const plan = await planModel.findOne({ _id: config.planID })
             if (!plan) throw createHttpError.NotFound("پلن مورد نظر وجود ندارد یا حذف شده، لطفا با پشتیبانی تماس بگیرید")
-            console.log(+configExpiryTime(plan.month));
 
             const data = {
                 expiryTime: +configExpiryTime(plan.month),
@@ -273,8 +270,6 @@ class UserConfigController extends Controllers {
     }
     async updateConfig(data, configID) {
         const configs = await configService.updateConfig(data, configID)
-        console.log(configs.data.obj.success);
-
         return configs.data.obj.success
     }
     async getConfigID() {

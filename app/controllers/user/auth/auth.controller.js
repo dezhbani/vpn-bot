@@ -57,7 +57,6 @@ class userAuthControllers extends Controllers {
     async completeُSignup(req, res, next){
         try {
             const { _id } = req.user
-            console.log(req.body);
             const { full_name, first_name, last_name } = await completeُSignupSchema.validateAsync(req.body);
             
             const saveUserDetails = await userModel.updateOne({_id}, {$set: {full_name, first_name, last_name}})

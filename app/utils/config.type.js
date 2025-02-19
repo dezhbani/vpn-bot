@@ -288,8 +288,6 @@ const createVmess = () => {
 }
 
 function generateConfig(data) {
-    console.log(data);
-    
     const { protocol, settings, streamSettings, port, remark } = data;
 
     // تبدیل settings و streamSettings از حالت رشته‌ای به JSON

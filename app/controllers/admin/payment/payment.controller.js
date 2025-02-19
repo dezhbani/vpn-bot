@@ -98,7 +98,6 @@ class paymentController extends Controllers {
                 const { mobile } = await userModel.findById(payment.user)
                 bill.paymentID = payment._id;
                 let configResult;
-                console.log(bill.for.description, bill.paymentID);
                 if(bill.for.description == "ارتقا کانفیگ به پلن بالاتر") configResult = await upgradeConfig(mobile, bill.planID, configID)
                 if(bill.planID && bill.up == null) {
                     configResult = await createConfig(mobile, bill.planID)
@@ -130,7 +129,6 @@ class paymentController extends Controllers {
             throw createHttpError.BadRequest("پرداخت انجام نشد در صورت کسر وجه طی ۷۲ ساعت به حساب شما بازمیگردد")
         } catch (error) {
             next(error)
-            console.log(error);
         }
     }
     async verifyWalletTransaction(req, res, next){

@@ -37,8 +37,6 @@ function configExpiryTime(month) {
     expiryTime.setMinutes(59)
     expiryTime.setSeconds(0)
     expiryTime.setMilliseconds(0)
-    console.log(expiryTime.getDate(), expiryTime.getMonth(), expiryTime.getFullYear());
-    
     return expiryTime.getTime()
 }
 const randomString = () => {
@@ -68,7 +66,6 @@ function stringifyProperties(data = {}, fields) {
                 
                 // Assign the parsed object to data[key]
                 data[key] = object;
-                console.log("data", data);
             } catch (e) {
                 console.error(`Error parsing JSON for key "${key}":`, e);
             }
@@ -154,7 +151,6 @@ const findConfigByID = async (configID) => {
         }
     })).data.obj
     const config = configs.filter(config => JSON.parse(config.settings).clients[0].id == configID);
-    console.log(config, configID);
     if (!config) throw createHttpError.NotFound("کانفیگی یافت نشد");
     return config[0]
 }
@@ -163,10 +159,8 @@ const upgradeConfig = async (userID, planID, configID, price) => {
     const user = await userModel.findOne(userID)
     if (!user) throw createHttpError.NotFound("کاربر یافت نشد")
 
-    console.log(userID, configID);
     const config = await configModel.findOne({ userID, configID })
     if (!config) throw createHttpError.NotFound("کانفیگ یافت نشد، لطفا با پشتیبانی تماس بگیرید")
-    console.log(config);
 
     const plan = await planModel.findOne({ _id: planID })
     if (!plan) throw createHttpError.NotFound("پلن مورد نظر وجود ندارد یا حذف شده، لطفا با پشتیبانی تماس بگیرید")
@@ -207,7 +201,6 @@ const getV2rayCookie = async () => {
         username: V2RAY_USERNAME,
         password: V2RAY_PASSWORD
     });
-    console.log(loginResponse.headers['set-cookie'][0]);
     return loginResponse.headers['set-cookie'][0].split(';')[0];
 }
 const getStartAndEndOfMonthTimestamps = () => {
