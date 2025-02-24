@@ -4,18 +4,19 @@ import ProfileIcon from '../user/assets/Profile-2.svg';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { headers } from '../public/function';
+import { Navigate } from 'react-router-dom';
 
 const CompleteProfile = () => {
     const user = useContext(ProfileContext);
-    
-    if(headers.headers.authorization == 'bearer null') window.location.replace("/sign-up")
-    
-    // Set the initial state based on user data or an empty string
     const [data, setData] = useState({
         first_name: "",
         last_name: "",
         full_name: ""
     });
+    
+    if(headers.headers.authorization == 'bearer null') window.location.replace("/sign-up")
+    
+    // Set the initial state based on user data or an empty string
 
     // Update state when user changes an input
     const change = (event) => {
@@ -38,7 +39,8 @@ const CompleteProfile = () => {
             toast.error(error.response.data.message, {autoClose: 2000})
         }
     }
-
+    if(user.first_name && user.last_name && user.full_name) return <Navigate to={'/sign-up'} replace />
+    
     if(headers.headers.authorization !== 'bearer null') return (
         <div className='min-h-screen flex justify-center items-center'>
             <div className='bg-white rounded-xl p-5 flex flex-col shadow-[2px_4px_30px_0px_#00000010] dir-rtl font-iran-sans'>

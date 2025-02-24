@@ -15,9 +15,9 @@ const UserProfileContext = ({children}) => {
     useEffect(() => {
         UserProfile()
     }, [])
+    if(loading) return <Modal isOpen={loading} loading={loading} />
     return (
         <div>
-            <Modal isOpen={loading} loading={loading} />
             <ProfileContext.Provider value={profile}>
                 {children}
             </ProfileContext.Provider>

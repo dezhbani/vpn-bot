@@ -7,6 +7,7 @@ import Plan from './modules/Plan';
 import Config from './modules/Config';
 import Options from './modules/Options';
 import Modal from '../../public/components/Modal';
+import NotFoundError from '../../admin/public/errors/NotFoundError';
 
 const ConfigDetails = () => {
     const { configID } = useParams()
@@ -17,21 +18,23 @@ const ConfigDetails = () => {
     const getConfig = async () => {
         setLoading(true)
         const result = await getConfigByID(configID)
+
         setData(result)
         setLoading(false)
     }
 
     useEffect(() => {
         getConfig()
-        console.log(reload, 'dddd');
-
     }, [reload])
+
+    if(!loading && !data) return <NotFoundError />
+
     return (
         <>
             <Sidebar />
             <Modal isOpen={loading} loading={loading} />
             {
-                !loading &&
+                !loading && data &&
                 <div className='flex z-20 dir-ltr w-[calc(100%-7rem)] sm:w-[calc(75%-3.5rem)] lg:w-[calc(80%-2rem)] xl:w-4/5 ml-4 mr-4 sm:mr-6 mt-24 mb-4 lg:mt-32 rounded-xl flex-wrap font-iran-sans'>
                     <div className='flex flex-row-reverse justify-between w-full h-fit bg-white shadow-[2px_4px_30px_0px_#00000010] mb-4 rounded-xl p-2'>
                         <Options plan={data?.plan} configID={configID} config={data?.config} setReload={setReload} reload={reload} />
