@@ -161,7 +161,7 @@ const createVlessTcp = async (lastID, plan, fullName) => {
         protocol: "vless",
         settings,
         streamSettings,
-        tag: `inbound-${randomNumber()}`,
+        tag: `inbound-${port}`,
         sniffing
     };
     const configContent = `vless://${id}@s1.delta-dev.top:${port}?type=tcp&security=none&path=%2F&host=${Host[0]}&headerType=http#${name}`

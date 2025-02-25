@@ -12,6 +12,7 @@ const { addConfigSchema } = require("../../validations/user/config.schema");
 const { checkUserPaymentType } = require("../../utils/paymet.functions");
 const { smsService } = require("../../services/sms.service");
 const { configService } = require("../../services/config.service");
+const { xrayService } = require("../../services/xray.service");
 
 class UserConfigController extends Controllers {
     async buyConfig(req, res, next) {
@@ -27,6 +28,11 @@ class UserConfigController extends Controllers {
             const addConfig = await configService.addConfig(details)
             // update user
             if (!addConfig.success) throw createHttpError.InternalServerError("کانفیگ ایجاد نشد")
+            //tunneling port
+            const addTunnelPort = await xrayService.addInboundToTunnel(details.tag)
+            if (!addTunnelPort) throw createHttpError.InternalServerError("خطای ایجاد کانفیگ، لطفا به پشتیبانی اطلاع دهید")
+            const restartService = await xrayService.restartXraySystem()
+            if (!restartService) throw createHttpError.InternalServerError("خطای ایجاد کانفیگ، لطفا به پشتیبانی اطلاع دهید")
 
             const configs = {
                 name: fullName,
@@ -258,7 +264,7 @@ class UserConfigController extends Controllers {
 
         }
     }
-    async checkUpperPlan(currentPlan, newPlan){
+    async checkUpperPlan(currentPlan, newPlan) {
         try {
             const current = await planModel.findById(currentPlan)
             const upgradedPlan = await planModel.findById(newPlan)
