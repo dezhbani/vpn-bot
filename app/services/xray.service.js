@@ -1,10 +1,9 @@
 const { default: axios } = require("axios");
 const { Controllers } = require("../controllers/controller");
-const createHttpError = require("http-errors");
-const { V2RAY_API_URL, V2RAY_USERNAME, V2RAY_PASSWORD } = process.env
-const qs = require('qs');
+const { V2RAY_API_URL } = process.env
 const cache = require("../utils/cache");
 const { copyObject } = require("../utils/functions");
+
 const cookie = () => {
     const V2RAY_TOKEN = cache.get("token")
     return {
@@ -47,14 +46,10 @@ class xrayService extends Controllers {
         try {
             const xraySetting = await this.getXraySetting()
             if(!xraySetting.tags.includes(tag)) return Error("xray: port not exist") 
-            let ss =['11', '2', '3']
-            ss = ss.filter(s => s !== '3')
-            console.log(ss);
-            
             const copiedSettings = copyObject(xraySetting.setting)
             let inboundTags = copiedSettings.routing.rules[3].inboundTag
             inboundTags = inboundTags.filter(tg => tg !== tag)
-            // lo
+            
             copiedSettings.routing.rules[3].inboundTag = inboundTags
             const strXraySetting = JSON.stringify(copiedSettings, null, 2);
 
@@ -64,7 +59,14 @@ class xrayService extends Controllers {
             throw error
         }
     }
-    
+    async restartXraySystem(){
+        try {
+            const restartResult = (await axios.post(`${V2RAY_API_URL}/server/restartXrayService`, {}, cookie())).data.success
+            return restartResult
+        } catch (error) {
+            throw error
+        }
+    }
     async updateXraySetting(data){
         try {
             const V2RAY_TOKEN = cache.get("token")
