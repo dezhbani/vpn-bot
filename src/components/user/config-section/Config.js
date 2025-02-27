@@ -23,12 +23,18 @@ const Config = ({ config }) => {
         const currentDate = new Date();
         const targetDateObj = new Date(config.expiry_date);
 
-        // Calculate the difference in time
         const timeDifference = targetDateObj - currentDate;
 
-        // Convert time difference from milliseconds to days
-        const daysLeft = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-        return daysLeft
+        if (timeDifference < 0) return null;
+        let daysLeft = Math.ceil(timeDifference / (1000 * 60 * 60 * 24)) - 1;
+        let timeLeft = `${daysLeft} روز`
+        if (daysLeft == 0) {
+            daysLeft = Math.ceil(timeDifference / (1000 * 60 * 60))
+            timeLeft = `${daysLeft} ساعت`
+        }
+        console.log("daysLeft", timeLeft);
+
+        return timeLeft
     };
     const handleCopy = (value, message) => {
         handleMessage({ message })
@@ -42,18 +48,18 @@ const Config = ({ config }) => {
             </div>
             <div className='max-lg:w-full lg:w-1/4 flex justify-center items-center text-center md:text-left'>
                 {
-                    daysLeft() > 0 && <span className='text-xs dir-rtl pr-5 opacity-60 max-w-24 min-w-24 text-gray-600'>
-                    <Typewriter
-                        options={{
-                            strings: [`${daysLeft()} روز دیگر منقضی می شود`],
-                            autoStart: true,
-                            pauseFor: 1000,
-                            cursor: '',
-                            delay: 50,
-                            deleteSpeed: Infinity
-                        }}
-                    />
-                </span>
+                    <span className={`text-xs dir-rtl pr-5 opacity-60 w-24 max-sm:hidden ${daysLeft()? 'text-gray-600': 'text-white'}`}>
+                        <Typewriter
+                            options={{
+                                strings: [`${daysLeft()} دیگر منقضی می شود`],
+                                autoStart: true,
+                                pauseFor: 1000,
+                                cursor: '',
+                                delay: 50,
+                                deleteSpeed: Infinity
+                            }}
+                        />
+                    </span>
                 }
                 <Status status={config.status} />
             </div>

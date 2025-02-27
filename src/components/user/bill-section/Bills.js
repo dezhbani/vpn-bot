@@ -59,7 +59,7 @@ const Bills = () => {
                 )}
                 <div className='w-full max-w-full dir-rtl h-fit bg-white shadow-[2px_4px_30px_0px_#00000010] mt-4 rounded-xl p-3'>
 
-                    {totalPages > 1 && (
+                    {totalPages >= 1 && (
                         <ReactPaginate
                             previousLabel={
                                 <svg
@@ -130,7 +130,7 @@ const Bills = () => {
                     !loading && bills.length > 0 &&
                     <div className='w-full overflow-x-auto dir-rtl h-auto bg-white shadow-[2px_4px_30px_0px_#00000010] mt-4 rounded-xl p-3'>
                         {
-                            bills.map(bill => <div className='border-b-2 border-gray-100'>
+                            bills.map(bill => <div className='border-b-2 last:border-0 border-gray-100'>
                                 <Bill bill={bill} key={bill._id} />
                             </div>)
                         }

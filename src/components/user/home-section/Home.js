@@ -3,22 +3,22 @@ import Sidebar from '../public/Sidebar';
 import { getConfigs } from '../services/config.service';
 
 const Home = () => {
-    const [configs, setConfigs] = useState(null); // Initialize with null
-    const [loading, setLoading] = useState(true);
+    // const [configs, setConfigs] = useState(null); // Initialize with null
+    // const [loading, setLoading] = useState(true);
 
-    const getConfigDetails = async () => {
-        const configsResponse = await getConfigs();
-        if (configsResponse?.configs === null) setConfigs(null); // Set configs state to null if response is null
-        else setConfigs(configsResponse?.configs || []); // Set the array if it's not null, otherwise set empty array
-    };
+    // const getConfigDetails = async () => {
+    //     const configsResponse = await getConfigs();
+    //     if (configsResponse?.configs === null) setConfigs(null); // Set configs state to null if response is null
+    //     else setConfigs(configsResponse?.configs || []); // Set the array if it's not null, otherwise set empty array
+    // };
 
-    useEffect(() => {
-        getConfigDetails();
-    }, []);
+    // useEffect(() => {
+    //     getConfigDetails();
+    // }, []);
 
-    useEffect(() => {
-        if (configs !== null) setLoading(false); // Set loading to false once configs are retrieved or set to null
-    }, [configs]);
+    // useEffect(() => {
+    //     if (configs !== null) setLoading(false); // Set loading to false once configs are retrieved or set to null
+    // }, [configs]);
 
     return (
         <div className='scroll-auto'>
