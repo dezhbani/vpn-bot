@@ -12,7 +12,7 @@ const Plan = ({ plan, upgrade = false, setSelectedPlan }) => {
     const handleClose = () => setOpenInvoice(false)
     const handleOpen = () => setOpenInvoice(true)
     const handleClick = () => {
-        if(upgrade) setSelectedPlan(plan)
+        if (upgrade) setSelectedPlan(plan)
     }
     const handleBuyConfig = async () => {
         setLoading(true)
@@ -21,6 +21,27 @@ const Plan = ({ plan, upgrade = false, setSelectedPlan }) => {
         if (result?.gatewayURL) document.location.href = result.gatewayURL
         setLoading(false)
         setOpenInvoice(false)
+    }
+    const expiryDate = time => {
+        const spilitedStr = time.split("")
+        const timeSymbol = spilitedStr.pop()
+        const duration = time.slice(0, -1)
+        if (typeof +duration !== "number" || isNaN(+duration)) return "نامحدود"
+        let expire
+        switch (timeSymbol) {
+            case "h": //horse
+                return expire = `${duration} ساعته`
+            case "d": //day
+                return expire = `${duration} روزه`
+            case "w": //week
+                return expire = `${duration} هفته`
+            case "m": //month
+                return expire = `${duration} ماهه`
+            case "y": //year
+                return expire = `${duration} ساله`
+            default:
+                return "نامحدود"
+        }
     }
     return (
         <>
@@ -43,7 +64,7 @@ const Plan = ({ plan, upgrade = false, setSelectedPlan }) => {
                     </li>
                     <li className="flex items-center my-7">
                         <img alt='icon' src={TickIcon} className='mx-1' />
-                        {plan.month} ماهه
+                        {expiryDate(plan.month)}
                     </li>
                     <li className="flex items-center mt-7">
                         <img alt='icon' src={TickIcon} className='mx-1' />
