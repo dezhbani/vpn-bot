@@ -3,7 +3,7 @@ const JWT = require("jsonwebtoken");
 const createError = require("http-errors");
 const createHttpError = require("http-errors");
 const jMoment = require("moment-jalali");
-const { createVlessKcp } = require("./config.type");
+// const { createVlessKcp } = require("./config.type");
 const { default: axios } = require("axios");
 const { planModel } = require("../models/plan");
 const { configModel } = require("../models/config");
@@ -30,13 +30,51 @@ async function signAccessToken(userID) {
 function copyObject(object) {
     return JSON.parse(JSON.stringify(object))
 }
-function configExpiryTime(month) {
-    const expiryTime = new Date()
-    expiryTime.setDate(expiryTime.getDate() + (month * 31))
-    expiryTime.setHours(23)
-    expiryTime.setMinutes(59)
-    expiryTime.setSeconds(0)
-    expiryTime.setMilliseconds(0)
+// function configExpiryTime(month) {
+//     const expiryTime = new Date()
+//     expiryTime.setTime(expiryTime.getDate() + (month * 31))
+//     expiryTime.setHours(23)
+//     expiryTime.setMinutes(59)
+//     expiryTime.setSeconds(0)
+//     expiryTime.setMilliseconds(0)
+//     return expiryTime.getTime()
+// }
+function configExpiryTime(time = '3d', lastMoment = true) {
+    const spilitedStr = time.split("")
+    const timeSymbol = spilitedStr.pop()
+    const duration = time.slice(0, -1)
+    if (typeof +duration !== "number" || isNaN(+duration)) return "زمان وارد شده صحیح نیست"
+    let requestDuration
+    switch (timeSymbol) {
+        case "h": //horse
+            requestDuration = 3600000 * +duration
+            break;
+        case "d": //day
+            requestDuration = 86400000 * +duration
+            break;
+        case "w": //week
+            requestDuration = 604800000 * +duration
+            break;
+        case "m": //month
+            requestDuration = 2592000000 * +duration
+            break;
+        case "y": //year
+            requestDuration = 31536000000 * +duration
+            break;
+        default:
+            return "واحد زمان وارد شده معتبر نیست"
+    }
+    const nowTimestamp = Date.now(); 
+    const expiryTimestamp = nowTimestamp + requestDuration;
+    const expiryTime = new Date(expiryTimestamp);
+
+    if (timeSymbol !== "h" && lastMoment) {
+        expiryTime.setHours(23)
+        expiryTime.setMinutes(59)
+        expiryTime.setSeconds(0)
+        expiryTime.setMilliseconds(0)
+    }
+
     return expiryTime.getTime()
 }
 const randomString = () => {
@@ -101,39 +139,39 @@ const getConfigID = async () => {
     const lastConfigID = configs[lastIndex].id + 1
     return lastConfigID
 }
-const createConfig = async (mobile, planID) => {
-    const plan = await findPlanByID(planID);
-    const lastConfigID = await getConfigID();
-    const user = await userModel.findOne({ mobile })
-    const fullName = `${user.first_name} ${user.last_name}`;
-    const { details, configContent: config_content, id } = await createVlessKcp(lastConfigID, plan, fullName)
-    const addConfig = await axios.post(`${V2RAY_API_URL}/xui/inbound/add`, details, {
-        withCredentials: true,
-        headers: {
-            'Cookie': process.env['V2RAY_TOKEN']
-        }
-    })
-    const configs = {
-        name: fullName,
-        config_content,
-        expiry_date: +configExpiryTime(plan.month),
-        configID: id,
-        userID: user._id,
-        planID
-    }
-    const bills = {
-        planID,
-        buy_date: new Date().getTime(),
-        for: {
-            description: 'خرید کانفیگ'
-        },
-        up: true,
-        price: plan.price
-    }
-    if (!addConfig.data.success) return createHttpError.InternalServerError("کانفیگ ایجاد نشد")
-    const obj = { configs, bills }
-    return obj
-}
+// const createConfig = async (mobile, planID) => {
+//     const plan = await findPlanByID(planID);
+//     const lastConfigID = await getConfigID();
+//     const user = await userModel.findOne({ mobile })
+//     const fullName = `${user.first_name} ${user.last_name}`;
+//     const { details, configContent: config_content, id } = await createVlessKcp(lastConfigID, plan, fullName)
+//     const addConfig = await axios.post(`${V2RAY_API_URL}/xui/inbound/add`, details, {
+//         withCredentials: true,
+//         headers: {
+//             'Cookie': process.env['V2RAY_TOKEN']
+//         }
+//     })
+//     const configs = {
+//         name: fullName,
+//         config_content,
+//         expiry_date: +configExpiryTime(plan.month),
+//         configID: id,
+//         userID: user._id,
+//         planID
+//     }
+//     const bills = {
+//         planID,
+//         buy_date: new Date().getTime(),
+//         for: {
+//             description: 'خرید کانفیگ'
+//         },
+//         up: true,
+//         price: plan.price
+//     }
+//     if (!addConfig.data.success) return createHttpError.InternalServerError("کانفیگ ایجاد نشد")
+//     const obj = { configs, bills }
+//     return obj
+// }
 const updateConfig = async (ID, data) => {
     const configs = (await axios.post(`${V2RAY_API_URL}/xui/inbound/update/${ID}`, data, {
         withCredentials: true,
@@ -191,11 +229,6 @@ const upgradeConfig = async (userID, planID, configID, price) => {
     // await smsService.repurchaseMessage(user.mobile, user.full_name)
 }
 const GbToBit = GB => (+GB) * 1024 * 1024 * 1024
-const findPlanByID = async (planID, type) => {
-    const plan = await planModel.findById(planID);
-    if (!plan) throw createHttpError.NotFound("پلنی یافت نشد");
-    return plan
-}
 const getV2rayCookie = async () => {
     const loginResponse = await axios.post(`${V2RAY_API_URL}/login`, {
         username: V2RAY_USERNAME,
@@ -230,7 +263,6 @@ module.exports = {
     invoiceNumberGenerator,
     rialToToman,
     tomanToRial,
-    createConfig,
     getV2rayCookie,
     getStartAndEndOfMonthTimestamps,
     exportConfigDetails,

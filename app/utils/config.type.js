@@ -1,22 +1,13 @@
 const { v4: uuidv4 } = require('uuid');
+const { configExpiryTime } = require('./functions');
 const domain = 's1.delta-dev.top'
 const subLinkDomain = 'https://api.delta-dev.top'
 
 const randomHost = () => {
-    const Host = ['google.com', 'speedtest.net']
-    const Referer = ['digikala.com', 'snapp.ir']
+    const Host = ['digikala.com', 'snapp.ir']
+    const Referer = ['google.com', 'speedtest.net']
     const randomIndex = max => Math.floor((Math.random() * max));
     return { Host: [Host[randomIndex(Host.length)]], Referer: [Referer[randomIndex(Referer.length)]] }
-}
-const configExpiryTime = month => {
-    const expiryTime = new Date()
-    expiryTime.setMonth(expiryTime.getMonth())
-    expiryTime.setDate(expiryTime.getDate() + 2)
-    expiryTime.setHours(23)
-    expiryTime.setMinutes(59)
-    expiryTime.setSeconds(0)
-    expiryTime.setMilliseconds(0)
-    return expiryTime.getTime()
 }
 const randomString = () => {
     const random = Math.random().toString(36).substring(2, 8);
